@@ -88,8 +88,15 @@ table.sg{border-collapse:collapse;margin:12px 0;font-size:16px;white-space:nowra
   <div class="qh"><span class="lab">2)</span><div>For <i>m</i> ≠ 1, compute Δ', the product <i>P</i> and the sum <i>S</i> of the roots, then make the sign table of Δ', <i>P</i> and <i>S</i>.</div></div>
   <button class="tog">Show answer</button>
   <div class="ans">
-    <p>Δ' = (<i>m</i> − 3)² − (<i>m</i> − 1)(2<i>m</i> − 3) = −<i>m</i>² − <i>m</i> + 6 = <span class="res">−(<i>m</i> + 3)(<i>m</i> − 2)</span></p>
+    <p>Δ' = <i>b</i>'² − <i>ac</i> = (<i>m</i> − 3)² − (<i>m</i> − 1)(2<i>m</i> − 3) = <i>m</i>² − 6<i>m</i> + 9 − (2<i>m</i>² − 5<i>m</i> + 3)</p>
+    <p><span class="res">Δ' = −<i>m</i>² − <i>m</i> + 6</span></p>
+    <p><b>Roots of Δ'</b> (a trinomial in <i>m</i> with α = −1, β = −1, γ = 6):</p>
+    <p>δ = β² − 4αγ = (−1)² − 4(−1)(6) = 1 + 24 = 25 , &nbsp;√δ = 5</p>
+    <p><i>m</i>₁ = <span class="fr"><span>−β + √δ</span><span>2α</span></span> = <span class="fr"><span>1 + 5</span><span>−2</span></span> = −3 &nbsp;&nbsp; <i>m</i>₂ = <span class="fr"><span>−β − √δ</span><span>2α</span></span> = <span class="fr"><span>1 − 5</span><span>−2</span></span> = 2</p>
+    <p><b>Sign of Δ'</b>: the coefficient of <i>m</i>² is α = −1 &lt; 0. A trinomial has the sign of α outside its roots and the opposite sign between them:</p>
+    <p>Δ' &lt; 0 for <i>m</i> &lt; −3 or <i>m</i> &gt; 2 , &nbsp; Δ' &gt; 0 for −3 &lt; <i>m</i> &lt; 2.</p>
     <p><i>P</i> = <span class="fr"><span>2<i>m</i> − 3</span><span><i>m</i> − 1</span></span> &nbsp;&nbsp; <i>S</i> = <span class="fr"><span>2(<i>m</i> − 3)</span><span><i>m</i> − 1</span></span></p>
+    <p><b>Sign of <i>P</i> and <i>S</i></b>: a quotient has the same sign as the product of its numerator and denominator. 2<i>m</i> − 3 = 0 for <i>m</i> = 3/2 ; <i>m</i> − 3 = 0 for <i>m</i> = 3 ; <i>m</i> − 1 = 0 for <i>m</i> = 1 (forbidden value).</p>
     <p>Critical values: −3, 1, 3/2, 2, 3.</p>
     <div class="scroll">
     <table class="sg" id="sg"></table>
@@ -159,8 +166,11 @@ table.sg{border-collapse:collapse;margin:12px 0;font-size:16px;white-space:nowra
           <button class="tog">Show answer</button>
           <div class="ans">
             <p>We need <i>x</i>₁<i>x</i>₂ ≠ 0, so <i>m</i> ≠ 3/2. Then <span class="fr"><span>1</span><span><i>x</i>₁</span></span> + <span class="fr"><span>1</span><span><i>x</i>₂</span></span> = <span class="fr"><span><i>S</i></span><span><i>P</i></span></span> = <span class="fr"><span>2(<i>m</i> − 3)</span><span>2<i>m</i> − 3</span></span>.</p>
-            <p><span class="fr"><span>2(<i>m</i> − 3)</span><span>2<i>m</i> − 3</span></span> − (<i>m</i> + 3) = <span class="fr"><span>−2<i>m</i>² − <i>m</i> + 3</span><span>2<i>m</i> − 3</span></span> = −<span class="fr"><span>(2<i>m</i> + 3)(<i>m</i> − 1)</span><span>2<i>m</i> − 3</span></span> &lt; 0</p>
-            <p>⇔ <span class="fr"><span>(2<i>m</i> + 3)(<i>m</i> − 1)</span><span>2<i>m</i> − 3</span></span> &gt; 0 ⇔ <i>m</i> ∈ ]−3/2 ; 1[ ∪ ]3/2 ; +∞[.</p>
+            <p><span class="fr"><span>2(<i>m</i> − 3)</span><span>2<i>m</i> − 3</span></span> − (<i>m</i> + 3) = <span class="fr"><span>−2<i>m</i>² − <i>m</i> + 3</span><span>2<i>m</i> − 3</span></span> &lt; 0</p>
+            <p>Numerator: −2<i>m</i>² − <i>m</i> + 3 ; δ = 1 + 24 = 25 , √δ = 5 ; roots <span class="fr"><span>1 + 5</span><span>−4</span></span> = −3/2 and <span class="fr"><span>1 − 5</span><span>−4</span></span> = 1. Coefficient of <i>m</i>² is −2 &lt; 0: negative outside the roots, positive between them.</p>
+            <p>Denominator: 2<i>m</i> − 3 = 0 for <i>m</i> = 3/2.</p>
+            <div class="scroll"><table class="sg" id="sg2"></table></div>
+            <p>The quotient is negative ⇔ <i>m</i> ∈ ]−3/2 ; 1[ ∪ ]3/2 ; +∞[.</p>
             <p>With a):</p>
             <p class="res">m ∈ ]−3/2 ; 1[ ∪ ]3/2 ; 2[</p>
           </div>
@@ -219,14 +229,22 @@ const rows=[
   ['<i>P</i>',['','+','|','+','‖','−','0','+','|','+','|','+','']],
   ['<i>S</i>',['','+','|','+','‖','−','|','−','|','−','0','+','']]
 ];
+const build=(id,vals,rows)=>{
 const head='<tr><th><i>m</i></th>'+vals.map((v,k)=>'<td class="v">'+v+'</td>'+(k<vals.length-1?'<td class="i"></td>':'')).join('')+'</tr>';
+document.getElementById(id).innerHTML=head+rows.map(([l,cs])=>'<tr><th>'+l+'</th>'+cs.map(cell).join('')+'</tr>').join('');
+};
 const cell=(c,k)=>{
   if(k%2){return '<td class="i '+(c==='+'?'p':'n')+'">'+c+'</td>'}
   if(c==='')return '<td class="v"></td>';
   if(c==='‖')return '<td class="v dbl"></td>';
   return '<td class="v k">'+(c==='0'?'<span class="z">0</span>':'')+'</td>';
 };
-document.getElementById('sg').innerHTML=head+rows.map(([l,cs])=>'<tr><th>'+l+'</th>'+cs.map(cell).join('')+'</tr>').join('');
+build('sg',vals,rows);
+build('sg2',['−∞','−3/2','1','3/2','+∞'],[
+  ['−2<i>m</i>² − <i>m</i> + 3',['','−','0','+','0','−','|','−','']],
+  ['2<i>m</i> − 3',['','−','|','−','|','−','0','+','']],
+  ['quotient',['','+','0','−','0','+','‖','−','']]
+]);
 
 const toggle=(btn,open)=>{const a=btn.nextElementSibling;const o=open===undefined?!a.classList.contains('open'):open;a.classList.toggle('open',o);btn.textContent=o?'Hide answer':'Show answer';btn.setAttribute('aria-expanded',o)};
 const btns=[...document.querySelectorAll('.tog')];
