@@ -4,17 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Quadratic with Parameter</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 /*
 VOICE: calm, exact, a well-set math worksheet.
 IDEA: a printed exercise sheet with fold-down answer flaps.
-PICTURE: the equation, set large, with the sign table of Δ', P, S.
-COLOUR and TYPE: white paper, dark ink, one deep teal accent for answers; Source Serif for math, Inter for buttons.
-LAYOUT: one column, each question a row with its own Show/Hide answer under it.
+PICTURE: the equation set large; inside each answer, numbered steps and a superposition diagram on an m axis.
+COLOUR and TYPE: white paper, dark ink, teal for the solution, green for results; Source Serif for math, Inter for labels.
+LAYOUT: one column; each question with its own Show/Hide answer under it.
 */
-:root{color-scheme:light dark;--bg:light-dark(#ffffff,#14171a);--ink:light-dark(#1b1d1f,#e9ecee);--mute:light-dark(#5c6268,#a3abb2);--line:light-dark(#dfe3e6,#2c3236);--ac:light-dark(#0b6e6e,#5fd1c8);--acbg:light-dark(#eef7f6,#18282a);--plus:light-dark(#0b6e3a,#6fdc9c);--minus:light-dark(#b0262c,#ff8a8f)}
+:root{color-scheme:light dark;--bg:light-dark(#ffffff,#14171a);--ink:light-dark(#1b1d1f,#e9ecee);--mute:light-dark(#5c6268,#a3abb2);--line:light-dark(#dfe3e6,#2c3236);--dash:light-dark(#c4cacf,#3d454b);--ac:light-dark(#0b6e6e,#5fd1c8);--acbg:light-dark(#f3f8f8,#172124);--sol:light-dark(#1d9e75,#5dcaa5);--gray:light-dark(#8a8f94,#7f878d);--okbg:light-dark(#e8f4ec,#16291e);--ok:light-dark(#1e6b3a,#86d9a4);--plus:light-dark(#0b6e3a,#6fdc9c);--minus:light-dark(#b0262c,#ff8a8f)}
 :root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
 *{box-sizing:border-box;min-width:0}
 body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 "Source Serif 4",Georgia,serif;overflow-x:clip}
@@ -22,9 +21,6 @@ body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 "Source Serif 
 h1{font-size:clamp(28px,4.5vw,40px);line-height:1.1;margin:0 0 6px;text-wrap:balance}
 .sub{color:var(--mute);margin:0 0 28px;font-size:16px}
 .eq{border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);padding:22px 0;margin:0 0 10px;display:flex;align-items:center;justify-content:center;gap:28px;flex-wrap:wrap;font-size:clamp(20px,4vw,30px)}
-.eq i{font-style:italic}
-.eq .tag{font-size:.8em}
-.intro{margin:18px 0 8px}
 .bar{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 8px}
 button{font:500 15px Inter,system-ui,sans-serif;min-height:44px;padding:0 16px;border-radius:8px;border:1.5px solid var(--ac);background:transparent;color:var(--ac);cursor:pointer}
 button:hover{background:var(--acbg)}
@@ -35,17 +31,25 @@ ol.q{list-style:none;padding:0;margin:0}
 .qh{display:grid;grid-template-columns:2.2em minmax(0,1fr);gap:4px}
 .lab{font-weight:700}
 .sublist{list-style:none;padding:0;margin:8px 0 0}
-.sublist>li{margin:6px 0}
+.sublist>li{margin:10px 0}
 .tog{margin:10px 0 0 2.2em;min-height:36px;font-size:14px;padding:0 12px}
-.ans{display:none;margin:10px 0 0 2.2em;background:var(--acbg);border-left:3px solid var(--ac);padding:12px 16px;border-radius:0 8px 8px 0}
+.ans{display:none;margin:12px 0 0 2.2em;background:var(--acbg);border:1px solid var(--line);border-radius:12px;padding:16px}
 .ans.open{display:block}
-.ans p{margin:6px 0}
-.res{font-weight:700;color:var(--ac)}
+.ans p{margin:0 0 6px}
+.step{display:grid;grid-template-columns:26px minmax(0,1fr);gap:10px;margin:0 0 18px}
+.num{width:26px;height:26px;border-radius:50%;background:var(--bg);border:1px solid var(--line);color:var(--mute);font:500 12px Inter,system-ui,sans-serif;display:flex;align-items:center;justify-content:center}
+.sh{font:500 13px Inter,system-ui,sans-serif;color:var(--mute);margin:4px 0 8px!important}
+.ch{display:grid;grid-template-columns:24px minmax(0,1fr);row-gap:8px;align-items:center;margin:4px 0 8px}
+.ch>span:nth-child(odd){color:var(--mute);text-align:center;font-size:19px;line-height:1}
+.nw{white-space:nowrap}
+.scroll{overflow-x:auto}
+.res{background:var(--okbg);border-radius:8px;padding:10px 14px;margin-top:4px}
+.res small{display:block;font:500 12px Inter,system-ui,sans-serif;color:var(--ok)}
+.res b{color:var(--ok);font-size:18px;white-space:nowrap}
 .fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;font-size:.92em;line-height:1.15;margin:0 2px}
 .fr>span:first-child{border-bottom:1px solid currentColor;padding:0 3px}
 .fr>span:last-child{padding:0 3px}
-.scroll{overflow-x:auto}
-table.sg{border-collapse:collapse;margin:12px 0;font-size:16px;white-space:nowrap;background:var(--bg);border:1.5px solid var(--ink)}
+table.sg{border-collapse:collapse;margin:8px 0;font-size:16px;white-space:nowrap;background:var(--bg);border:1.5px solid var(--ink)}
 .sg th{font-weight:600;padding:7px 14px;border-right:1.5px solid var(--ink);text-align:center}
 .sg td{padding:7px 0;text-align:center}
 .sg tr:first-child>*{border-bottom:1.5px solid var(--ink)}
@@ -56,7 +60,10 @@ table.sg{border-collapse:collapse;margin:12px 0;font-size:16px;white-space:nowra
 .sg td.v.k span{background:var(--bg);padding:0 3px}
 .sg td.v.dbl{background:linear-gradient(90deg,transparent calc(50% - 2.5px),var(--ink) calc(50% - 2.5px),var(--ink) calc(50% - 1.5px),transparent calc(50% - 1.5px),transparent calc(50% + 1.5px),var(--ink) calc(50% + 1.5px),var(--ink) calc(50% + 2.5px),transparent calc(50% + 2.5px))}
 .p{color:var(--plus);font-weight:700}.n{color:var(--minus);font-weight:700}.z{font-weight:700}
-.note{color:var(--mute);font-size:14px;margin-top:28px}
+svg.sp{display:block;width:100%;max-width:460px;height:120px;margin:4px 0 6px;font-family:Inter,system-ui,sans-serif}
+.ch>span:nth-child(even){overflow-x:auto;padding:2px 0}
+.note{color:var(--mute);font-size:15px;margin-top:28px}
+@media(max-width:600px){.ans{margin-left:0;padding:12px}.tog{margin-left:0}.qh{grid-template-columns:1.7em minmax(0,1fr)}.sublist .qh{grid-template-columns:1.5em minmax(0,1fr)}.step{grid-template-columns:22px minmax(0,1fr);gap:8px}.num{width:22px;height:22px}.ch{grid-template-columns:20px minmax(0,1fr)}body{font-size:16px}table.sg{font-size:14px}.sg th{padding:6px 8px;white-space:normal;min-width:64px}.sg td.i{min-width:28px;padding:6px 3px}.sg td.v{min-width:24px;padding:6px 2px}}
 @media print{button{display:none}.ans{display:block!important}}
 </style>
 </head>
@@ -65,7 +72,7 @@ table.sg{border-collapse:collapse;margin:12px 0;font-size:16px;white-space:nowra
 <h1>Quadratic equation with a parameter</h1>
 <p class="sub">Discussion according to the real parameter <i>m</i></p>
 
-<div class="eq"><span>(<i>m</i> − 1)<i>x</i>² − 2(<i>m</i> − 3)<i>x</i> + 2<i>m</i> − 3 = 0</span><span class="tag">(<i>E</i>)</span></div>
+<div class="eq"><span>(<i>m</i> + 1)<i>x</i>² + 2(<i>m</i> − 5)<i>x</i> + 4<i>m</i> − 5 = 0</span><span>(<i>E</i>)</span></div>
 
 <div class="bar">
   <button class="solid" id="showAll">Show all answers</button>
@@ -74,36 +81,61 @@ table.sg{border-collapse:collapse;margin:12px 0;font-size:16px;white-space:nowra
 
 <ol class="q">
 
+<!-- 1 -->
 <li>
-  <div class="qh"><span class="lab">1)</span><div>Solve (<i>E</i>) for <i>m</i> = 1.</div></div>
+  <div class="qh"><span class="lab">1)</span><div>Solve (<i>E</i>) for <i>m</i> = −1.</div></div>
   <button class="tog">Show answer</button>
   <div class="ans">
-    <p>For <i>m</i> = 1, (<i>E</i>) becomes 4<i>x</i> − 1 = 0 (first degree).</p>
-    <p class="res">x = 1/4</p>
-    <p>From now on, suppose <i>m</i> ≠ 1.</p>
+    <p>For <i>m</i> = −1, (<i>E</i>) becomes a first-degree equation:</p>
+    <div class="ch"><span></span><span class="nw">−12<i>x</i> − 9 = 0</span><span>⇔</span><span class="nw"><i>x</i> = −9/12 = −3/4</span></div>
+    <div class="res"><small>Result</small><b>x = −3/4</b></div>
+    <p style="margin-top:10px">From now on, <i>m</i> ≠ −1.</p>
   </div>
 </li>
 
+<!-- 2 -->
 <li>
-  <div class="qh"><span class="lab">2)</span><div>For <i>m</i> ≠ 1, compute Δ', the product <i>P</i> and the sum <i>S</i> of the roots, then make the sign table of Δ', <i>P</i> and <i>S</i>.</div></div>
+  <div class="qh"><span class="lab">2)</span><div>For <i>m</i> ≠ −1, compute Δ', the product <i>P</i> and the sum <i>S</i> of the roots, then make the sign table of Δ', <i>P</i> and <i>S</i>.</div></div>
   <button class="tog">Show answer</button>
   <div class="ans">
-    <p>Δ' = <i>b</i>'² − <i>ac</i> = (<i>m</i> − 3)² − (<i>m</i> − 1)(2<i>m</i> − 3) = <i>m</i>² − 6<i>m</i> + 9 − (2<i>m</i>² − 5<i>m</i> + 3)</p>
-    <p><span class="res">Δ' = −<i>m</i>² − <i>m</i> + 6</span></p>
-    <p><b>Roots of Δ'</b> (a trinomial in <i>m</i> with A = −1, B = −1, C = 6):</p>
-    <p>D = B² − 4AC = (−1)² − 4(−1)(6) = 1 + 24 = 25 , &nbsp;√D = 5</p>
-    <p><i>m</i>₁ = <span class="fr"><span>−B + √D</span><span>2A</span></span> = <span class="fr"><span>1 + 5</span><span>−2</span></span> = −3 &nbsp;&nbsp; <i>m</i>₂ = <span class="fr"><span>−B − √D</span><span>2A</span></span> = <span class="fr"><span>1 − 5</span><span>−2</span></span> = 2</p>
-    <p><b>Sign of Δ'</b>: the coefficient of <i>m</i>² is A = −1 &lt; 0. A trinomial has the sign of A outside its roots and the opposite sign between them:</p>
-    <p>Δ' &lt; 0 for <i>m</i> &lt; −3 or <i>m</i> &gt; 2 , &nbsp; Δ' &gt; 0 for −3 &lt; <i>m</i> &lt; 2.</p>
-    <p><i>P</i> = <span class="fr"><span>2<i>m</i> − 3</span><span><i>m</i> − 1</span></span> &nbsp;&nbsp; <i>S</i> = <span class="fr"><span>2(<i>m</i> − 3)</span><span><i>m</i> − 1</span></span></p>
-    <p><b>Sign of <i>P</i> and <i>S</i></b>: a quotient has the same sign as the product of its numerator and denominator. 2<i>m</i> − 3 = 0 for <i>m</i> = 3/2 ; <i>m</i> − 3 = 0 for <i>m</i> = 3 ; <i>m</i> − 1 = 0 for <i>m</i> = 1 (forbidden value).</p>
-    <p>Critical values: −3, 1, 3/2, 2, 3.</p>
-    <div class="scroll">
-    <table class="sg" id="sg"></table>
-    </div>
+    <div class="step"><div class="num">1</div><div>
+      <p class="sh">Compute Δ'</p>
+      <p><i>a</i> = <i>m</i> + 1 , &nbsp;<i>b</i>' = <i>m</i> − 5 , &nbsp;<i>c</i> = 4<i>m</i> − 5</p>
+      <div class="ch">
+        <span></span><span class="nw">Δ' = <i>b</i>'² − <i>ac</i></span>
+        <span>=</span><span class="nw">(<i>m</i> − 5)² − (<i>m</i> + 1)(4<i>m</i> − 5)</span>
+        <span>=</span><span class="nw"><i>m</i>² − 10<i>m</i> + 25 − (4<i>m</i>² − <i>m</i> − 5)</span>
+        <span>=</span><span class="nw"><b>−3<i>m</i>² − 9<i>m</i> + 30</b></span>
+      </div>
+    </div></div>
+    <div class="step"><div class="num">2</div><div>
+      <p class="sh">Roots of Δ' (trinomial in <i>m</i>)</p>
+      <p class="nw">A = −3 , B = −9 , C = 30</p>
+      <p><span class="nw">A + B + C = 18 ≠ 0</span> and <span class="nw">A − B + C = 36 ≠ 0</span>: no shortcut.</p>
+      <div class="ch">
+        <span></span><span class="nw">D = B² − 4AC = 81 + 360 = 441</span>
+        <span></span><span class="nw">√D = 21</span>
+        <span></span><span class="nw"><i>m</i>₁ = <span class="fr"><span>−B + √D</span><span>2A</span></span> = <span class="fr"><span>9 + 21</span><span>−6</span></span> = −5</span>
+        <span></span><span class="nw"><i>m</i>₂ = <span class="fr"><span>−B − √D</span><span>2A</span></span> = <span class="fr"><span>9 − 21</span><span>−6</span></span> = 2</span>
+      </div>
+      <p>A = −3 &lt; 0: Δ' has the sign of A outside the roots and the opposite sign between them.</p>
+    </div></div>
+    <div class="step"><div class="num">3</div><div>
+      <p class="sh"><i>P</i> and <i>S</i></p>
+      <div class="ch">
+        <span></span><span class="nw"><i>P</i> = <span class="fr"><span><i>c</i></span><span><i>a</i></span></span> = <span class="fr"><span>4<i>m</i> − 5</span><span><i>m</i> + 1</span></span></span>
+        <span></span><span class="nw"><i>S</i> = <span class="fr"><span>−2<i>b</i>'</span><span><i>a</i></span></span> = <span class="fr"><span>−2(<i>m</i> − 5)</span><span><i>m</i> + 1</span></span></span>
+      </div>
+      <p>A quotient has the sign of the product of its numerator and denominator. 4<i>m</i> − 5 = 0 for <i>m</i> = 5/4 ; <i>m</i> − 5 = 0 for <i>m</i> = 5 ; <i>m</i> + 1 = 0 for <i>m</i> = −1 (forbidden value).</p>
+    </div></div>
+    <div class="step"><div class="num">4</div><div>
+      <p class="sh">Sign table</p>
+      <div class="scroll"><table class="sg" data-t='{"v":["−∞","−5","−1","5/4","2","5","+∞"],"r":[["Δ&#39;",["","−","0","+","|","+","|","+","0","−","|","−",""]],["<i>P</i>",["","+","|","+","‖","−","0","+","|","+","|","+",""]],["<i>S</i>",["","−","|","−","‖","+","|","+","|","+","0","−",""]]]}'></table></div>
+    </div></div>
   </div>
 </li>
 
+<!-- 3 -->
 <li>
   <div class="qh"><span class="lab">3)</span><div>Find <i>m</i> so that (<i>E</i>) has:
     <ol class="sublist">
@@ -112,8 +144,15 @@ table.sg{border-collapse:collapse;margin:12px 0;font-size:16px;white-space:nowra
       <div class="qh"><span class="lab">a)</span><div>two distinct roots <i>x</i>₁ and <i>x</i>₂.</div></div>
       <button class="tog">Show answer</button>
       <div class="ans">
-        <p><i>m</i> ≠ 1 and Δ' &gt; 0 ⇔ −3 &lt; <i>m</i> &lt; 2.</p>
-        <p class="res">m ∈ ]−3 ; 1[ ∪ ]1 ; 2[</p>
+        <div class="step"><div class="num">1</div><div>
+          <p class="sh">Conditions</p>
+          <p class="nw"><i>m</i> ≠ −1 and Δ' &gt; 0</p>
+        </div></div>
+        <div class="step"><div class="num">2</div><div>
+          <p class="sh">From the table</p>
+          <p class="nw">Δ' &gt; 0 ⇔ −5 &lt; <i>m</i> &lt; 2</p>
+        </div></div>
+        <div class="res"><small>Result</small><b>m ∈ ]−5 ; −1[ ∪ ]−1 ; 2[</b></div>
       </div>
     </li>
 
@@ -121,9 +160,20 @@ table.sg{border-collapse:collapse;margin:12px 0;font-size:16px;white-space:nowra
       <div class="qh"><span class="lab">b)</span><div>a double root. Give it.</div></div>
       <button class="tog">Show answer</button>
       <div class="ans">
-        <p>Δ' = 0 ⇔ <i>m</i> = −3 or <i>m</i> = 2. The double root is <i>x</i>₀ = <span class="fr"><span><i>m</i> − 3</span><span><i>m</i> − 1</span></span>.</p>
-        <p class="res">m = −3 : x₀ = 3/2 &nbsp;&nbsp;|&nbsp;&nbsp; m = 2 : x₀ = −1</p>
-        <p>Check: <i>m</i> = −3 gives −(2<i>x</i> − 3)² = 0, and <i>m</i> = 2 gives (<i>x</i> + 1)² = 0.</p>
+        <div class="step"><div class="num">1</div><div>
+          <p class="sh">Condition</p>
+          <p class="nw">Δ' = 0 ⇔ <i>m</i> = −5 or <i>m</i> = 2</p>
+        </div></div>
+        <div class="step"><div class="num">2</div><div>
+          <p class="sh">The double root</p>
+          <div class="ch">
+            <span></span><span class="nw"><i>x</i>₀ = <span class="fr"><span>−<i>b</i>'</span><span><i>a</i></span></span> = <span class="fr"><span>−(<i>m</i> − 5)</span><span><i>m</i> + 1</span></span></span>
+            <span></span><span class="nw"><i>m</i> = −5 : &nbsp;<i>x</i>₀ = <span class="fr"><span>10</span><span>−4</span></span> = −5/2</span>
+            <span></span><span class="nw"><i>m</i> = 2 : &nbsp;<i>x</i>₀ = <span class="fr"><span>3</span><span>3</span></span> = 1</span>
+          </div>
+          <p>Check: <span class="nw"><i>m</i> = −5 gives −(2<i>x</i> + 5)² = 0</span> and <span class="nw"><i>m</i> = 2 gives 3(<i>x</i> − 1)² = 0.</span></p>
+        </div></div>
+        <div class="res"><small>Result</small><b>m = −5 : x₀ = −5/2</b><br><b>m = 2 : x₀ = 1</b></div>
       </div>
     </li>
 
@@ -131,11 +181,20 @@ table.sg{border-collapse:collapse;margin:12px 0;font-size:16px;white-space:nowra
       <div class="qh"><span class="lab">c)</span><div>two distinct roots of the same sign. Specify the sign.</div></div>
       <button class="tog">Show answer</button>
       <div class="ans">
-        <p>Conditions: Δ' &gt; 0 and <i>P</i> &gt; 0. From the table:</p>
-        <p class="res">m ∈ ]−3 ; 1[ ∪ ]3/2 ; 2[</p>
-        <p>Sign of the roots:</p>
-        <p>On ]−3 ; 1[, <i>S</i> &gt; 0: <span class="res">both roots positive</span>.</p>
-        <p>On ]3/2 ; 2[, <i>S</i> &lt; 0: <span class="res">both roots negative</span>.</p>
+        <div class="step"><div class="num">1</div><div>
+          <p class="sh">Conditions</p>
+          <p class="nw">Δ' &gt; 0 (part a) and <i>P</i> &gt; 0</p>
+        </div></div>
+        <div class="step"><div class="num">2</div><div>
+          <p class="sh">Superpose the conditions</p>
+          <svg class="sp" data-d='{"b":["−5","−1","5/4","2"],"r":[{"l":"Sol.","s":1,"g":[[0,1],[2,3]],"t":["both −","both +"]},{"l":"Δ&#39; &gt; 0","g":[[0,1],[1,3]]},{"l":"P &gt; 0","g":[[null,1],[2,null]]}]}'></svg>
+        </div></div>
+        <div class="step"><div class="num">3</div><div>
+          <p class="sh">Sign of the roots, from <i>S</i></p>
+          <p>On <span class="nw">]−5 ; −1[</span> : <span class="nw"><i>S</i> &lt; 0</span>, both roots negative.</p>
+          <p>On <span class="nw">]5/4 ; 2[</span> : <span class="nw"><i>S</i> &gt; 0</span>, both roots positive.</p>
+        </div></div>
+        <div class="res"><small>Result</small><b>m ∈ ]−5 ; −1[ ∪ ]5/4 ; 2[</b></div>
       </div>
     </li>
 
@@ -143,51 +202,140 @@ table.sg{border-collapse:collapse;margin:12px 0;font-size:16px;white-space:nowra
       <div class="qh"><span class="lab">d)</span><div>two distinct roots of opposite signs.</div></div>
       <button class="tog">Show answer</button>
       <div class="ans">
-        <p><i>P</i> &lt; 0 ⇔ 1 &lt; <i>m</i> &lt; 3/2 (then Δ' &gt; 0 automatically).</p>
-        <p class="res">m ∈ ]1 ; 3/2[</p>
+        <div class="step"><div class="num">1</div><div>
+          <p class="sh">Condition</p>
+          <p><i>P</i> &lt; 0. Then <i>ac</i> &lt; 0, so Δ' = <i>b</i>'² − <i>ac</i> &gt; 0 automatically.</p>
+        </div></div>
+        <div class="step"><div class="num">2</div><div>
+          <p class="sh">Superpose the conditions</p>
+          <svg class="sp" data-d='{"b":["−5","−1","5/4","2"],"r":[{"l":"Sol.","s":1,"g":[[1,2]]},{"l":"Δ&#39; &gt; 0","g":[[0,1],[1,3]]},{"l":"P &lt; 0","g":[[1,2]]}]}'></svg>
+        </div></div>
+        <div class="res"><small>Result</small><b>m ∈ ]−1 ; 5/4[</b></div>
       </div>
     </li>
 
     <li>
       <div class="qh"><span class="lab">e)</span><div>two distinct roots satisfying:
         <ol class="sublist">
+
         <li>
-          <div class="qh"><span class="lab">i)</span><div>(<i>x</i>₁ − 1)(<i>x</i>₂ − 1) &lt; −1.</div></div>
+          <div class="qh"><span class="lab">i)</span><div><span class="nw">(<i>x</i>₁ + 1)(<i>x</i>₂ + 1) ≥ 5.</span></div></div>
           <button class="tog">Show answer</button>
           <div class="ans">
-            <p>(<i>x</i>₁ − 1)(<i>x</i>₂ − 1) = <i>P</i> − <i>S</i> + 1 = <span class="fr"><span><i>m</i> + 2</span><span><i>m</i> − 1</span></span></p>
-            <p><span class="fr"><span><i>m</i> + 2</span><span><i>m</i> − 1</span></span> + 1 &lt; 0 ⇔ <span class="fr"><span>2<i>m</i> + 1</span><span><i>m</i> − 1</span></span> &lt; 0 ⇔ −1/2 &lt; <i>m</i> &lt; 1.</p>
-            <p>With a):</p>
-            <p class="res">m ∈ ]−1/2 ; 1[</p>
+            <div class="step"><div class="num">1</div><div>
+              <p class="sh">Express with <i>S</i> and <i>P</i></p>
+              <div class="ch">
+                <span></span><span class="nw">(<i>x</i>₁ + 1)(<i>x</i>₂ + 1) = <i>P</i> + <i>S</i> + 1</span>
+                <span>=</span><span class="nw"><span class="fr"><span>(4<i>m</i> − 5) − 2(<i>m</i> − 5) + (<i>m</i> + 1)</span><span><i>m</i> + 1</span></span></span>
+                <span>=</span><span class="nw"><span class="fr"><span>3<i>m</i> + 6</span><span><i>m</i> + 1</span></span></span>
+              </div>
+            </div></div>
+            <div class="step"><div class="num">2</div><div>
+              <p class="sh">Solve the inequality</p>
+              <div class="ch">
+                <span></span><span class="nw"><span class="fr"><span>3<i>m</i> + 6</span><span><i>m</i> + 1</span></span> ≥ 5</span>
+                <span>⇔</span><span class="nw"><span class="fr"><span>3<i>m</i> + 6 − 5(<i>m</i> + 1)</span><span><i>m</i> + 1</span></span> ≥ 0</span>
+                <span>⇔</span><span class="nw"><span class="fr"><span>−2<i>m</i> + 1</span><span><i>m</i> + 1</span></span> ≥ 0</span>
+              </div>
+              <div class="scroll"><table class="sg" data-t='{"v":["−∞","−1","1/2","+∞"],"r":[["−2<i>m</i> + 1",["","+","|","+","0","−",""]],["<i>m</i> + 1",["","−","0","+","|","+",""]],["quotient",["","−","‖","+","0","−",""]]]}'></table></div>
+              <p class="nw">⇔ −1 &lt; <i>m</i> ≤ 1/2</p>
+            </div></div>
+            <div class="step"><div class="num">3</div><div>
+              <p class="sh">Superpose with a)</p>
+              <svg class="sp" data-d='{"b":["−5","−1","1/2","2"],"r":[{"l":"Sol.","s":1,"g":[[1,2,0,1]]},{"l":"Δ&#39; &gt; 0","g":[[0,1],[1,3]]},{"l":"(x₁ + 1)(x₂ + 1) ≥ 5","g":[[1,2,0,1]]}]}'></svg>
+            </div></div>
+            <div class="res"><small>Result</small><b>m ∈ ]−1 ; 1/2]</b></div>
           </div>
         </li>
+
         <li>
-          <div class="qh"><span class="lab">ii)</span><div><span class="fr"><span>1</span><span><i>x</i>₁</span></span> + <span class="fr"><span>1</span><span><i>x</i>₂</span></span> &lt; <i>m</i> + 3.</div></div>
+          <div class="qh"><span class="lab">ii)</span><div><span class="nw"><span class="fr"><span>1</span><span><i>x</i>₁</span></span> + <span class="fr"><span>1</span><span><i>x</i>₂</span></span> &lt; <i>m</i>.</span></div></div>
           <button class="tog">Show answer</button>
           <div class="ans">
-            <p>We need <i>x</i>₁<i>x</i>₂ ≠ 0, so <i>m</i> ≠ 3/2. Then <span class="fr"><span>1</span><span><i>x</i>₁</span></span> + <span class="fr"><span>1</span><span><i>x</i>₂</span></span> = <span class="fr"><span><i>S</i></span><span><i>P</i></span></span> = <span class="fr"><span>2(<i>m</i> − 3)</span><span>2<i>m</i> − 3</span></span>.</p>
-            <p><span class="fr"><span>2(<i>m</i> − 3)</span><span>2<i>m</i> − 3</span></span> − (<i>m</i> + 3) = <span class="fr"><span>−2<i>m</i>² − <i>m</i> + 3</span><span>2<i>m</i> − 3</span></span> &lt; 0</p>
-            <p>Numerator: −2<i>m</i>² − <i>m</i> + 3 ; D = 1 + 24 = 25 , √D = 5 ; roots <span class="fr"><span>1 + 5</span><span>−4</span></span> = −3/2 and <span class="fr"><span>1 − 5</span><span>−4</span></span> = 1. Coefficient of <i>m</i>² is −2 &lt; 0: negative outside the roots, positive between them.</p>
-            <p>Denominator: 2<i>m</i> − 3 = 0 for <i>m</i> = 3/2.</p>
-            <div class="scroll"><table class="sg" id="sg2"></table></div>
-            <p>The quotient is negative ⇔ <i>m</i> ∈ ]−3/2 ; 1[ ∪ ]3/2 ; +∞[.</p>
-            <p>With a):</p>
-            <p class="res">m ∈ ]−3/2 ; 1[ ∪ ]3/2 ; 2[</p>
+            <div class="step"><div class="num">1</div><div>
+              <p class="sh">Express with <i>S</i> and <i>P</i></p>
+              <p>We need <span class="nw"><i>x</i>₁<i>x</i>₂ ≠ 0</span>, so <span class="nw"><i>m</i> ≠ 5/4.</span></p>
+              <div class="ch">
+                <span></span><span class="nw"><span class="fr"><span>1</span><span><i>x</i>₁</span></span> + <span class="fr"><span>1</span><span><i>x</i>₂</span></span> = <span class="fr"><span><i>S</i></span><span><i>P</i></span></span> = <span class="fr"><span>−2(<i>m</i> − 5)</span><span>4<i>m</i> − 5</span></span></span>
+              </div>
+            </div></div>
+            <div class="step"><div class="num">2</div><div>
+              <p class="sh">Solve the inequality</p>
+              <div class="ch">
+                <span></span><span class="nw"><span class="fr"><span>−2(<i>m</i> − 5)</span><span>4<i>m</i> − 5</span></span> &lt; <i>m</i></span>
+                <span>⇔</span><span class="nw"><span class="fr"><span>−2<i>m</i> + 10 − <i>m</i>(4<i>m</i> − 5)</span><span>4<i>m</i> − 5</span></span> &lt; 0</span>
+                <span>⇔</span><span class="nw"><span class="fr"><span>−4<i>m</i>² + 3<i>m</i> + 10</span><span>4<i>m</i> − 5</span></span> &lt; 0</span>
+              </div>
+              <p>Numerator: <span class="nw">A = −4 , B = 3 , C = 10</span>. <span class="nw">A + B + C = 9 ≠ 0</span> and <span class="nw">A − B + C = 3 ≠ 0</span>.</p>
+              <div class="ch">
+                <span></span><span class="nw">D = 9 + 160 = 169 , &nbsp;√D = 13</span>
+                <span></span><span class="nw"><i>m</i>₁ = <span class="fr"><span>−3 + 13</span><span>−8</span></span> = −5/4</span>
+                <span></span><span class="nw"><i>m</i>₂ = <span class="fr"><span>−3 − 13</span><span>−8</span></span> = 2</span>
+              </div>
+              <div class="scroll"><table class="sg" data-t='{"v":["−∞","−5/4","5/4","2","+∞"],"r":[["−4<i>m</i>² + 3<i>m</i> + 10",["","−","0","+","|","+","0","−",""]],["4<i>m</i> − 5",["","−","|","−","0","+","|","+",""]],["quotient",["","+","0","−","‖","+","0","−",""]]]}'></table></div>
+              <p class="nw">⇔ <i>m</i> ∈ ]−5/4 ; 5/4[ ∪ ]2 ; +∞[</p>
+            </div></div>
+            <div class="step"><div class="num">3</div><div>
+              <p class="sh">Superpose with a)</p>
+              <svg class="sp" data-d='{"b":["−5","−5/4","−1","5/4","2"],"r":[{"l":"Sol.","s":1,"g":[[1,2],[2,3]]},{"l":"Δ&#39; &gt; 0","g":[[0,2],[2,4]]},{"l":"1/x₁ + 1/x₂ &lt; m","g":[[1,3],[4,null]]}]}'></svg>
+            </div></div>
+            <div class="res"><small>Result</small><b>m ∈ ]−5/4 ; −1[ ∪ ]−1 ; 5/4[</b></div>
           </div>
         </li>
+
+        <li>
+          <div class="qh"><span class="lab">iii)</span><div>Show that <span class="nw">(4<i>x</i>₁ + 3)(4<i>x</i>₂ + 3)</span> does not depend on <i>m</i>.</div></div>
+          <button class="tog">Show answer</button>
+          <div class="ans">
+            <div class="step"><div class="num">1</div><div>
+              <p class="sh">Expand</p>
+              <div class="ch">
+                <span></span><span class="nw">(4<i>x</i>₁ + 3)(4<i>x</i>₂ + 3) = 16<i>x</i>₁<i>x</i>₂ + 12(<i>x</i>₁ + <i>x</i>₂) + 9</span>
+                <span>=</span><span class="nw">16<i>P</i> + 12<i>S</i> + 9</span>
+              </div>
+            </div></div>
+            <div class="step"><div class="num">2</div><div>
+              <p class="sh">Replace <i>P</i> and <i>S</i></p>
+              <div class="ch">
+                <span></span><span class="nw"><span class="fr"><span>16(4<i>m</i> − 5) − 24(<i>m</i> − 5) + 9(<i>m</i> + 1)</span><span><i>m</i> + 1</span></span></span>
+                <span>=</span><span class="nw"><span class="fr"><span>64<i>m</i> − 80 − 24<i>m</i> + 120 + 9<i>m</i> + 9</span><span><i>m</i> + 1</span></span></span>
+                <span>=</span><span class="nw"><span class="fr"><span>49<i>m</i> + 49</span><span><i>m</i> + 1</span></span> = <span class="fr"><span>49(<i>m</i> + 1)</span><span><i>m</i> + 1</span></span></span>
+              </div>
+            </div></div>
+            <div class="res"><small>Result</small><b>(4x₁ + 3)(4x₂ + 3) = 49 for every m</b></div>
+          </div>
+        </li>
+
         </ol>
       </div></div>
     </li>
 
     <li>
-      <div class="qh"><span class="lab">f)</span><div>two distinct roots, both greater than 1.</div></div>
+      <div class="qh"><span class="lab">f)</span><div>two distinct roots, both less than 1.</div></div>
       <button class="tog">Show answer</button>
       <div class="ans">
-        <p>Conditions: Δ' &gt; 0, (<i>x</i>₁ − 1)(<i>x</i>₂ − 1) &gt; 0 and (<i>x</i>₁ − 1) + (<i>x</i>₂ − 1) &gt; 0.</p>
-        <p>(<i>x</i>₁ − 1) + (<i>x</i>₂ − 1) = <i>S</i> − 2 = <span class="fr"><span>−4</span><span><i>m</i> − 1</span></span> &gt; 0 ⇔ <i>m</i> &lt; 1.</p>
-        <p><span class="fr"><span><i>m</i> + 2</span><span><i>m</i> − 1</span></span> &gt; 0 with <i>m</i> &lt; 1 ⇔ <i>m</i> &lt; −2.</p>
-        <p>With a):</p>
-        <p class="res">m ∈ ]−3 ; −2[</p>
+        <div class="step"><div class="num">1</div><div>
+          <p class="sh">Conditions</p>
+          <p><i>x</i>₁ &lt; 1 and <i>x</i>₂ &lt; 1 ⇔ <span class="nw"><i>x</i>₁ − 1</span> and <span class="nw"><i>x</i>₂ − 1</span> are both negative:</p>
+          <div class="ch">
+            <span>•</span><span class="nw">Δ' &gt; 0</span>
+            <span>•</span><span class="nw">(<i>x</i>₁ − 1)(<i>x</i>₂ − 1) &gt; 0</span>
+            <span>•</span><span class="nw">(<i>x</i>₁ − 1) + (<i>x</i>₂ − 1) &lt; 0</span>
+          </div>
+        </div></div>
+        <div class="step"><div class="num">2</div><div>
+          <p class="sh">Express with <i>S</i> and <i>P</i></p>
+          <div class="ch">
+            <span></span><span class="nw">(<i>x</i>₁ − 1)(<i>x</i>₂ − 1) = <i>P</i> − <i>S</i> + 1 = <span class="fr"><span>7<i>m</i> − 14</span><span><i>m</i> + 1</span></span></span>
+            <span></span><span class="nw">(<i>x</i>₁ − 1) + (<i>x</i>₂ − 1) = <i>S</i> − 2 = <span class="fr"><span>−4<i>m</i> + 8</span><span><i>m</i> + 1</span></span></span>
+          </div>
+          <div class="scroll"><table class="sg" data-t='{"v":["−∞","−1","2","+∞"],"r":[["7<i>m</i> − 14",["","−","|","−","0","+",""]],["−4<i>m</i> + 8",["","+","|","+","0","−",""]],["<i>m</i> + 1",["","−","0","+","|","+",""]],["<i>P</i> − <i>S</i> + 1",["","+","‖","−","0","+",""]],["<i>S</i> − 2",["","−","‖","+","0","−",""]]]}'></table></div>
+        </div></div>
+        <div class="step"><div class="num">3</div><div>
+          <p class="sh">Superpose the conditions</p>
+          <svg class="sp" data-d='{"b":["−5","−1","2"],"r":[{"l":"Sol.","s":1,"g":[[0,1]]},{"l":"Δ&#39; &gt; 0","g":[[0,1],[1,2]]},{"l":"P − S + 1 &gt; 0","g":[[null,1],[2,null]]},{"l":"S − 2 &lt; 0","g":[[null,1],[2,null]]}]}'></svg>
+        </div></div>
+        <div class="res"><small>Result</small><b>m ∈ ]−5 ; −1[</b></div>
       </div>
     </li>
 
@@ -195,58 +343,106 @@ table.sg{border-collapse:collapse;margin:12px 0;font-size:16px;white-space:nowra
   </div></div>
 </li>
 
+<!-- 4 -->
 <li>
-  <div class="qh"><span class="lab">4)</span><div>Find <i>m</i> so that 1 is a root of (<i>E</i>), then find the other root.</div></div>
+  <div class="qh"><span class="lab">4)</span><div>Find <i>m</i> so that −1 is a root of (<i>E</i>), then find the other root.</div></div>
   <button class="tog">Show answer</button>
   <div class="ans">
-    <p><i>a</i> + <i>b</i> + <i>c</i> = (<i>m</i> − 1) − 2(<i>m</i> − 3) + 2<i>m</i> − 3 = <i>m</i> + 2 = 0 ⇔ <i>m</i> = −2.</p>
-    <p>Other root: <i>x</i>₂ = <i>P</i> = <span class="fr"><span>−7</span><span>−3</span></span>.</p>
-    <p class="res">m = −2 , x₂ = 7/3</p>
+    <div class="step"><div class="num">1</div><div>
+      <p class="sh">−1 is a root ⇔ <i>a</i> − <i>b</i> + <i>c</i> = 0</p>
+      <div class="ch">
+        <span></span><span class="nw">(<i>m</i> + 1) − 2(<i>m</i> − 5) + 4<i>m</i> − 5 = 0</span>
+        <span>⇔</span><span class="nw">3<i>m</i> + 6 = 0</span>
+        <span>⇔</span><span class="nw"><i>m</i> = −2</span>
+      </div>
+    </div></div>
+    <div class="step"><div class="num">2</div><div>
+      <p class="sh">The other root, from <i>P</i></p>
+      <div class="ch">
+        <span></span><span class="nw">(−1) · <i>x</i>₂ = <i>P</i> = <span class="fr"><span>4(−2) − 5</span><span>−2 + 1</span></span> = 13</span>
+        <span>⇔</span><span class="nw"><i>x</i>₂ = −13</span>
+      </div>
+    </div></div>
+    <div class="res"><small>Result</small><b>m = −2 , x₂ = −13</b></div>
   </div>
 </li>
 
+<!-- 5 -->
 <li>
   <div class="qh"><span class="lab">5)</span><div>Find <i>m</i> so that 0 is a root of (<i>E</i>), then find the other root.</div></div>
   <button class="tog">Show answer</button>
   <div class="ans">
-    <p><i>c</i> = 2<i>m</i> − 3 = 0 ⇔ <i>m</i> = 3/2.</p>
-    <p>Other root: <i>x</i>₂ = <i>S</i> = <span class="fr"><span>2(3/2 − 3)</span><span>3/2 − 1</span></span> = −6.</p>
-    <p class="res">m = 3/2 , x₂ = −6</p>
+    <div class="step"><div class="num">1</div><div>
+      <p class="sh">0 is a root ⇔ <i>c</i> = 0</p>
+      <p class="nw">4<i>m</i> − 5 = 0 ⇔ <i>m</i> = 5/4</p>
+    </div></div>
+    <div class="step"><div class="num">2</div><div>
+      <p class="sh">The other root, from <i>S</i></p>
+      <div class="ch">
+        <span></span><span class="nw">0 + <i>x</i>₂ = <i>S</i> = <span class="fr"><span>−2(5/4 − 5)</span><span>5/4 + 1</span></span> = <span class="fr"><span>15/2</span><span>9/4</span></span> = 10/3</span>
+      </div>
+    </div></div>
+    <div class="res"><small>Result</small><b>m = 5/4 , x₂ = 10/3</b></div>
   </div>
 </li>
 
 </ol>
-<p class="note">Remark: m = 3/2 is the border between c) and d): at this value one root is 0, so the roots are neither of the same sign nor of opposite signs.</p>
+<p class="note">Remarks: m = 5/4 is the border between c) and d): one root is 0, so the roots are neither of the same sign nor of opposite signs. In e.iii), 4x + 3 = 0 gives x = −3/4, the root found in part 1 for m = −1.</p>
 </div>
 
 <script>
 {
-/* Sign table: values at the borders, signs in the intervals.
-   In a row: '' = nothing (at ±∞), '|' = plain vertical line, '0' = zero on the line, '‖' = forbidden value */
-const vals=['−∞','−3','1','3/2','2','3','+∞'];
-const rows=[
-  ["Δ'",['','−','0','+','|','+','|','+','0','−','|','−','']],
-  ['<i>P</i>',['','+','|','+','‖','−','0','+','|','+','|','+','']],
-  ['<i>S</i>',['','+','|','+','‖','−','|','−','|','−','0','+','']]
-];
-const build=(id,vals,rows)=>{
-const head='<tr><th><i>m</i></th>'+vals.map((v,k)=>'<td class="v">'+v+'</td>'+(k<vals.length-1?'<td class="i"></td>':'')).join('')+'</tr>';
-document.getElementById(id).innerHTML=head+rows.map(([l,cs])=>'<tr><th>'+l+'</th>'+cs.map(cell).join('')+'</tr>').join('');
-};
+/* Sign tables: values at the borders, signs in the intervals.
+   '' = nothing (at ±∞), '|' = plain line, '0' = zero on the line, '‖' = forbidden value */
 const cell=(c,k)=>{
-  if(k%2){return '<td class="i '+(c==='+'?'p':'n')+'">'+c+'</td>'}
+  if(k%2)return '<td class="i '+(c==='+'?'p':'n')+'">'+c+'</td>';
   if(c==='')return '<td class="v"></td>';
   if(c==='‖')return '<td class="v dbl"></td>';
   return '<td class="v k">'+(c==='0'?'<span class="z">0</span>':'')+'</td>';
 };
-build('sg',vals,rows);
-build('sg2',['−∞','−3/2','1','3/2','+∞'],[
-  ['−2<i>m</i>² − <i>m</i> + 3',['','−','0','+','0','−','|','−','']],
-  ['2<i>m</i> − 3',['','−','|','−','|','−','0','+','']],
-  ['quotient',['','+','0','−','0','+','‖','−','']]
-]);
+for(const t of document.querySelectorAll('table.sg[data-t]')){
+  const d=JSON.parse(t.dataset.t);
+  const head='<tr><th><i>m</i></th>'+d.v.map((v,k)=>'<td class="v">'+v+'</td>'+(k<d.v.length-1?'<td class="i"></td>':'')).join('')+'</tr>';
+  t.innerHTML=head+d.r.map(([l,cs])=>'<tr><th>'+l+'</th>'+cs.map(cell).join('')+'</tr>').join('');
+}
 
-const toggle=(btn,open)=>{const a=btn.nextElementSibling;const o=open===undefined?!a.classList.contains('open'):open;a.classList.toggle('open',o);btn.textContent=o?'Hide answer':'Show answer';btn.setAttribute('aria-expanded',o)};
+/* Superposition diagrams.
+   b: bounds (equally spaced). r: rows, top first. g: segments [from,to,closedFrom,closedTo];
+   null = runs to the edge. s: solution row. t: small text above each segment. */
+const draw=s=>{
+  const W=Math.max(240,Math.min(460,s.clientWidth||0)); if(!s.clientWidth)return;
+  const L=8,R=W-12,ROW=36,TOP=8;
+  const d=JSON.parse(s.dataset.d), nb=d.b.length;
+  const X=i=>L+14+(i+0.5)*((R-L-28)/nb);
+  const axisY=TOP+d.r.length*ROW+6, H=axisY+24;
+  let o='<g stroke="var(--dash)" stroke-width="1" stroke-dasharray="2 3">'+d.b.map((_,i)=>'<line x1="'+X(i)+'" y1="'+TOP+'" x2="'+X(i)+'" y2="'+axisY+'"/>').join('')+'</g>';
+  d.r.forEach((r,ri)=>{
+    const y=TOP+ri*ROW+24, col=r.s?'var(--sol)':'var(--gray)', w=r.s?5:3, dot=r.s?4:3;
+    o+='<text x="0" y="'+(y-9)+'" font-size="12" font-weight="'+(r.s?600:400)+'" fill="'+(r.s?'var(--ac)':'var(--mute)')+'">'+r.l+'</text>';
+    const ends=[];r.g.forEach(g=>{if(g[0]!==null)ends.push(g[0]);if(g[1]!==null)ends.push(g[1])});
+    r.g.forEach((g,gi)=>{
+      const [a,b,ca,cb]=g;
+      let x1=a===null?L:X(a), x2=b===null?R:X(b);
+      if(a!==null&&!ca&&ends.filter(e=>e===a).length>1)x1+=4;
+      if(b!==null&&!cb&&ends.filter(e=>e===b).length>1)x2-=4;
+      o+='<line x1="'+x1+'" y1="'+y+'" x2="'+x2+'" y2="'+y+'" stroke="'+col+'" stroke-width="'+w+'"/>';
+      if(ca)o+='<circle cx="'+x1+'" cy="'+y+'" r="'+dot+'" fill="'+col+'"/>';
+      if(cb)o+='<circle cx="'+x2+'" cy="'+y+'" r="'+dot+'" fill="'+col+'"/>';
+      if(r.t&&r.t[gi])o+='<text x="'+((x1+x2)/2)+'" y="'+(y-9)+'" font-size="11" text-anchor="middle" fill="var(--ac)">'+r.t[gi]+'</text>';
+    });
+  });
+  o+='<line x1="'+L+'" y1="'+axisY+'" x2="'+(R+2)+'" y2="'+axisY+'" stroke="var(--mute)" stroke-width="1"/>';
+  o+='<path d="M'+(R+2)+' '+(axisY-3)+' L'+(R+8)+' '+axisY+' L'+(R+2)+' '+(axisY+3)+' Z" fill="var(--mute)"/>';
+  o+=d.b.map((v,i)=>'<line x1="'+X(i)+'" y1="'+(axisY-1.5)+'" x2="'+X(i)+'" y2="'+(axisY+1.5)+'" stroke="var(--mute)" stroke-width="1"/><text x="'+X(i)+'" y="'+(axisY+17)+'" font-size="12" text-anchor="middle" fill="var(--mute)">'+v+'</text>').join('');
+  o+='<text x="'+(R+8)+'" y="'+(axisY+17)+'" font-size="12" text-anchor="end" font-style="italic" font-family="Source Serif 4,Georgia,serif" fill="var(--mute)">m</text>';
+  s.setAttribute('viewBox','0 0 '+W+' '+H);
+  s.style.height=H+'px';
+  s.innerHTML=o;
+};
+const spObs=new ResizeObserver(es=>es.forEach(e=>draw(e.target)));
+document.querySelectorAll('svg.sp[data-d]').forEach(s=>{spObs.observe(s);draw(s)});
+
+const toggle=(btn,open)=>{const a=btn.nextElementSibling;const v=open===undefined?!a.classList.contains('open'):open;a.classList.toggle('open',v);btn.textContent=v?'Hide answer':'Show answer';btn.setAttribute('aria-expanded',v)};
 const btns=[...document.querySelectorAll('.tog')];
 btns.forEach(b=>{b.setAttribute('aria-expanded','false');b.addEventListener('click',()=>toggle(b))});
 document.getElementById('showAll').addEventListener('click',()=>btns.forEach(b=>toggle(b,true)));
