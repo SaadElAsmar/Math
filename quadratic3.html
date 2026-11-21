@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quadratic with Parameter 3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/*
+VOICE: calm, exact, a well-set math worksheet.
+IDEA: a printed exercise sheet with fold-down answer flaps.
+PICTURE: the equation, set large, with the sign table of Δ', P, S.
+COLOUR and TYPE: white paper, dark ink, one deep teal accent for answers; Source Serif for math, Inter for buttons.
+LAYOUT: one column, each question a row with its own Show/Hide answer under it.
+*/
+:root{color-scheme:light dark;--bg:light-dark(#ffffff,#14171a);--ink:light-dark(#1b1d1f,#e9ecee);--mute:light-dark(#5c6268,#a3abb2);--line:light-dark(#dfe3e6,#2c3236);--ac:light-dark(#0b6e6e,#5fd1c8);--acbg:light-dark(#eef7f6,#18282a);--plus:light-dark(#0b6e3a,#6fdc9c);--minus:light-dark(#b0262c,#ff8a8f)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 "Source Serif 4",Georgia,serif;overflow-x:clip}
+.wrap{max-width:820px;margin:0 auto;padding:clamp(24px,4vw,56px) max(5vw,16px) 64px}
+h1{font-size:clamp(28px,4.5vw,40px);line-height:1.1;margin:0 0 6px;text-wrap:balance}
+.sub{color:var(--mute);margin:0 0 28px;font-size:16px}
+.eq{border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);padding:22px 0;margin:0 0 10px;display:flex;align-items:center;justify-content:center;gap:28px;flex-wrap:wrap;font-size:clamp(20px,4vw,30px)}
+.eq i{font-style:italic}
+.eq .tag{font-size:.8em}
+.intro{margin:18px 0 8px}
+.bar{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 8px}
+button{font:500 15px Inter,system-ui,sans-serif;min-height:44px;padding:0 16px;border-radius:8px;border:1.5px solid var(--ac);background:transparent;color:var(--ac);cursor:pointer}
+button:hover{background:var(--acbg)}
+button:focus-visible{outline:3px solid var(--ac);outline-offset:2px}
+button.solid{background:var(--ac);color:var(--bg)}
+ol.q{list-style:none;padding:0;margin:0}
+.q>li{border-bottom:1px solid var(--line);padding:16px 0}
+.qh{display:grid;grid-template-columns:2.2em minmax(0,1fr);gap:4px}
+.lab{font-weight:700}
+.sublist{list-style:none;padding:0;margin:8px 0 0}
+.sublist>li{margin:6px 0}
+.tog{margin:10px 0 0 2.2em;min-height:36px;font-size:14px;padding:0 12px}
+.ans{display:none;margin:10px 0 0 2.2em;background:var(--acbg);border-left:3px solid var(--ac);padding:12px 16px;border-radius:0 8px 8px 0}
+.ans.open{display:block}
+.ans p{margin:6px 0}
+.res{font-weight:700;color:var(--ac)}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;font-size:.92em;line-height:1.15;margin:0 2px}
+.fr>span:first-child{border-bottom:1px solid currentColor;padding:0 3px}
+.fr>span:last-child{padding:0 3px}
+.scroll{overflow-x:auto}
+table.sg{border-collapse:collapse;margin:12px 0;font-size:16px;white-space:nowrap;background:var(--bg);border:1.5px solid var(--ink)}
+.sg th{font-weight:600;padding:7px 14px;border-right:1.5px solid var(--ink);text-align:center}
+.sg td{padding:7px 0;text-align:center}
+.sg tr:first-child>*{border-bottom:1.5px solid var(--ink)}
+.sg tr+tr>*{border-top:1px solid var(--line)}
+.sg td.i{min-width:46px;padding:7px 6px}
+.sg td.v{min-width:30px;padding:7px 4px}
+.sg td.v.k{background:linear-gradient(var(--ink),var(--ink)) center/1px 100% no-repeat}
+.sg td.v.k span{background:var(--bg);padding:0 3px}
+.sg td.v.dbl{background:linear-gradient(90deg,transparent calc(50% - 2.5px),var(--ink) calc(50% - 2.5px),var(--ink) calc(50% - 1.5px),transparent calc(50% - 1.5px),transparent calc(50% + 1.5px),var(--ink) calc(50% + 1.5px),var(--ink) calc(50% + 2.5px),transparent calc(50% + 2.5px))}
+.p{color:var(--plus);font-weight:700}.n{color:var(--minus);font-weight:700}.z{font-weight:700}
+.note{color:var(--mute);font-size:14px;margin-top:28px}
+@media print{button{display:none}.ans{display:block!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Quadratic equation with a parameter (3)</h1>
+<p class="sub">Discussion according to the real parameter <i>m</i></p>
+
+<div class="eq"><span><i>m</i><i>x</i>² + (<i>m</i> + 7)<i>x</i> + 2<i>m</i> − 7 = 0</span><span class="tag">(<i>E</i>)</span></div>
+
+<div class="bar">
+  <button class="solid" id="showAll">Show all answers</button>
+  <button id="hideAll">Hide all answers</button>
+</div>
+
+<ol class="q">
+
+<li>
+  <div class="qh"><span class="lab">1)</span><div>Solve (<i>E</i>) for <i>m</i> = 0.</div></div>
+  <button class="tog">Show answer</button>
+  <div class="ans">
+    <p>For <i>m</i> = 0, (<i>E</i>) becomes 7<i>x</i> − 7 = 0 (first degree).</p>
+    <p class="res">x = 1</p>
+    <p>From now on, suppose <i>m</i> ≠ 0.</p>
+  </div>
+</li>
+
+<li>
+  <div class="qh"><span class="lab">2)</span><div>For <i>m</i> ≠ 0, compute Δ, the product <i>P</i> and the sum <i>S</i> of the roots, then make the sign table of Δ, <i>P</i> and <i>S</i>.</div></div>
+  <button class="tog">Show answer</button>
+  <div class="ans">
+    <p>Here <i>b</i> = <i>m</i> + 7 is not of the form 2<i>b</i>', so we use Δ = <i>b</i>² − 4<i>ac</i>.</p>
+    <p>Δ = (<i>m</i> + 7)² − 4<i>m</i>(2<i>m</i> − 7) = <i>m</i>² + 14<i>m</i> + 49 − 8<i>m</i>² + 28<i>m</i></p>
+    <p><span class="res">Δ = −7<i>m</i>² + 42<i>m</i> + 49</span></p>
+    <p><b>Roots of Δ</b> (a trinomial in <i>m</i> with A = −7, B = 42, C = 49):</p>
+    <p>D = B² − 4AC = 42² − 4(−7)(49) = 1764 + 1372 = 3136 , &nbsp;√D = 56</p>
+    <p><i>m</i>₁ = <span class="fr"><span>−B + √D</span><span>2A</span></span> = <span class="fr"><span>−42 + 56</span><span>−14</span></span> = −1 &nbsp;&nbsp; <i>m</i>₂ = <span class="fr"><span>−B − √D</span><span>2A</span></span> = <span class="fr"><span>−42 − 56</span><span>−14</span></span> = 7</p>
+    <p><b>Sign of Δ</b>: the coefficient of <i>m</i>² is A = −7 &lt; 0. A trinomial has the sign of A outside its roots and the opposite sign between them:</p>
+    <p>Δ &lt; 0 for <i>m</i> &lt; −1 or <i>m</i> &gt; 7 , &nbsp; Δ &gt; 0 for −1 &lt; <i>m</i> &lt; 7.</p>
+    <p><i>P</i> = <span class="fr"><span><i>c</i></span><span><i>a</i></span></span> = <span class="fr"><span>2<i>m</i> − 7</span><span><i>m</i></span></span> &nbsp;&nbsp; <i>S</i> = −<span class="fr"><span><i>b</i></span><span><i>a</i></span></span> = <span class="fr"><span>−(<i>m</i> + 7)</span><span><i>m</i></span></span></p>
+    <p><b>Sign of <i>P</i> and <i>S</i></b>: a quotient has the same sign as the product of its numerator and denominator. 2<i>m</i> − 7 = 0 for <i>m</i> = 7/2 ; −(<i>m</i> + 7) = 0 for <i>m</i> = −7 ; <i>m</i> = 0 is the forbidden value.</p>
+    <p>Critical values: −7, −1, 0, 7/2, 7.</p>
+    <div class="scroll"><table class="sg" id="sg"></table></div>
+  </div>
+</li>
+
+<li>
+  <div class="qh"><span class="lab">3)</span><div>Find <i>m</i> so that (<i>E</i>) has:
+    <ol class="sublist">
+
+    <li>
+      <div class="qh"><span class="lab">a)</span><div>two distinct roots <i>x</i>₁ and <i>x</i>₂.</div></div>
+      <button class="tog">Show answer</button>
+      <div class="ans">
+        <p><i>m</i> ≠ 0 and Δ &gt; 0 ⇔ −1 &lt; <i>m</i> &lt; 7.</p>
+        <p class="res">m ∈ ]−1 ; 0[ ∪ ]0 ; 7[</p>
+      </div>
+    </li>
+
+    <li>
+      <div class="qh"><span class="lab">b)</span><div>a double root. Give it.</div></div>
+      <button class="tog">Show answer</button>
+      <div class="ans">
+        <p>Δ = 0 ⇔ <i>m</i> = −1 or <i>m</i> = 7. The double root is <i>x</i>₀ = <span class="fr"><span>−<i>b</i></span><span>2<i>a</i></span></span> = <span class="fr"><span>−(<i>m</i> + 7)</span><span>2<i>m</i></span></span>.</p>
+        <p class="res">m = −1 : x₀ = 3 &nbsp;&nbsp;|&nbsp;&nbsp; m = 7 : x₀ = −1</p>
+        <p>Check: <i>m</i> = −1 gives −(<i>x</i> − 3)² = 0, and <i>m</i> = 7 gives 7(<i>x</i> + 1)² = 0.</p>
+      </div>
+    </li>
+
+    <li>
+      <div class="qh"><span class="lab">c)</span><div>two distinct roots of the same sign. Specify the sign.</div></div>
+      <button class="tog">Show answer</button>
+      <div class="ans">
+        <p>Conditions: Δ &gt; 0 and <i>P</i> &gt; 0. From the table:</p>
+        <p class="res">m ∈ ]−1 ; 0[ ∪ ]7/2 ; 7[</p>
+        <p>Sign of the roots:</p>
+        <p>On ]−1 ; 0[, <i>S</i> &gt; 0: <span class="res">both roots positive</span>.</p>
+        <p>On ]7/2 ; 7[, <i>S</i> &lt; 0: <span class="res">both roots negative</span>.</p>
+      </div>
+    </li>
+
+    <li>
+      <div class="qh"><span class="lab">d)</span><div>two distinct roots of opposite signs.</div></div>
+      <button class="tog">Show answer</button>
+      <div class="ans">
+        <p><i>P</i> &lt; 0 ⇔ 0 &lt; <i>m</i> &lt; 7/2 (then Δ &gt; 0 automatically).</p>
+        <p class="res">m ∈ ]0 ; 7/2[</p>
+      </div>
+    </li>
+
+    <li>
+      <div class="qh"><span class="lab">e)</span><div>two distinct roots satisfying:
+        <ol class="sublist">
+        <li>
+          <div class="qh"><span class="lab">i)</span><div>Show that (<i>x</i>₁ − 1)(<i>x</i>₂ − 1) does not depend on <i>m</i>.</div></div>
+          <button class="tog">Show answer</button>
+          <div class="ans">
+            <p>(<i>x</i>₁ − 1)(<i>x</i>₂ − 1) = <i>P</i> − <i>S</i> + 1 = <span class="fr"><span>(2<i>m</i> − 7) + (<i>m</i> + 7) + <i>m</i></span><span><i>m</i></span></span> = <span class="fr"><span>4<i>m</i></span><span><i>m</i></span></span></p>
+            <p class="res">(x₁ − 1)(x₂ − 1) = 4 for every m</p>
+          </div>
+        </li>
+        <li>
+          <div class="qh"><span class="lab">ii)</span><div>(<i>x</i>₁ + 1)(<i>x</i>₂ + 1) ≥ −2.</div></div>
+          <button class="tog">Show answer</button>
+          <div class="ans">
+            <p>(<i>x</i>₁ + 1)(<i>x</i>₂ + 1) = <i>P</i> + <i>S</i> + 1 = <span class="fr"><span>(2<i>m</i> − 7) − (<i>m</i> + 7) + <i>m</i></span><span><i>m</i></span></span> = <span class="fr"><span>2<i>m</i> − 14</span><span><i>m</i></span></span></p>
+            <p><span class="fr"><span>2<i>m</i> − 14</span><span><i>m</i></span></span> + 2 ≥ 0 ⇔ <span class="fr"><span>4<i>m</i> − 14</span><span><i>m</i></span></span> ≥ 0 ⇔ <i>m</i> &lt; 0 or <i>m</i> ≥ 7/2.</p>
+            <p>With a):</p>
+            <p class="res">m ∈ ]−1 ; 0[ ∪ [7/2 ; 7[</p>
+          </div>
+        </li>
+        <li>
+          <div class="qh"><span class="lab">iii)</span><div><span class="fr"><span>1</span><span><i>x</i>₁</span></span> + <span class="fr"><span>1</span><span><i>x</i>₂</span></span> &lt; <i>m</i> + 1.</div></div>
+          <button class="tog">Show answer</button>
+          <div class="ans">
+            <p>We need <i>x</i>₁<i>x</i>₂ ≠ 0, so <i>m</i> ≠ 7/2. Then <span class="fr"><span>1</span><span><i>x</i>₁</span></span> + <span class="fr"><span>1</span><span><i>x</i>₂</span></span> = <span class="fr"><span><i>S</i></span><span><i>P</i></span></span> = <span class="fr"><span>−(<i>m</i> + 7)</span><span>2<i>m</i> − 7</span></span>.</p>
+            <p><span class="fr"><span>−(<i>m</i> + 7)</span><span>2<i>m</i> − 7</span></span> − (<i>m</i> + 1) = <span class="fr"><span>−<i>m</i> − 7 − (2<i>m</i>² − 5<i>m</i> − 7)</span><span>2<i>m</i> − 7</span></span> = <span class="fr"><span>−2<i>m</i>² + 4<i>m</i></span><span>2<i>m</i> − 7</span></span> &lt; 0</p>
+            <p>Numerator: −2<i>m</i>² + 4<i>m</i> with A = −2, B = 4, C = 0 ; D = 16 , √D = 4 ; roots <span class="fr"><span>−4 + 4</span><span>−4</span></span> = 0 and <span class="fr"><span>−4 − 4</span><span>−4</span></span> = 2. A &lt; 0: negative outside the roots, positive between them.</p>
+            <p>Denominator: 2<i>m</i> − 7 = 0 for <i>m</i> = 7/2.</p>
+            <div class="scroll"><table class="sg" id="sg2"></table></div>
+            <p>The quotient is negative ⇔ <i>m</i> ∈ ]0 ; 2[ ∪ ]7/2 ; +∞[.</p>
+            <p>With a):</p>
+            <p class="res">m ∈ ]0 ; 2[ ∪ ]7/2 ; 7[</p>
+          </div>
+        </li>
+        </ol>
+      </div></div>
+    </li>
+
+    <li>
+      <div class="qh"><span class="lab">f)</span><div>two distinct roots, both greater than 1.</div></div>
+      <button class="tog">Show answer</button>
+      <div class="ans">
+        <p>Conditions: Δ &gt; 0, (<i>x</i>₁ − 1)(<i>x</i>₂ − 1) &gt; 0 and (<i>x</i>₁ − 1) + (<i>x</i>₂ − 1) &gt; 0.</p>
+        <p>By e.i), (<i>x</i>₁ − 1)(<i>x</i>₂ − 1) = 4 &gt; 0 always.</p>
+        <p>(<i>x</i>₁ − 1) + (<i>x</i>₂ − 1) = <i>S</i> − 2 = <span class="fr"><span>−(<i>m</i> + 7) − 2<i>m</i></span><span><i>m</i></span></span> = <span class="fr"><span>−3<i>m</i> − 7</span><span><i>m</i></span></span> &gt; 0 ⇔ −7/3 &lt; <i>m</i> &lt; 0.</p>
+        <p>With a):</p>
+        <p class="res">m ∈ ]−1 ; 0[</p>
+      </div>
+    </li>
+
+    </ol>
+  </div></div>
+</li>
+
+<li>
+  <div class="qh"><span class="lab">4)</span><div>Find <i>m</i> so that 2 is a root of (<i>E</i>), then find the other root.</div></div>
+  <button class="tog">Show answer</button>
+  <div class="ans">
+    <p>Replace <i>x</i> by 2: 4<i>m</i> + 2(<i>m</i> + 7) + 2<i>m</i> − 7 = 8<i>m</i> + 7 = 0 ⇔ <i>m</i> = −7/8.</p>
+    <p>Other root: 2<i>x</i>₂ = <i>P</i> = <span class="fr"><span>2(−7/8) − 7</span><span>−7/8</span></span> = <span class="fr"><span>−35/4</span><span>−7/8</span></span> = 10.</p>
+    <p class="res">m = −7/8 , x₂ = 5</p>
+  </div>
+</li>
+
+<li>
+  <div class="qh"><span class="lab">5)</span><div>Find <i>m</i> so that 0 is a root of (<i>E</i>), then find the other root.</div></div>
+  <button class="tog">Show answer</button>
+  <div class="ans">
+    <p><i>c</i> = 2<i>m</i> − 7 = 0 ⇔ <i>m</i> = 7/2.</p>
+    <p>Other root: <i>x</i>₂ = <i>S</i> = <span class="fr"><span>−(7/2 + 7)</span><span>7/2</span></span> = −3.</p>
+    <p class="res">m = 7/2 , x₂ = −3</p>
+  </div>
+</li>
+
+</ol>
+<p class="note">Remark: for m = 0 the equation is of first degree and its root is 1. This agrees with e.i): 1 is never a root when m ≠ 0, since (x₁ − 1)(x₂ − 1) = 4 ≠ 0.</p>
+</div>
+
+<script>
+{
+/* Sign table: values at the borders, signs in the intervals.
+   In a row: '' = nothing (at ±∞), '|' = plain vertical line, '0' = zero on the line, '‖' = forbidden value */
+const vals=['−∞','−7','−1','0','7/2','7','+∞'];
+const rows=[
+  ["Δ",['','−','|','−','0','+','|','+','|','+','0','−','']],
+  ['<i>P</i>',['','+','|','+','|','+','‖','−','0','+','|','+','']],
+  ['<i>S</i>',['','−','0','+','|','+','‖','−','|','−','|','−','']]
+];
+const build=(id,vals,rows)=>{
+const head='<tr><th><i>m</i></th>'+vals.map((v,k)=>'<td class="v">'+v+'</td>'+(k<vals.length-1?'<td class="i"></td>':'')).join('')+'</tr>';
+document.getElementById(id).innerHTML=head+rows.map(([l,cs])=>'<tr><th>'+l+'</th>'+cs.map(cell).join('')+'</tr>').join('');
+};
+const cell=(c,k)=>{
+  if(k%2){return '<td class="i '+(c==='+'?'p':'n')+'">'+c+'</td>'}
+  if(c==='')return '<td class="v"></td>';
+  if(c==='‖')return '<td class="v dbl"></td>';
+  return '<td class="v k">'+(c==='0'?'<span class="z">0</span>':'')+'</td>';
+};
+build('sg',vals,rows);
+build('sg2',['−∞','0','2','7/2','+∞'],[
+  ['−2<i>m</i>² + 4<i>m</i>',['','−','0','+','0','−','|','−','']],
+  ['2<i>m</i> − 7',['','−','|','−','|','−','0','+','']],
+  ['quotient',['','+','0','−','0','+','‖','−','']]
+]);
+
+const toggle=(btn,open)=>{const a=btn.nextElementSibling;const o=open===undefined?!a.classList.contains('open'):open;a.classList.toggle('open',o);btn.textContent=o?'Hide answer':'Show answer';btn.setAttribute('aria-expanded',o)};
+const btns=[...document.querySelectorAll('.tog')];
+btns.forEach(b=>{b.setAttribute('aria-expanded','false');b.addEventListener('click',()=>toggle(b))});
+document.getElementById('showAll').addEventListener('click',()=>btns.forEach(b=>toggle(b,true)));
+document.getElementById('hideAll').addEventListener('click',()=>btns.forEach(b=>toggle(b,false)));
+}
+</script>
+</body>
+</html>
