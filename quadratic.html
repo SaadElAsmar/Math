@@ -85,8 +85,6 @@ button.link:hover{background:none;opacity:1}
 .tot tr.sum td{font-weight:600;border-bottom:0}
 .msg{color:var(--minus);font-size:14px;min-height:0}
 .msg:empty{display:none}
-body.stu .qh[data-part]{cursor:pointer;border-radius:8px;outline:1px dashed var(--dash);outline-offset:4px}
-body.stu .qh[data-part]:hover{background:var(--acbg)}
 .eye{border:0;background:none;color:var(--mute);opacity:.55;min-height:0;width:24px;height:24px;padding:0;margin-left:4px;vertical-align:middle;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;cursor:pointer}
 .eye:hover{opacity:1;background:var(--acbg)}
 .ans{user-select:none;-webkit-user-select:none}
@@ -105,37 +103,6 @@ body.stu .qh[data-part]:hover{background:var(--acbg)}
 <p class="sub">Discussion selon le paramètre réel <i>m</i></p>
 
 <div class="eq"><span>(<i>m</i> + 1)<i>x</i>² + 2(<i>m</i> − 5)<i>x</i> + 4<i>m</i> − 5 = 0</span><span>(<i>E</i>)</span></div>
-
-<div class="acc">
-  <button class="link" id="accBtn" aria-expanded="false">Corrigés</button>
-  <div id="accPanel" class="panel" hidden>
-    <form id="loginForm" class="row">
-      <input id="codeIn" type="password" autocomplete="off" placeholder="Code" aria-label="Code">
-      <button type="submit">OK</button>
-    </form>
-    <div id="stuBox" hidden>
-      <p id="stuMsg">Touche une question pour voir son corrigé pendant 50 s.</p>
-      <button type="button" id="lockBtn" class="small">Verrouiller</button>
-    </div>
-    <div id="teaBox" hidden>
-      <p class="pt">Corrigés ouverts depuis <span id="since"></span></p>
-      <table class="tot"><tbody id="totBody"></tbody></table>
-      <p class="pt">Codes</p>
-      <form id="codesForm" class="grid2">
-        <label>Code 1<input id="c1In" autocomplete="off"></label>
-        <label>Code 2<input id="c2In" autocomplete="off"></label>
-        <button type="submit" class="small">Enregistrer les codes</button>
-      </form>
-      <p class="pt">Remise à zéro</p>
-      <div class="row wrapr">
-        <label class="rad"><input type="radio" name="mode" value="one"> Un corrigé par code</label>
-        <label class="rad"><input type="radio" name="mode" value="all"> Tous les corrigés</label>
-      </div>
-      <div class="row"><button type="button" id="resetBtn" class="small">Remettre à zéro</button><button type="button" id="closeBtn" class="small">Fermer</button></div>
-    </div>
-    <p id="accMsg" class="msg" role="status"></p>
-  </div>
-</div>
 
 <ol class="q">
 
@@ -283,77 +250,30 @@ const spObs=new ResizeObserver(es=>es.forEach(e=>draw(e.target)));
 const buildDiagrams=root=>root.querySelectorAll('svg.sp[data-d]').forEach(s=>{spObs.observe(s);draw(s)});
 buildDiagrams(document);
 
-/* Answers access: codes are checked by the Apps Script, answers come from it one at a time */
+/* Answers: each eye opens one answer for 15 s (one at a time); the Apps Script counts each opening */
 const API='https://script.google.com/macros/s/AKfycbxCT9amacyKKkQJhzrnjFkjM2HKnxq4T87vsryULQHPqJvyWezvHXpc-APpsu50VRUXwQ/exec';
-const $=id=>document.getElementById(id);
-const st={token:null,teacher:null,more:false,busy:false};
-const msg=t=>{$('accMsg').textContent=t||''};
-const call=async body=>{
-  if(!API)throw new Error('Le service des corrigés n’est pas encore connecté.');
-  const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body)});
-  return r.json();
-};
-const show=v=>{$('loginForm').hidden=v!=='login';$('stuBox').hidden=v!=='stu';$('teaBox').hidden=v!=='tea';document.body.classList.toggle('stu',v==='stu')};
-const fillTeacher=d=>{
-  $('since').textContent=d.since;
-  $('totBody').innerHTML=d.counts.map(([l,c])=>'<tr><td>'+l+'</td><td>'+c+'</td></tr>').join('')+'<tr class="sum"><td>Total</td><td>'+d.total+'</td></tr>';
-  $('c1In').value=d.code1;$('c2In').value=d.code2;
-  document.querySelectorAll('input[name=mode]').forEach(r=>r.checked=r.value===d.mode);
-};
-$('accBtn').addEventListener('click',()=>{const p=$('accPanel');p.hidden=!p.hidden;$('accBtn').setAttribute('aria-expanded',!p.hidden);if(!p.hidden&&!$('loginForm').hidden)$('codeIn').focus()});
-$('loginForm').addEventListener('submit',async e=>{
-  e.preventDefault();const code=$('codeIn').value.trim();
-  if(!code){msg('Saisis d’abord un code.');return}
-  msg('');
-  try{
-    const d=await call({action:'login',code});
-    if(!d.ok){msg(d.err||'Code incorrect');return}
-    $('codeIn').value='';
-    if(d.role==='teacher'){st.teacher=code;fillTeacher(d);show('tea')}
-    else{st.token=d.token;st.more=true;const pp=pending;pending=null;setTimeout(()=>{if(pp)openPart(pp)},0);$('stuMsg').textContent=d.mode==='one'?'Touche une question pour voir son corrigé pendant 50 s (un seul corrigé).':'Touche une question pour voir son corrigé pendant 50 s.';show('stu')}
-  }catch(err){msg(err.message||'Problème de connexion. Réessaie.')}
-});
-$('codeIn').addEventListener('input',()=>msg(''));
-$('lockBtn').addEventListener('click',()=>{st.token=null;pending=null;show('login');msg('')});
-$('closeBtn').addEventListener('click',()=>{st.teacher=null;show('login');$('accPanel').hidden=true;msg('')});
-$('codesForm').addEventListener('submit',async e=>{
-  e.preventDefault();
-  try{const d=await call({action:'setCodes',code:st.teacher,code1:$('c1In').value,code2:$('c2In').value});
-    if(!d.ok){msg(d.err);return} st.teacher=d.code2;fillTeacher(d);msg('');$('accMsg').textContent='';alertOk(d.msg)}catch(err){msg(err.message)}
-});
-$('resetBtn').addEventListener('click',async()=>{
-  const m=document.querySelector('input[name=mode]:checked');
-  if(!m){msg('Choisis d’abord un mode.');return}
-  try{const d=await call({action:'reset',code:st.teacher,mode:m.value});if(!d.ok){msg(d.err);return}fillTeacher(d);alertOk(d.msg)}catch(err){msg(err.message)}
-});
-const alertOk=t=>{const p=document.createElement('p');p.className='pt';p.style.color='var(--ok)';p.textContent=t;$('teaBox').prepend(p);setTimeout(()=>p.remove(),2500)};
-const timers={};
-const closeAns=a=>{clearInterval(timers[a.dataset.part]);a.classList.remove('open');a.innerHTML=''};
-let pending=null;
-const askCode=part=>{pending=part;show('login');$('accPanel').hidden=false;$('accBtn').setAttribute('aria-expanded','true');$('codeIn').focus();$('accPanel').scrollIntoView({behavior:'smooth',block:'center'})};
+const SECS=15;
+let busy=false,current=null,timer=null;
+const closeAns=a=>{if(!a)return;clearInterval(timer);a.classList.remove('open');a.innerHTML='';if(current===a)current=null};
 const openPart=async part=>{
-  if(st.busy)return;
+  if(busy)return;
   const a=document.querySelector('.ans[data-part="'+part+'"]');
-  if(a.classList.contains('open'))return;
-  if(!st.token){askCode(part);return}
-  st.busy=true;a.classList.add('open');a.innerHTML='<p class="loading">Chargement…</p>';
+  if(a===current)return;
+  closeAns(current);
+  busy=true;current=a;a.classList.add('open');a.innerHTML='<p class="loading">Chargement…</p>';
   try{
-    const d=await call({action:'answer',token:st.token,part});
-    if(!d.ok){closeAns(a);if(d.needCode){st.token=null;askCode(part)}msg(d.err);return}
-    if(!d.more){st.token=null;show('login');}
-    let left=50;
-    a.innerHTML='<div class="timer"><span>50 s</span><i><b></b></i></div>'+d.html;
+    const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({part})});
+    const d=await r.json();
+    if(!d.ok){a.innerHTML='<p class="loading">'+(d.err||'Erreur')+'</p>';setTimeout(()=>closeAns(a),2500);return}
+    let left=SECS;
+    a.innerHTML='<div class="timer"><span>'+SECS+' s</span><i><b></b></i></div>'+d.html;
     buildTables(a);buildDiagrams(a);
-    a.scrollIntoView({behavior:'smooth',block:'start'});
     const lab=a.querySelector('.timer span'),bar=a.querySelector('.timer b');
-    timers[part]=setInterval(()=>{left--;lab.textContent=left+' s';bar.style.width=(left*2)+'%';if(left<=0)closeAns(a)},1000);
-  }catch(err){closeAns(a);msg(err.message||'Problème de connexion. Réessaie.')}
-  finally{st.busy=false}
+    timer=setInterval(()=>{left--;lab.textContent=left+' s';bar.style.width=(left*100/SECS)+'%';if(left<=0)closeAns(a)},1000);
+  }catch(err){a.innerHTML='<p class="loading">Problème de connexion. Réessaie.</p>';setTimeout(()=>closeAns(a),2500)}
+  finally{busy=false}
 };
-document.querySelectorAll('.qh[data-part]').forEach(q=>{
-  q.querySelector('.eye').addEventListener('click',ev=>{ev.stopPropagation();openPart(q.dataset.part)});
-  q.addEventListener('click',ev=>{if(document.body.classList.contains('stu')&&!ev.target.closest('.qh[data-part] .qh')){ev.stopPropagation();openPart(q.dataset.part)}});
-});
+document.querySelectorAll('.qh[data-part]').forEach(q=>q.querySelector('.eye').addEventListener('click',ev=>{ev.stopPropagation();openPart(q.dataset.part)}));
 ['copy','cut','contextmenu'].forEach(t=>document.addEventListener(t,e=>{if(e.target.closest&&e.target.closest('.ans'))e.preventDefault()}));
 }
 </script>
