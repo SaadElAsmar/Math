@@ -107,6 +107,8 @@ button.link:hover{background:none;opacity:1}
 .tot tr.sum td{font-weight:600;border-bottom:0}
 .msg{color:var(--minus);font-size:14px}
 .tline{font-size:14px;color:var(--mute)}
+.cover{display:flex;justify-content:center;padding:48px 0 24px}
+.cover button{min-height:52px;font-size:17px;padding:0 28px}
 .tline b{font-size:20px;color:var(--ac);margin-right:2px}
 .cnt{display:inline-flex;align-items:center;justify-content:center;min-width:26px;height:22px;padding:0 7px;margin-right:8px;border-radius:11px;background:var(--ac);color:var(--bg);font:600 12px Inter,system-ui,sans-serif;vertical-align:2px}
 .cnt.zero{background:var(--line);color:var(--mute)}
@@ -122,13 +124,15 @@ button.link:hover{background:none;opacity:1}
 <div id="tPanel" class="panel" hidden>
   <form id="tLogin" class="row"><input id="tCode" type="password" autocomplete="off" placeholder="Code" aria-label="Code"><button type="submit" class="small">OK</button></form>
   <div id="tStats" hidden>
-    <p class="tline"><b id="tTotal">0</b> corrigés ouverts depuis <span id="tSince"></span>. Le nombre est affiché devant chaque question.</p>
+    <p class="tline"><b id="tTotal">0</b> corrigés ouverts depuis <span id="tSince"></span>. Le nombre est affiché devant chaque question.<br>Fiche ouverte pour la dernière fois : <span id="tStart"></span></p>
     <div class="row"><button type="button" id="tRestart" class="small">Recommencer le comptage</button><button type="button" id="tRefresh" class="small">Actualiser</button></div>
   </div>
   <div class="row"><button type="button" id="tClose" class="small">Fermer</button></div>
   <p id="tMsg" class="msg" role="status"></p>
 </div>
 <p class="sub">Discussion selon le paramètre réel <i>m</i></p>
+<div id="cover" class="cover"><button type="button" id="startBtn" class="solid">Ouvrir la fiche</button></div>
+<div id="main" hidden>
 
 <div class="eq"><span>(<i>m</i> + 1)<i>x</i>² + 2(<i>m</i> − 5)<i>x</i> + 4<i>m</i> − 5 = 0</span><span>(<i>E</i>)</span></div>
 
@@ -216,6 +220,7 @@ button.link:hover{background:none;opacity:1}
 </li>
 
 </ol>
+</div>
 </div>
 
 <script>
@@ -312,7 +317,7 @@ const post=async body=>{const r=await fetch(API,{method:'POST',headers:{'Content
 const IDS=['1','2','3a','3b','3c','3d','3e.i','3e.ii','3e.iii','3f','4','5'];
 const clearBadges=()=>document.querySelectorAll('.cnt').forEach(b=>b.remove());
 const fillT=d=>{
-  T('tSince').textContent=d.since;T('tTotal').textContent=d.total;
+  T('tSince').textContent=d.since;T('tStart').textContent=d.lastStart||'—';T('tTotal').textContent=d.total;
   clearBadges();
   d.counts.forEach(([l,c],i)=>{const q=document.querySelector('.qh[data-part="'+IDS[i]+'"]');if(!q)return;const b=document.createElement('span');b.className='cnt'+(c?'':' zero');b.textContent=c;b.title='Ouvert '+c+' fois';q.children[1].prepend(b)});
   T('tLogin').hidden=true;T('tStats').hidden=false;
@@ -323,6 +328,11 @@ T('tLogin').addEventListener('submit',async e=>{e.preventDefault();const v=T('tC
 T('tRefresh').addEventListener('click',()=>tAsk('stats'));
 T('tRestart').addEventListener('click',()=>tAsk('restart'));
 T('tClose').addEventListener('click',()=>{T('tPanel').hidden=true;tMsg('');clearBadges()});
+T('startBtn').addEventListener('click',()=>{
+  T('cover').hidden=true;T('main').hidden=false;
+  fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'start'})}).catch(()=>{});
+  document.querySelectorAll('svg.sp[data-d]').forEach(s=>draw(s));
+});
 document.querySelectorAll('.qh[data-part]').forEach(q=>q.querySelector('.eye').addEventListener('click',ev=>{ev.stopPropagation();openPart(q.dataset.part)}));
 ['copy','cut','contextmenu'].forEach(t=>document.addEventListener(t,e=>{if(e.target.closest&&e.target.closest('.ans'))e.preventDefault()}));
 }
