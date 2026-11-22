@@ -284,7 +284,7 @@ const closeAns=a=>{if(!a)return;clearInterval(timer);a.classList.remove('open');
 const openPart=async part=>{
   if(busy)return;
   const a=document.querySelector('.ans[data-part="'+part+'"]');
-  if(a===current)return;
+  if(a===current){closeAns(a);return}
   closeAns(current);
   busy=true;current=a;a.classList.add('open');a.innerHTML='<p class="loading">Chargement…</p>';
   try{
