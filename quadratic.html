@@ -277,9 +277,9 @@ const spObs=new ResizeObserver(es=>es.forEach(e=>draw(e.target)));
 const buildDiagrams=root=>root.querySelectorAll('svg.sp[data-d]').forEach(s=>{spObs.observe(s);draw(s)});
 buildDiagrams(document);
 
-/* Answers: each eye opens one answer for 15 s (one at a time); the Apps Script counts each opening */
+/* Answers: each eye opens one answer for 8 s (one at a time); the Apps Script counts each opening */
 const API='https://script.google.com/macros/s/AKfycbxCT9amacyKKkQJhzrnjFkjM2HKnxq4T87vsryULQHPqJvyWezvHXpc-APpsu50VRUXwQ/exec';
-const SECS=15;
+const SECS=8;
 let busy=false,current=null,timer=null;
 const closeAns=a=>{if(!a)return;clearInterval(timer);a.classList.remove('open');a.innerHTML='';if(current===a)current=null};
 const openPart=async part=>{
