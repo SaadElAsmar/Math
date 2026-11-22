@@ -87,6 +87,8 @@ button.link:hover{background:none;opacity:1}
 .msg:empty{display:none}
 body.stu .qh[data-part]{cursor:pointer;border-radius:8px;outline:1px dashed var(--dash);outline-offset:4px}
 body.stu .qh[data-part]:hover{background:var(--acbg)}
+.eye{border:0;background:none;color:var(--mute);opacity:.55;min-height:0;width:24px;height:24px;padding:0;margin-left:4px;vertical-align:middle;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;cursor:pointer}
+.eye:hover{opacity:1;background:var(--acbg)}
 .ans{user-select:none;-webkit-user-select:none}
 .timer{display:flex;align-items:center;gap:10px;margin:0 0 12px;font:500 13px Inter,system-ui,sans-serif;color:var(--mute)}
 .timer i{flex:1;height:3px;background:var(--line);border-radius:2px;overflow:hidden;font-style:normal}
@@ -139,13 +141,13 @@ body.stu .qh[data-part]:hover{background:var(--acbg)}
 
 <!-- 1 -->
 <li>
-  <div class="qh" data-part="1"><span class="lab">1)</span><div>Solve (<i>E</i>) for <i>m</i> = −1.</div></div>
+  <div class="qh" data-part="1"><span class="lab">1)</span><div>Solve (<i>E</i>) for <i>m</i> = −1. <button type="button" class="eye" aria-label="See the answer"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button></div></div>
   <div class="ans" data-part="1"></div>
 </li>
 
 <!-- 2 -->
 <li>
-  <div class="qh" data-part="2"><span class="lab">2)</span><div>For <i>m</i> ≠ −1, compute Δ', the product <i>P</i> and the sum <i>S</i> of the roots, then make the sign table of Δ', <i>P</i> and <i>S</i>.</div></div>
+  <div class="qh" data-part="2"><span class="lab">2)</span><div>For <i>m</i> ≠ −1, compute Δ', the product <i>P</i> and the sum <i>S</i> of the roots, then make the sign table of Δ', <i>P</i> and <i>S</i>. <button type="button" class="eye" aria-label="See the answer"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button></div></div>
   <div class="ans" data-part="2"></div>
 </li>
 
@@ -155,22 +157,22 @@ body.stu .qh[data-part]:hover{background:var(--acbg)}
     <ol class="sublist">
 
     <li>
-      <div class="qh" data-part="3a"><span class="lab">a)</span><div>two distinct roots <i>x</i>₁ and <i>x</i>₂.</div></div>
+      <div class="qh" data-part="3a"><span class="lab">a)</span><div>two distinct roots <i>x</i>₁ and <i>x</i>₂. <button type="button" class="eye" aria-label="See the answer"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button></div></div>
       <div class="ans" data-part="3a"></div>
     </li>
 
     <li>
-      <div class="qh" data-part="3b"><span class="lab">b)</span><div>a double root. Give it.</div></div>
+      <div class="qh" data-part="3b"><span class="lab">b)</span><div>a double root. Give it. <button type="button" class="eye" aria-label="See the answer"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button></div></div>
       <div class="ans" data-part="3b"></div>
     </li>
 
     <li>
-      <div class="qh" data-part="3c"><span class="lab">c)</span><div>two distinct roots of the same sign. Specify the sign.</div></div>
+      <div class="qh" data-part="3c"><span class="lab">c)</span><div>two distinct roots of the same sign. Specify the sign. <button type="button" class="eye" aria-label="See the answer"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button></div></div>
       <div class="ans" data-part="3c"></div>
     </li>
 
     <li>
-      <div class="qh" data-part="3d"><span class="lab">d)</span><div>two distinct roots of opposite signs.</div></div>
+      <div class="qh" data-part="3d"><span class="lab">d)</span><div>two distinct roots of opposite signs. <button type="button" class="eye" aria-label="See the answer"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button></div></div>
       <div class="ans" data-part="3d"></div>
     </li>
 
@@ -179,17 +181,17 @@ body.stu .qh[data-part]:hover{background:var(--acbg)}
         <ol class="sublist">
 
         <li>
-          <div class="qh" data-part="3e.i"><span class="lab">i)</span><div><span class="nw">(<i>x</i>₁ + 1)(<i>x</i>₂ + 1) ≥ 5.</span></div></div>
+          <div class="qh" data-part="3e.i"><span class="lab">i)</span><div><span class="nw">(<i>x</i>₁ + 1)(<i>x</i>₂ + 1) ≥ 5.</span> <button type="button" class="eye" aria-label="See the answer"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button></div></div>
           <div class="ans" data-part="3e.i"></div>
         </li>
 
         <li>
-          <div class="qh" data-part="3e.ii"><span class="lab">ii)</span><div><span class="nw"><span class="fr"><span>1</span><span><i>x</i>₁</span></span> + <span class="fr"><span>1</span><span><i>x</i>₂</span></span> &lt; <i>m</i>.</span></div></div>
+          <div class="qh" data-part="3e.ii"><span class="lab">ii)</span><div><span class="nw"><span class="fr"><span>1</span><span><i>x</i>₁</span></span> + <span class="fr"><span>1</span><span><i>x</i>₂</span></span> &lt; <i>m</i>.</span> <button type="button" class="eye" aria-label="See the answer"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button></div></div>
           <div class="ans" data-part="3e.ii"></div>
         </li>
 
         <li>
-          <div class="qh" data-part="3e.iii"><span class="lab">iii)</span><div>Show that <span class="nw">(4<i>x</i>₁ + 3)(4<i>x</i>₂ + 3)</span> does not depend on <i>m</i>.</div></div>
+          <div class="qh" data-part="3e.iii"><span class="lab">iii)</span><div>Show that <span class="nw">(4<i>x</i>₁ + 3)(4<i>x</i>₂ + 3)</span> does not depend on <i>m</i>. <button type="button" class="eye" aria-label="See the answer"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button></div></div>
           <div class="ans" data-part="3e.iii"></div>
         </li>
 
@@ -198,7 +200,7 @@ body.stu .qh[data-part]:hover{background:var(--acbg)}
     </li>
 
     <li>
-      <div class="qh" data-part="3f"><span class="lab">f)</span><div>two distinct roots, both less than 1.</div></div>
+      <div class="qh" data-part="3f"><span class="lab">f)</span><div>two distinct roots, both less than 1. <button type="button" class="eye" aria-label="See the answer"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button></div></div>
       <div class="ans" data-part="3f"></div>
     </li>
 
@@ -208,13 +210,13 @@ body.stu .qh[data-part]:hover{background:var(--acbg)}
 
 <!-- 4 -->
 <li>
-  <div class="qh" data-part="4"><span class="lab">4)</span><div>Find <i>m</i> so that −1 is a root of (<i>E</i>), then find the other root.</div></div>
+  <div class="qh" data-part="4"><span class="lab">4)</span><div>Find <i>m</i> so that −1 is a root of (<i>E</i>), then find the other root. <button type="button" class="eye" aria-label="See the answer"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button></div></div>
   <div class="ans" data-part="4"></div>
 </li>
 
 <!-- 5 -->
 <li>
-  <div class="qh" data-part="5"><span class="lab">5)</span><div>Find <i>m</i> so that 0 is a root of (<i>E</i>), then find the other root.</div></div>
+  <div class="qh" data-part="5"><span class="lab">5)</span><div>Find <i>m</i> so that 0 is a root of (<i>E</i>), then find the other root. <button type="button" class="eye" aria-label="See the answer"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button></div></div>
   <div class="ans" data-part="5"></div>
 </li>
 
@@ -308,11 +310,11 @@ $('loginForm').addEventListener('submit',async e=>{
     if(!d.ok){msg(d.err||'Wrong code');return}
     $('codeIn').value='';
     if(d.role==='teacher'){st.teacher=code;fillTeacher(d);show('tea')}
-    else{st.token=d.token;st.more=true;$('stuMsg').textContent=d.mode==='one'?'Tap one question to see its answer for 50 s.':'Tap a question to see its answer for 50 s.';show('stu')}
+    else{st.token=d.token;st.more=true;const pp=pending;pending=null;setTimeout(()=>{if(pp)openPart(pp)},0);$('stuMsg').textContent=d.mode==='one'?'Tap one question to see its answer for 50 s.':'Tap a question to see its answer for 50 s.';show('stu')}
   }catch(err){msg(err.message||'Connection problem. Try again.')}
 });
 $('codeIn').addEventListener('input',()=>msg(''));
-$('lockBtn').addEventListener('click',()=>{st.token=null;show('login');msg('')});
+$('lockBtn').addEventListener('click',()=>{st.token=null;pending=null;show('login');msg('')});
 $('closeBtn').addEventListener('click',()=>{st.teacher=null;show('login');$('accPanel').hidden=true;msg('')});
 $('codesForm').addEventListener('submit',async e=>{
   e.preventDefault();
@@ -327,25 +329,31 @@ $('resetBtn').addEventListener('click',async()=>{
 const alertOk=t=>{const p=document.createElement('p');p.className='pt';p.style.color='var(--ok)';p.textContent=t;$('teaBox').prepend(p);setTimeout(()=>p.remove(),2500)};
 const timers={};
 const closeAns=a=>{clearInterval(timers[a.dataset.part]);a.classList.remove('open');a.innerHTML=''};
-document.querySelectorAll('.qh[data-part]').forEach(q=>q.addEventListener('click',async ev=>{
-  if(!document.body.classList.contains('stu')||st.busy)return;
-  ev.stopPropagation();
-  const part=q.dataset.part, a=document.querySelector('.ans[data-part="'+part+'"]');
+let pending=null;
+const askCode=part=>{pending=part;show('login');$('accPanel').hidden=false;$('accBtn').setAttribute('aria-expanded','true');$('codeIn').focus();$('accPanel').scrollIntoView({behavior:'smooth',block:'center'})};
+const openPart=async part=>{
+  if(st.busy)return;
+  const a=document.querySelector('.ans[data-part="'+part+'"]');
   if(a.classList.contains('open'))return;
-  if(!st.token){show('login');$('accPanel').hidden=false;msg('Enter the code again.');return}
+  if(!st.token){askCode(part);return}
   st.busy=true;a.classList.add('open');a.innerHTML='<p class="loading">Loading…</p>';
   try{
     const d=await call({action:'answer',token:st.token,part});
-    if(!d.ok){closeAns(a);if(d.needCode){st.token=null;show('login');$('accPanel').hidden=false}msg(d.err);return}
-    if(!d.more){st.token=null;show('login');$('accPanel').hidden=false;msg('');}
+    if(!d.ok){closeAns(a);if(d.needCode){st.token=null;askCode(part)}msg(d.err);return}
+    if(!d.more){st.token=null;show('login');}
     let left=50;
     a.innerHTML='<div class="timer"><span>50 s</span><i><b></b></i></div>'+d.html;
     buildTables(a);buildDiagrams(a);
+    a.scrollIntoView({behavior:'smooth',block:'start'});
     const lab=a.querySelector('.timer span'),bar=a.querySelector('.timer b');
     timers[part]=setInterval(()=>{left--;lab.textContent=left+' s';bar.style.width=(left*2)+'%';if(left<=0)closeAns(a)},1000);
   }catch(err){closeAns(a);msg(err.message||'Connection problem. Try again.')}
   finally{st.busy=false}
-}));
+};
+document.querySelectorAll('.qh[data-part]').forEach(q=>{
+  q.querySelector('.eye').addEventListener('click',ev=>{ev.stopPropagation();openPart(q.dataset.part)});
+  q.addEventListener('click',ev=>{if(document.body.classList.contains('stu')&&!ev.target.closest('.qh[data-part] .qh')){ev.stopPropagation();openPart(q.dataset.part)}});
+});
 ['copy','cut','contextmenu'].forEach(t=>document.addEventListener(t,e=>{if(e.target.closest&&e.target.closest('.ans'))e.preventDefault()}));
 }
 </script>
