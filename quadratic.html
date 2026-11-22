@@ -105,6 +105,10 @@ button.link:hover{background:none;opacity:1}
 .tot td:last-child{text-align:right;font-variant-numeric:tabular-nums}
 .tot tr.sum td{font-weight:600;border-bottom:0}
 .msg{color:var(--minus);font-size:14px}
+.tline{font-size:14px;color:var(--mute)}
+.tline b{font-size:20px;color:var(--ac);margin-right:2px}
+.cnt{display:inline-flex;align-items:center;justify-content:center;min-width:26px;height:22px;padding:0 7px;margin-right:8px;border-radius:11px;background:var(--ac);color:var(--bg);font:600 12px Inter,system-ui,sans-serif;vertical-align:2px}
+.cnt.zero{background:var(--line);color:var(--mute)}
 .msg:empty{display:none}
 .note{color:var(--mute);font-size:15px;margin-top:28px}
 @media(max-width:600px){.ans{margin-left:0;padding:12px}.tog{margin-left:0}.qh{grid-template-columns:1.7em minmax(0,1fr)}.sublist .qh{grid-template-columns:1.5em minmax(0,1fr)}.step{grid-template-columns:22px minmax(0,1fr);gap:8px}.num{width:22px;height:22px}.ch{grid-template-columns:20px minmax(0,1fr)}body{font-size:16px}table.sg{font-size:13px}.sg th{padding:6px 3px}}
@@ -117,8 +121,7 @@ button.link:hover{background:none;opacity:1}
 <div id="tPanel" class="panel" hidden>
   <form id="tLogin" class="row"><input id="tCode" type="password" autocomplete="off" placeholder="Code" aria-label="Code"><button type="submit" class="small">OK</button></form>
   <div id="tStats" hidden>
-    <p class="pt">Corrigés ouverts depuis <span id="tSince"></span></p>
-    <table class="tot"><tbody id="tBody"></tbody></table>
+    <p class="tline"><b id="tTotal">0</b> corrigés ouverts depuis <span id="tSince"></span>. Le nombre est affiché devant chaque question.</p>
     <div class="row"><button type="button" id="tRestart" class="small">Recommencer le comptage</button><button type="button" id="tRefresh" class="small">Actualiser</button></div>
   </div>
   <div class="row"><button type="button" id="tClose" class="small">Fermer</button></div>
@@ -303,13 +306,20 @@ const T=id=>document.getElementById(id);
 let taps=0,tapT=null,tCodeVal=null;
 const tMsg=t=>{T('tMsg').textContent=t||''};
 const post=async body=>{const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body)});return r.json()};
-const fillT=d=>{T('tSince').textContent=d.since;T('tBody').innerHTML=d.counts.map(([l,c])=>'<tr><td>'+l+'</td><td>'+c+'</td></tr>').join('')+'<tr class="sum"><td>Total</td><td>'+d.total+'</td></tr>';T('tLogin').hidden=true;T('tStats').hidden=false};
+const IDS=['1','2','3a','3b','3c','3d','3e.i','3e.ii','3e.iii','3f','4','5'];
+const clearBadges=()=>document.querySelectorAll('.cnt').forEach(b=>b.remove());
+const fillT=d=>{
+  T('tSince').textContent=d.since;T('tTotal').textContent=d.total;
+  clearBadges();
+  d.counts.forEach(([l,c],i)=>{const q=document.querySelector('.qh[data-part="'+IDS[i]+'"]');if(!q)return;const b=document.createElement('span');b.className='cnt'+(c?'':' zero');b.textContent=c;b.title='Ouvert '+c+' fois';q.children[1].prepend(b)});
+  T('tLogin').hidden=true;T('tStats').hidden=false;
+};
 const tAsk=async action=>{tMsg('');try{const d=await post({action,code:tCodeVal});if(!d.ok){tMsg(d.err||'Erreur');return false}fillT(d);return true}catch(e){tMsg('Problème de connexion. Réessaie.');return false}};
 T('ttl').addEventListener('click',()=>{taps++;clearTimeout(tapT);tapT=setTimeout(()=>taps=0,1500);if(taps>=5){taps=0;T('tPanel').hidden=false;if(!tCodeVal){T('tLogin').hidden=false;T('tStats').hidden=true;T('tCode').focus()}else tAsk('stats')}});
 T('tLogin').addEventListener('submit',async e=>{e.preventDefault();const v=T('tCode').value.trim();if(!v){tMsg('Saisis d’abord un code.');return}tCodeVal=v;T('tCode').value='';if(!await tAsk('stats'))tCodeVal=null});
 T('tRefresh').addEventListener('click',()=>tAsk('stats'));
 T('tRestart').addEventListener('click',()=>tAsk('restart'));
-T('tClose').addEventListener('click',()=>{T('tPanel').hidden=true;tMsg('')});
+T('tClose').addEventListener('click',()=>{T('tPanel').hidden=true;tMsg('');clearBadges()});
 document.querySelectorAll('.qh[data-part]').forEach(q=>q.querySelector('.eye').addEventListener('click',ev=>{ev.stopPropagation();openPart(q.dataset.part)}));
 ['copy','cut','contextmenu'].forEach(t=>document.addEventListener(t,e=>{if(e.target.closest&&e.target.closest('.ans'))e.preventDefault()}));
 }
