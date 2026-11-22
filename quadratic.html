@@ -92,6 +92,20 @@ button.link:hover{background:none;opacity:1}
 .timer i{flex:1;height:3px;background:var(--line);border-radius:2px;overflow:hidden;font-style:normal}
 .timer i b{display:block;height:100%;background:var(--ac);width:100%;transition:width 1s linear}
 .loading{color:var(--mute);font:14px Inter,system-ui,sans-serif}
+
+#ttl{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
+.panel{margin:8px 0 16px;border:1px solid var(--line);border-radius:12px;padding:14px;background:var(--acbg);font:15px/1.5 Inter,system-ui,sans-serif}
+.panel p{margin:0 0 8px}
+.row{display:flex;gap:8px;align-items:center;margin:0 0 8px;flex-wrap:wrap}
+.panel input{font:16px Inter,system-ui,sans-serif;min-height:44px;padding:0 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);flex:1}
+.panel button.small{min-height:40px;font-size:14px;padding:0 14px}
+.pt{font-weight:600;font-size:13px;color:var(--mute)}
+.tot{border-collapse:collapse;width:100%;margin:0 0 12px;font-size:14px}
+.tot td{padding:5px 8px;border-bottom:1px solid var(--line)}
+.tot td:last-child{text-align:right;font-variant-numeric:tabular-nums}
+.tot tr.sum td{font-weight:600;border-bottom:0}
+.msg{color:var(--minus);font-size:14px}
+.msg:empty{display:none}
 .note{color:var(--mute);font-size:15px;margin-top:28px}
 @media(max-width:600px){.ans{margin-left:0;padding:12px}.tog{margin-left:0}.qh{grid-template-columns:1.7em minmax(0,1fr)}.sublist .qh{grid-template-columns:1.5em minmax(0,1fr)}.step{grid-template-columns:22px minmax(0,1fr);gap:8px}.num{width:22px;height:22px}.ch{grid-template-columns:20px minmax(0,1fr)}body{font-size:16px}table.sg{font-size:13px}.sg th{padding:6px 3px}}
 @media print{button{display:none}.ans{display:block!important}}
@@ -99,7 +113,17 @@ button.link:hover{background:none;opacity:1}
 </head>
 <body>
 <div class="wrap">
-<h1>Équation du second degré à paramètre</h1>
+<h1 id="ttl">Équation du second degré à paramètre</h1>
+<div id="tPanel" class="panel" hidden>
+  <form id="tLogin" class="row"><input id="tCode" type="password" autocomplete="off" placeholder="Code" aria-label="Code"><button type="submit" class="small">OK</button></form>
+  <div id="tStats" hidden>
+    <p class="pt">Corrigés ouverts depuis <span id="tSince"></span></p>
+    <table class="tot"><tbody id="tBody"></tbody></table>
+    <div class="row"><button type="button" id="tRestart" class="small">Recommencer le comptage</button><button type="button" id="tRefresh" class="small">Actualiser</button></div>
+  </div>
+  <div class="row"><button type="button" id="tClose" class="small">Fermer</button></div>
+  <p id="tMsg" class="msg" role="status"></p>
+</div>
 <p class="sub">Discussion selon le paramètre réel <i>m</i></p>
 
 <div class="eq"><span>(<i>m</i> + 1)<i>x</i>² + 2(<i>m</i> − 5)<i>x</i> + 4<i>m</i> − 5 = 0</span><span>(<i>E</i>)</span></div>
@@ -273,6 +297,19 @@ const openPart=async part=>{
   }catch(err){a.innerHTML='<p class="loading">Problème de connexion. Réessaie.</p>';setTimeout(()=>closeAns(a),2500)}
   finally{busy=false}
 };
+
+/* Hidden teacher panel: tap the title 5 times quickly */
+const T=id=>document.getElementById(id);
+let taps=0,tapT=null,tCodeVal=null;
+const tMsg=t=>{T('tMsg').textContent=t||''};
+const post=async body=>{const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body)});return r.json()};
+const fillT=d=>{T('tSince').textContent=d.since;T('tBody').innerHTML=d.counts.map(([l,c])=>'<tr><td>'+l+'</td><td>'+c+'</td></tr>').join('')+'<tr class="sum"><td>Total</td><td>'+d.total+'</td></tr>';T('tLogin').hidden=true;T('tStats').hidden=false};
+const tAsk=async action=>{tMsg('');try{const d=await post({action,code:tCodeVal});if(!d.ok){tMsg(d.err||'Erreur');return false}fillT(d);return true}catch(e){tMsg('Problème de connexion. Réessaie.');return false}};
+T('ttl').addEventListener('click',()=>{taps++;clearTimeout(tapT);tapT=setTimeout(()=>taps=0,1500);if(taps>=5){taps=0;T('tPanel').hidden=false;if(!tCodeVal){T('tLogin').hidden=false;T('tStats').hidden=true;T('tCode').focus()}else tAsk('stats')}});
+T('tLogin').addEventListener('submit',async e=>{e.preventDefault();const v=T('tCode').value.trim();if(!v){tMsg('Saisis d’abord un code.');return}tCodeVal=v;T('tCode').value='';if(!await tAsk('stats'))tCodeVal=null});
+T('tRefresh').addEventListener('click',()=>tAsk('stats'));
+T('tRestart').addEventListener('click',()=>tAsk('restart'));
+T('tClose').addEventListener('click',()=>{T('tPanel').hidden=true;tMsg('')});
 document.querySelectorAll('.qh[data-part]').forEach(q=>q.querySelector('.eye').addEventListener('click',ev=>{ev.stopPropagation();openPart(q.dataset.part)}));
 ['copy','cut','contextmenu'].forEach(t=>document.addEventListener(t,e=>{if(e.target.closest&&e.target.closest('.ans'))e.preventDefault()}));
 }
