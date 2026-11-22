@@ -16,6 +16,7 @@ LAYOUT: one column; each question with its own Show/Hide answer under it.
 :root{color-scheme:light dark;--bg:light-dark(#ffffff,#14171a);--ink:light-dark(#1b1d1f,#e9ecee);--mute:light-dark(#5c6268,#a3abb2);--line:light-dark(#dfe3e6,#2c3236);--dash:light-dark(#c4cacf,#3d454b);--ac:light-dark(#0b6e6e,#5fd1c8);--acbg:light-dark(#f3f8f8,#172124);--sol:light-dark(#1d9e75,#5dcaa5);--gray:light-dark(#8a8f94,#7f878d);--okbg:light-dark(#e8f4ec,#16291e);--ok:light-dark(#1e6b3a,#86d9a4);--plus:light-dark(#0b6e3a,#6fdc9c);--minus:light-dark(#b0262c,#ff8a8f)}
 :root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
 *{box-sizing:border-box;min-width:0}
+[hidden]{display:none!important}
 body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 "Source Serif 4",Georgia,serif;overflow-x:clip}
 .wrap{max-width:820px;margin:0 auto;padding:clamp(24px,4vw,56px) max(5vw,16px) 64px}
 h1{font-size:clamp(28px,4.5vw,40px);line-height:1.1;margin:0 0 6px;text-wrap:balance}
@@ -33,7 +34,7 @@ ol.q{list-style:none;padding:0;margin:0}
 .sublist{list-style:none;padding:0;margin:8px 0 0}
 .sublist>li{margin:10px 0}
 .tog{margin:10px 0 0 2.2em;min-height:36px;font-size:14px;padding:0 12px}
-.ans{display:none;margin:12px 0 0 2.2em;background:var(--acbg);border:1px solid var(--line);border-radius:12px;padding:16px}
+.ans{display:none;margin:10px 0 0 2.2em;background:var(--acbg);border:1px solid var(--line);border-radius:12px;padding:16px}
 .ans.open{display:block}
 .ans p{margin:0 0 6px}
 .step{display:grid;grid-template-columns:26px minmax(0,1fr);gap:10px;margin:0 0 18px}
@@ -49,21 +50,50 @@ ol.q{list-style:none;padding:0;margin:0}
 .fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;font-size:.92em;line-height:1.15;margin:0 2px}
 .fr>span:first-child{border-bottom:1px solid currentColor;padding:0 3px}
 .fr>span:last-child{padding:0 3px}
-table.sg{border-collapse:collapse;margin:8px 0;font-size:16px;white-space:nowrap;background:var(--bg);border:1.5px solid var(--ink)}
-.sg th{font-weight:600;padding:7px 14px;border-right:1.5px solid var(--ink);text-align:center}
+table.sg{border-collapse:collapse;margin:8px 0;font-size:16px;white-space:nowrap;background:var(--bg);border:1.5px solid var(--ink);width:100%;max-width:640px;table-layout:fixed}
+.sg th{font-weight:600;padding:7px 6px;white-space:normal;line-height:1.25;border-right:1.5px solid var(--ink);text-align:center}
 .sg td{padding:7px 0;text-align:center}
 .sg tr:first-child>*{border-bottom:1.5px solid var(--ink)}
 .sg tr+tr>*{border-top:1px solid var(--line)}
-.sg td.i{min-width:46px;padding:7px 6px}
-.sg td.v{min-width:30px;padding:7px 4px}
+.sg td.i{padding:7px 0}
+.sg td.v{padding:7px 0;overflow:visible}
+.sg tr:first-child td.v:nth-child(2){text-align:left}.sg tr:first-child td.v:last-child{text-align:right}
 .sg td.v.k{background:linear-gradient(var(--ink),var(--ink)) center/1px 100% no-repeat}
 .sg td.v.k span{background:var(--bg);padding:0 3px}
 .sg td.v.dbl{background:linear-gradient(90deg,transparent calc(50% - 2.5px),var(--ink) calc(50% - 2.5px),var(--ink) calc(50% - 1.5px),transparent calc(50% - 1.5px),transparent calc(50% + 1.5px),var(--ink) calc(50% + 1.5px),var(--ink) calc(50% + 2.5px),transparent calc(50% + 2.5px))}
 .p{color:var(--plus);font-weight:700}.n{color:var(--minus);font-weight:700}.z{font-weight:700}
 svg.sp{display:block;width:100%;max-width:460px;height:120px;margin:4px 0 6px;font-family:Inter,system-ui,sans-serif}
 .ch>span:nth-child(even){overflow-x:auto;padding:2px 0}
+
+.acc{margin:10px 0 4px;text-align:right}
+button.link{border:0;background:none;color:var(--mute);font:400 13px Inter,system-ui,sans-serif;min-height:32px;padding:0 4px;text-decoration:underline;text-underline-offset:3px;opacity:.75}
+button.link:hover{background:none;opacity:1}
+.panel{text-align:left;margin:8px 0 0;border:1px solid var(--line);border-radius:12px;padding:14px;background:var(--acbg);font:15px/1.5 Inter,system-ui,sans-serif}
+.panel p{margin:0 0 8px}
+.row{display:flex;gap:8px;align-items:center;margin:0 0 8px}
+.wrapr{flex-wrap:wrap}
+.panel input[type=password],.panel input:not([type]){font:16px Inter,system-ui,sans-serif;min-height:44px;padding:0 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);width:100%}
+.panel button.small{min-height:40px;font-size:14px;padding:0 14px}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;margin:0 0 12px;align-items:end}
+.grid2 label{font-size:13px;color:var(--mute);display:grid;gap:4px}
+.grid2 button{grid-column:1/-1;justify-self:start}
+.rad{font-size:14px;display:flex;gap:6px;align-items:center;min-height:40px;margin-right:12px}
+.pt{font-weight:600;font-size:13px;color:var(--mute);margin-top:6px!important}
+.tot{border-collapse:collapse;width:100%;margin:0 0 12px;font-size:14px}
+.tot td{padding:5px 8px;border-bottom:1px solid var(--line)}
+.tot td:last-child{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tot tr.sum td{font-weight:600;border-bottom:0}
+.msg{color:var(--minus);font-size:14px;min-height:0}
+.msg:empty{display:none}
+body.stu .qh[data-part]{cursor:pointer;border-radius:8px;outline:1px dashed var(--dash);outline-offset:4px}
+body.stu .qh[data-part]:hover{background:var(--acbg)}
+.ans{user-select:none;-webkit-user-select:none}
+.timer{display:flex;align-items:center;gap:10px;margin:0 0 12px;font:500 13px Inter,system-ui,sans-serif;color:var(--mute)}
+.timer i{flex:1;height:3px;background:var(--line);border-radius:2px;overflow:hidden;font-style:normal}
+.timer i b{display:block;height:100%;background:var(--ac);width:100%;transition:width 1s linear}
+.loading{color:var(--mute);font:14px Inter,system-ui,sans-serif}
 .note{color:var(--mute);font-size:15px;margin-top:28px}
-@media(max-width:600px){.ans{margin-left:0;padding:12px}.tog{margin-left:0}.qh{grid-template-columns:1.7em minmax(0,1fr)}.sublist .qh{grid-template-columns:1.5em minmax(0,1fr)}.step{grid-template-columns:22px minmax(0,1fr);gap:8px}.num{width:22px;height:22px}.ch{grid-template-columns:20px minmax(0,1fr)}body{font-size:16px}table.sg{font-size:14px}.sg th{padding:6px 8px;white-space:normal;min-width:64px}.sg td.i{min-width:28px;padding:6px 3px}.sg td.v{min-width:24px;padding:6px 2px}}
+@media(max-width:600px){.ans{margin-left:0;padding:12px}.tog{margin-left:0}.qh{grid-template-columns:1.7em minmax(0,1fr)}.sublist .qh{grid-template-columns:1.5em minmax(0,1fr)}.step{grid-template-columns:22px minmax(0,1fr);gap:8px}.num{width:22px;height:22px}.ch{grid-template-columns:20px minmax(0,1fr)}body{font-size:16px}table.sg{font-size:13px}.sg th{padding:6px 3px}}
 @media print{button{display:none}.ans{display:block!important}}
 </style>
 </head>
@@ -74,65 +104,49 @@ svg.sp{display:block;width:100%;max-width:460px;height:120px;margin:4px 0 6px;fo
 
 <div class="eq"><span>(<i>m</i> + 1)<i>x</i>² + 2(<i>m</i> − 5)<i>x</i> + 4<i>m</i> − 5 = 0</span><span>(<i>E</i>)</span></div>
 
-<div class="bar">
-  <button class="solid" id="showAll">Show all answers</button>
-  <button id="hideAll">Hide all answers</button>
+<div class="acc">
+  <button class="link" id="accBtn" aria-expanded="false">Answers</button>
+  <div id="accPanel" class="panel" hidden>
+    <form id="loginForm" class="row">
+      <input id="codeIn" type="password" autocomplete="off" placeholder="Code" aria-label="Code">
+      <button type="submit">OK</button>
+    </form>
+    <div id="stuBox" hidden>
+      <p id="stuMsg">Tap a question to see its answer for 50 s.</p>
+      <button type="button" id="lockBtn" class="small">Lock</button>
+    </div>
+    <div id="teaBox" hidden>
+      <p class="pt">Answers opened since <span id="since"></span></p>
+      <table class="tot"><tbody id="totBody"></tbody></table>
+      <p class="pt">Codes</p>
+      <form id="codesForm" class="grid2">
+        <label>Code 1<input id="c1In" autocomplete="off"></label>
+        <label>Code 2<input id="c2In" autocomplete="off"></label>
+        <button type="submit" class="small">Save codes</button>
+      </form>
+      <p class="pt">Reset counters</p>
+      <div class="row wrapr">
+        <label class="rad"><input type="radio" name="mode" value="one"> One answer per code</label>
+        <label class="rad"><input type="radio" name="mode" value="all"> All answers</label>
+      </div>
+      <div class="row"><button type="button" id="resetBtn" class="small">Reset counters</button><button type="button" id="closeBtn" class="small">Close</button></div>
+    </div>
+    <p id="accMsg" class="msg" role="status"></p>
+  </div>
 </div>
 
 <ol class="q">
 
 <!-- 1 -->
 <li>
-  <div class="qh"><span class="lab">1)</span><div>Solve (<i>E</i>) for <i>m</i> = −1.</div></div>
-  <button class="tog">Show answer</button>
-  <div class="ans">
-    <p>For <i>m</i> = −1, (<i>E</i>) becomes a first-degree equation:</p>
-    <div class="ch"><span></span><span class="nw">−12<i>x</i> − 9 = 0</span><span>⇔</span><span class="nw"><i>x</i> = −9/12 = −3/4</span></div>
-    <div class="res"><small>Result</small><b>x = −3/4</b></div>
-    <p style="margin-top:10px">From now on, <i>m</i> ≠ −1.</p>
-  </div>
+  <div class="qh" data-part="1"><span class="lab">1)</span><div>Solve (<i>E</i>) for <i>m</i> = −1.</div></div>
+  <div class="ans" data-part="1"></div>
 </li>
 
 <!-- 2 -->
 <li>
-  <div class="qh"><span class="lab">2)</span><div>For <i>m</i> ≠ −1, compute Δ', the product <i>P</i> and the sum <i>S</i> of the roots, then make the sign table of Δ', <i>P</i> and <i>S</i>.</div></div>
-  <button class="tog">Show answer</button>
-  <div class="ans">
-    <div class="step"><div class="num">1</div><div>
-      <p class="sh">Compute Δ'</p>
-      <p><i>a</i> = <i>m</i> + 1 , &nbsp;<i>b</i>' = <i>m</i> − 5 , &nbsp;<i>c</i> = 4<i>m</i> − 5</p>
-      <div class="ch">
-        <span></span><span class="nw">Δ' = <i>b</i>'² − <i>ac</i></span>
-        <span>=</span><span class="nw">(<i>m</i> − 5)² − (<i>m</i> + 1)(4<i>m</i> − 5)</span>
-        <span>=</span><span class="nw"><i>m</i>² − 10<i>m</i> + 25 − (4<i>m</i>² − <i>m</i> − 5)</span>
-        <span>=</span><span class="nw"><b>−3<i>m</i>² − 9<i>m</i> + 30</b></span>
-      </div>
-    </div></div>
-    <div class="step"><div class="num">2</div><div>
-      <p class="sh">Roots of Δ' (trinomial in <i>m</i>)</p>
-      <p class="nw">A = −3 , B = −9 , C = 30</p>
-      <p><span class="nw">A + B + C = 18 ≠ 0</span> and <span class="nw">A − B + C = 36 ≠ 0</span>: no shortcut.</p>
-      <div class="ch">
-        <span></span><span class="nw">D = B² − 4AC = 81 + 360 = 441</span>
-        <span></span><span class="nw">√D = 21</span>
-        <span></span><span class="nw"><i>m</i>₁ = <span class="fr"><span>−B + √D</span><span>2A</span></span> = <span class="fr"><span>9 + 21</span><span>−6</span></span> = −5</span>
-        <span></span><span class="nw"><i>m</i>₂ = <span class="fr"><span>−B − √D</span><span>2A</span></span> = <span class="fr"><span>9 − 21</span><span>−6</span></span> = 2</span>
-      </div>
-      <p>A = −3 &lt; 0: Δ' has the sign of A outside the roots and the opposite sign between them.</p>
-    </div></div>
-    <div class="step"><div class="num">3</div><div>
-      <p class="sh"><i>P</i> and <i>S</i></p>
-      <div class="ch">
-        <span></span><span class="nw"><i>P</i> = <span class="fr"><span><i>c</i></span><span><i>a</i></span></span> = <span class="fr"><span>4<i>m</i> − 5</span><span><i>m</i> + 1</span></span></span>
-        <span></span><span class="nw"><i>S</i> = <span class="fr"><span>−2<i>b</i>'</span><span><i>a</i></span></span> = <span class="fr"><span>−2(<i>m</i> − 5)</span><span><i>m</i> + 1</span></span></span>
-      </div>
-      <p>A quotient has the sign of the product of its numerator and denominator. 4<i>m</i> − 5 = 0 for <i>m</i> = 5/4 ; <i>m</i> − 5 = 0 for <i>m</i> = 5 ; <i>m</i> + 1 = 0 for <i>m</i> = −1 (forbidden value).</p>
-    </div></div>
-    <div class="step"><div class="num">4</div><div>
-      <p class="sh">Sign table</p>
-      <div class="scroll"><table class="sg" data-t='{"v":["−∞","−5","−1","5/4","2","5","+∞"],"r":[["Δ&#39;",["","−","0","+","|","+","|","+","0","−","|","−",""]],["<i>P</i>",["","+","|","+","‖","−","0","+","|","+","|","+",""]],["<i>S</i>",["","−","|","−","‖","+","|","+","|","+","0","−",""]]]}'></table></div>
-    </div></div>
-  </div>
+  <div class="qh" data-part="2"><span class="lab">2)</span><div>For <i>m</i> ≠ −1, compute Δ', the product <i>P</i> and the sum <i>S</i> of the roots, then make the sign table of Δ', <i>P</i> and <i>S</i>.</div></div>
+  <div class="ans" data-part="2"></div>
 </li>
 
 <!-- 3 -->
@@ -141,77 +155,23 @@ svg.sp{display:block;width:100%;max-width:460px;height:120px;margin:4px 0 6px;fo
     <ol class="sublist">
 
     <li>
-      <div class="qh"><span class="lab">a)</span><div>two distinct roots <i>x</i>₁ and <i>x</i>₂.</div></div>
-      <button class="tog">Show answer</button>
-      <div class="ans">
-        <div class="step"><div class="num">1</div><div>
-          <p class="sh">Conditions</p>
-          <p class="nw"><i>m</i> ≠ −1 and Δ' &gt; 0</p>
-        </div></div>
-        <div class="step"><div class="num">2</div><div>
-          <p class="sh">From the table</p>
-          <p class="nw">Δ' &gt; 0 ⇔ −5 &lt; <i>m</i> &lt; 2</p>
-        </div></div>
-        <div class="res"><small>Result</small><b>m ∈ ]−5 ; −1[ ∪ ]−1 ; 2[</b></div>
-      </div>
+      <div class="qh" data-part="3a"><span class="lab">a)</span><div>two distinct roots <i>x</i>₁ and <i>x</i>₂.</div></div>
+      <div class="ans" data-part="3a"></div>
     </li>
 
     <li>
-      <div class="qh"><span class="lab">b)</span><div>a double root. Give it.</div></div>
-      <button class="tog">Show answer</button>
-      <div class="ans">
-        <div class="step"><div class="num">1</div><div>
-          <p class="sh">Condition</p>
-          <p class="nw">Δ' = 0 ⇔ <i>m</i> = −5 or <i>m</i> = 2</p>
-        </div></div>
-        <div class="step"><div class="num">2</div><div>
-          <p class="sh">The double root</p>
-          <div class="ch">
-            <span></span><span class="nw"><i>x</i>₀ = <span class="fr"><span>−<i>b</i>'</span><span><i>a</i></span></span> = <span class="fr"><span>−(<i>m</i> − 5)</span><span><i>m</i> + 1</span></span></span>
-            <span></span><span class="nw"><i>m</i> = −5 : &nbsp;<i>x</i>₀ = <span class="fr"><span>10</span><span>−4</span></span> = −5/2</span>
-            <span></span><span class="nw"><i>m</i> = 2 : &nbsp;<i>x</i>₀ = <span class="fr"><span>3</span><span>3</span></span> = 1</span>
-          </div>
-          <p>Check: <span class="nw"><i>m</i> = −5 gives −(2<i>x</i> + 5)² = 0</span> and <span class="nw"><i>m</i> = 2 gives 3(<i>x</i> − 1)² = 0.</span></p>
-        </div></div>
-        <div class="res"><small>Result</small><b>m = −5 : x₀ = −5/2</b><br><b>m = 2 : x₀ = 1</b></div>
-      </div>
+      <div class="qh" data-part="3b"><span class="lab">b)</span><div>a double root. Give it.</div></div>
+      <div class="ans" data-part="3b"></div>
     </li>
 
     <li>
-      <div class="qh"><span class="lab">c)</span><div>two distinct roots of the same sign. Specify the sign.</div></div>
-      <button class="tog">Show answer</button>
-      <div class="ans">
-        <div class="step"><div class="num">1</div><div>
-          <p class="sh">Conditions</p>
-          <p class="nw">Δ' &gt; 0 (part a) and <i>P</i> &gt; 0</p>
-        </div></div>
-        <div class="step"><div class="num">2</div><div>
-          <p class="sh">Superpose the conditions</p>
-          <svg class="sp" data-d='{"b":["−5","−1","5/4","2"],"r":[{"l":"Sol.","s":1,"g":[[0,1],[2,3]],"t":["both −","both +"]},{"l":"Δ&#39; &gt; 0","g":[[0,1],[1,3]]},{"l":"P &gt; 0","g":[[null,1],[2,null]]}]}'></svg>
-        </div></div>
-        <div class="step"><div class="num">3</div><div>
-          <p class="sh">Sign of the roots, from <i>S</i></p>
-          <p>On <span class="nw">]−5 ; −1[</span> : <span class="nw"><i>S</i> &lt; 0</span>, both roots negative.</p>
-          <p>On <span class="nw">]5/4 ; 2[</span> : <span class="nw"><i>S</i> &gt; 0</span>, both roots positive.</p>
-        </div></div>
-        <div class="res"><small>Result</small><b>m ∈ ]−5 ; −1[ ∪ ]5/4 ; 2[</b></div>
-      </div>
+      <div class="qh" data-part="3c"><span class="lab">c)</span><div>two distinct roots of the same sign. Specify the sign.</div></div>
+      <div class="ans" data-part="3c"></div>
     </li>
 
     <li>
-      <div class="qh"><span class="lab">d)</span><div>two distinct roots of opposite signs.</div></div>
-      <button class="tog">Show answer</button>
-      <div class="ans">
-        <div class="step"><div class="num">1</div><div>
-          <p class="sh">Condition</p>
-          <p><i>P</i> &lt; 0. Then <i>ac</i> &lt; 0, so Δ' = <i>b</i>'² − <i>ac</i> &gt; 0 automatically.</p>
-        </div></div>
-        <div class="step"><div class="num">2</div><div>
-          <p class="sh">Superpose the conditions</p>
-          <svg class="sp" data-d='{"b":["−5","−1","5/4","2"],"r":[{"l":"Sol.","s":1,"g":[[1,2]]},{"l":"Δ&#39; &gt; 0","g":[[0,1],[1,3]]},{"l":"P &lt; 0","g":[[1,2]]}]}'></svg>
-        </div></div>
-        <div class="res"><small>Result</small><b>m ∈ ]−1 ; 5/4[</b></div>
-      </div>
+      <div class="qh" data-part="3d"><span class="lab">d)</span><div>two distinct roots of opposite signs.</div></div>
+      <div class="ans" data-part="3d"></div>
     </li>
 
     <li>
@@ -219,91 +179,18 @@ svg.sp{display:block;width:100%;max-width:460px;height:120px;margin:4px 0 6px;fo
         <ol class="sublist">
 
         <li>
-          <div class="qh"><span class="lab">i)</span><div><span class="nw">(<i>x</i>₁ + 1)(<i>x</i>₂ + 1) ≥ 5.</span></div></div>
-          <button class="tog">Show answer</button>
-          <div class="ans">
-            <div class="step"><div class="num">1</div><div>
-              <p class="sh">Express with <i>S</i> and <i>P</i></p>
-              <div class="ch">
-                <span></span><span class="nw">(<i>x</i>₁ + 1)(<i>x</i>₂ + 1) = <i>P</i> + <i>S</i> + 1</span>
-                <span>=</span><span class="nw"><span class="fr"><span>(4<i>m</i> − 5) − 2(<i>m</i> − 5) + (<i>m</i> + 1)</span><span><i>m</i> + 1</span></span></span>
-                <span>=</span><span class="nw"><span class="fr"><span>3<i>m</i> + 6</span><span><i>m</i> + 1</span></span></span>
-              </div>
-            </div></div>
-            <div class="step"><div class="num">2</div><div>
-              <p class="sh">Solve the inequality</p>
-              <div class="ch">
-                <span></span><span class="nw"><span class="fr"><span>3<i>m</i> + 6</span><span><i>m</i> + 1</span></span> ≥ 5</span>
-                <span>⇔</span><span class="nw"><span class="fr"><span>3<i>m</i> + 6 − 5(<i>m</i> + 1)</span><span><i>m</i> + 1</span></span> ≥ 0</span>
-                <span>⇔</span><span class="nw"><span class="fr"><span>−2<i>m</i> + 1</span><span><i>m</i> + 1</span></span> ≥ 0</span>
-              </div>
-              <div class="scroll"><table class="sg" data-t='{"v":["−∞","−1","1/2","+∞"],"r":[["−2<i>m</i> + 1",["","+","|","+","0","−",""]],["<i>m</i> + 1",["","−","0","+","|","+",""]],["quotient",["","−","‖","+","0","−",""]]]}'></table></div>
-              <p class="nw">⇔ −1 &lt; <i>m</i> ≤ 1/2</p>
-            </div></div>
-            <div class="step"><div class="num">3</div><div>
-              <p class="sh">Superpose with a)</p>
-              <svg class="sp" data-d='{"b":["−5","−1","1/2","2"],"r":[{"l":"Sol.","s":1,"g":[[1,2,0,1]]},{"l":"Δ&#39; &gt; 0","g":[[0,1],[1,3]]},{"l":"(x₁ + 1)(x₂ + 1) ≥ 5","g":[[1,2,0,1]]}]}'></svg>
-            </div></div>
-            <div class="res"><small>Result</small><b>m ∈ ]−1 ; 1/2]</b></div>
-          </div>
+          <div class="qh" data-part="3e.i"><span class="lab">i)</span><div><span class="nw">(<i>x</i>₁ + 1)(<i>x</i>₂ + 1) ≥ 5.</span></div></div>
+          <div class="ans" data-part="3e.i"></div>
         </li>
 
         <li>
-          <div class="qh"><span class="lab">ii)</span><div><span class="nw"><span class="fr"><span>1</span><span><i>x</i>₁</span></span> + <span class="fr"><span>1</span><span><i>x</i>₂</span></span> &lt; <i>m</i>.</span></div></div>
-          <button class="tog">Show answer</button>
-          <div class="ans">
-            <div class="step"><div class="num">1</div><div>
-              <p class="sh">Express with <i>S</i> and <i>P</i></p>
-              <p>We need <span class="nw"><i>x</i>₁<i>x</i>₂ ≠ 0</span>, so <span class="nw"><i>m</i> ≠ 5/4.</span></p>
-              <div class="ch">
-                <span></span><span class="nw"><span class="fr"><span>1</span><span><i>x</i>₁</span></span> + <span class="fr"><span>1</span><span><i>x</i>₂</span></span> = <span class="fr"><span><i>S</i></span><span><i>P</i></span></span> = <span class="fr"><span>−2(<i>m</i> − 5)</span><span>4<i>m</i> − 5</span></span></span>
-              </div>
-            </div></div>
-            <div class="step"><div class="num">2</div><div>
-              <p class="sh">Solve the inequality</p>
-              <div class="ch">
-                <span></span><span class="nw"><span class="fr"><span>−2(<i>m</i> − 5)</span><span>4<i>m</i> − 5</span></span> &lt; <i>m</i></span>
-                <span>⇔</span><span class="nw"><span class="fr"><span>−2<i>m</i> + 10 − <i>m</i>(4<i>m</i> − 5)</span><span>4<i>m</i> − 5</span></span> &lt; 0</span>
-                <span>⇔</span><span class="nw"><span class="fr"><span>−4<i>m</i>² + 3<i>m</i> + 10</span><span>4<i>m</i> − 5</span></span> &lt; 0</span>
-              </div>
-              <p>Numerator: <span class="nw">A = −4 , B = 3 , C = 10</span>. <span class="nw">A + B + C = 9 ≠ 0</span> and <span class="nw">A − B + C = 3 ≠ 0</span>.</p>
-              <div class="ch">
-                <span></span><span class="nw">D = 9 + 160 = 169 , &nbsp;√D = 13</span>
-                <span></span><span class="nw"><i>m</i>₁ = <span class="fr"><span>−3 + 13</span><span>−8</span></span> = −5/4</span>
-                <span></span><span class="nw"><i>m</i>₂ = <span class="fr"><span>−3 − 13</span><span>−8</span></span> = 2</span>
-              </div>
-              <div class="scroll"><table class="sg" data-t='{"v":["−∞","−5/4","5/4","2","+∞"],"r":[["−4<i>m</i>² + 3<i>m</i> + 10",["","−","0","+","|","+","0","−",""]],["4<i>m</i> − 5",["","−","|","−","0","+","|","+",""]],["quotient",["","+","0","−","‖","+","0","−",""]]]}'></table></div>
-              <p class="nw">⇔ <i>m</i> ∈ ]−5/4 ; 5/4[ ∪ ]2 ; +∞[</p>
-            </div></div>
-            <div class="step"><div class="num">3</div><div>
-              <p class="sh">Superpose with a)</p>
-              <svg class="sp" data-d='{"b":["−5","−5/4","−1","5/4","2"],"r":[{"l":"Sol.","s":1,"g":[[1,2],[2,3]]},{"l":"Δ&#39; &gt; 0","g":[[0,2],[2,4]]},{"l":"1/x₁ + 1/x₂ &lt; m","g":[[1,3],[4,null]]}]}'></svg>
-            </div></div>
-            <div class="res"><small>Result</small><b>m ∈ ]−5/4 ; −1[ ∪ ]−1 ; 5/4[</b></div>
-          </div>
+          <div class="qh" data-part="3e.ii"><span class="lab">ii)</span><div><span class="nw"><span class="fr"><span>1</span><span><i>x</i>₁</span></span> + <span class="fr"><span>1</span><span><i>x</i>₂</span></span> &lt; <i>m</i>.</span></div></div>
+          <div class="ans" data-part="3e.ii"></div>
         </li>
 
         <li>
-          <div class="qh"><span class="lab">iii)</span><div>Show that <span class="nw">(4<i>x</i>₁ + 3)(4<i>x</i>₂ + 3)</span> does not depend on <i>m</i>.</div></div>
-          <button class="tog">Show answer</button>
-          <div class="ans">
-            <div class="step"><div class="num">1</div><div>
-              <p class="sh">Expand</p>
-              <div class="ch">
-                <span></span><span class="nw">(4<i>x</i>₁ + 3)(4<i>x</i>₂ + 3) = 16<i>x</i>₁<i>x</i>₂ + 12(<i>x</i>₁ + <i>x</i>₂) + 9</span>
-                <span>=</span><span class="nw">16<i>P</i> + 12<i>S</i> + 9</span>
-              </div>
-            </div></div>
-            <div class="step"><div class="num">2</div><div>
-              <p class="sh">Replace <i>P</i> and <i>S</i></p>
-              <div class="ch">
-                <span></span><span class="nw"><span class="fr"><span>16(4<i>m</i> − 5) − 24(<i>m</i> − 5) + 9(<i>m</i> + 1)</span><span><i>m</i> + 1</span></span></span>
-                <span>=</span><span class="nw"><span class="fr"><span>64<i>m</i> − 80 − 24<i>m</i> + 120 + 9<i>m</i> + 9</span><span><i>m</i> + 1</span></span></span>
-                <span>=</span><span class="nw"><span class="fr"><span>49<i>m</i> + 49</span><span><i>m</i> + 1</span></span> = <span class="fr"><span>49(<i>m</i> + 1)</span><span><i>m</i> + 1</span></span></span>
-              </div>
-            </div></div>
-            <div class="res"><small>Result</small><b>(4x₁ + 3)(4x₂ + 3) = 49 for every m</b></div>
-          </div>
+          <div class="qh" data-part="3e.iii"><span class="lab">iii)</span><div>Show that <span class="nw">(4<i>x</i>₁ + 3)(4<i>x</i>₂ + 3)</span> does not depend on <i>m</i>.</div></div>
+          <div class="ans" data-part="3e.iii"></div>
         </li>
 
         </ol>
@@ -311,32 +198,8 @@ svg.sp{display:block;width:100%;max-width:460px;height:120px;margin:4px 0 6px;fo
     </li>
 
     <li>
-      <div class="qh"><span class="lab">f)</span><div>two distinct roots, both less than 1.</div></div>
-      <button class="tog">Show answer</button>
-      <div class="ans">
-        <div class="step"><div class="num">1</div><div>
-          <p class="sh">Conditions</p>
-          <p><i>x</i>₁ &lt; 1 and <i>x</i>₂ &lt; 1 ⇔ <span class="nw"><i>x</i>₁ − 1</span> and <span class="nw"><i>x</i>₂ − 1</span> are both negative:</p>
-          <div class="ch">
-            <span>•</span><span class="nw">Δ' &gt; 0</span>
-            <span>•</span><span class="nw">(<i>x</i>₁ − 1)(<i>x</i>₂ − 1) &gt; 0</span>
-            <span>•</span><span class="nw">(<i>x</i>₁ − 1) + (<i>x</i>₂ − 1) &lt; 0</span>
-          </div>
-        </div></div>
-        <div class="step"><div class="num">2</div><div>
-          <p class="sh">Express with <i>S</i> and <i>P</i></p>
-          <div class="ch">
-            <span></span><span class="nw">(<i>x</i>₁ − 1)(<i>x</i>₂ − 1) = <i>P</i> − <i>S</i> + 1 = <span class="fr"><span>7<i>m</i> − 14</span><span><i>m</i> + 1</span></span></span>
-            <span></span><span class="nw">(<i>x</i>₁ − 1) + (<i>x</i>₂ − 1) = <i>S</i> − 2 = <span class="fr"><span>−4<i>m</i> + 8</span><span><i>m</i> + 1</span></span></span>
-          </div>
-          <div class="scroll"><table class="sg" data-t='{"v":["−∞","−1","2","+∞"],"r":[["7<i>m</i> − 14",["","−","|","−","0","+",""]],["−4<i>m</i> + 8",["","+","|","+","0","−",""]],["<i>m</i> + 1",["","−","0","+","|","+",""]],["<i>P</i> − <i>S</i> + 1",["","+","‖","−","0","+",""]],["<i>S</i> − 2",["","−","‖","+","0","−",""]]]}'></table></div>
-        </div></div>
-        <div class="step"><div class="num">3</div><div>
-          <p class="sh">Superpose the conditions</p>
-          <svg class="sp" data-d='{"b":["−5","−1","2"],"r":[{"l":"Sol.","s":1,"g":[[0,1]]},{"l":"Δ&#39; &gt; 0","g":[[0,1],[1,2]]},{"l":"P − S + 1 &gt; 0","g":[[null,1],[2,null]]},{"l":"S − 2 &lt; 0","g":[[null,1],[2,null]]}]}'></svg>
-        </div></div>
-        <div class="res"><small>Result</small><b>m ∈ ]−5 ; −1[</b></div>
-      </div>
+      <div class="qh" data-part="3f"><span class="lab">f)</span><div>two distinct roots, both less than 1.</div></div>
+      <div class="ans" data-part="3f"></div>
     </li>
 
     </ol>
@@ -345,45 +208,14 @@ svg.sp{display:block;width:100%;max-width:460px;height:120px;margin:4px 0 6px;fo
 
 <!-- 4 -->
 <li>
-  <div class="qh"><span class="lab">4)</span><div>Find <i>m</i> so that −1 is a root of (<i>E</i>), then find the other root.</div></div>
-  <button class="tog">Show answer</button>
-  <div class="ans">
-    <div class="step"><div class="num">1</div><div>
-      <p class="sh">−1 is a root ⇔ <i>a</i> − <i>b</i> + <i>c</i> = 0</p>
-      <div class="ch">
-        <span></span><span class="nw">(<i>m</i> + 1) − 2(<i>m</i> − 5) + 4<i>m</i> − 5 = 0</span>
-        <span>⇔</span><span class="nw">3<i>m</i> + 6 = 0</span>
-        <span>⇔</span><span class="nw"><i>m</i> = −2</span>
-      </div>
-    </div></div>
-    <div class="step"><div class="num">2</div><div>
-      <p class="sh">The other root, from <i>P</i></p>
-      <div class="ch">
-        <span></span><span class="nw">(−1) · <i>x</i>₂ = <i>P</i> = <span class="fr"><span>4(−2) − 5</span><span>−2 + 1</span></span> = 13</span>
-        <span>⇔</span><span class="nw"><i>x</i>₂ = −13</span>
-      </div>
-    </div></div>
-    <div class="res"><small>Result</small><b>m = −2 , x₂ = −13</b></div>
-  </div>
+  <div class="qh" data-part="4"><span class="lab">4)</span><div>Find <i>m</i> so that −1 is a root of (<i>E</i>), then find the other root.</div></div>
+  <div class="ans" data-part="4"></div>
 </li>
 
 <!-- 5 -->
 <li>
-  <div class="qh"><span class="lab">5)</span><div>Find <i>m</i> so that 0 is a root of (<i>E</i>), then find the other root.</div></div>
-  <button class="tog">Show answer</button>
-  <div class="ans">
-    <div class="step"><div class="num">1</div><div>
-      <p class="sh">0 is a root ⇔ <i>c</i> = 0</p>
-      <p class="nw">4<i>m</i> − 5 = 0 ⇔ <i>m</i> = 5/4</p>
-    </div></div>
-    <div class="step"><div class="num">2</div><div>
-      <p class="sh">The other root, from <i>S</i></p>
-      <div class="ch">
-        <span></span><span class="nw">0 + <i>x</i>₂ = <i>S</i> = <span class="fr"><span>−2(5/4 − 5)</span><span>5/4 + 1</span></span> = <span class="fr"><span>15/2</span><span>9/4</span></span> = 10/3</span>
-      </div>
-    </div></div>
-    <div class="res"><small>Result</small><b>m = 5/4 , x₂ = 10/3</b></div>
-  </div>
+  <div class="qh" data-part="5"><span class="lab">5)</span><div>Find <i>m</i> so that 0 is a root of (<i>E</i>), then find the other root.</div></div>
+  <div class="ans" data-part="5"></div>
 </li>
 
 </ol>
@@ -400,11 +232,17 @@ const cell=(c,k)=>{
   if(c==='‖')return '<td class="v dbl"></td>';
   return '<td class="v k">'+(c==='0'?'<span class="z">0</span>':'')+'</td>';
 };
-for(const t of document.querySelectorAll('table.sg[data-t]')){
-  const d=JSON.parse(t.dataset.t);
-  const head='<tr><th><i>m</i></th>'+d.v.map((v,k)=>'<td class="v">'+v+'</td>'+(k<d.v.length-1?'<td class="i"></td>':'')).join('')+'</tr>';
-  t.innerHTML=head+d.r.map(([l,cs])=>'<tr><th>'+l+'</th>'+cs.map(cell).join('')+'</tr>').join('');
-}
+const buildTables=root=>{for(const t of root.querySelectorAll('table.sg[data-t]')){
+  const d=JSON.parse(t.dataset.t), n=d.v.length, long=d.r.some(r=>r[0].replace(/<[^>]+>/g,'').length>8);
+  const lab=long?24:13, val=4.5, rest=100-lab-n*val, units=2*(n-3)+2, mid=2*rest/units, edge=rest/units;
+  let cg='<colgroup><col style="width:'+lab+'%">';
+  for(let k=0;k<n;k++){cg+='<col style="width:'+val+'%">';if(k<n-1)cg+='<col style="width:'+((k===0||k===n-2)?edge:mid)+'%">';}
+  cg+='</colgroup>';
+  const head='<tr><th><i>m</i></th>'+d.v.map((v,k)=>'<td class="v">'+v+'</td>'+(k<n-1?'<td class="i"></td>':'')).join('')+'</tr>';
+  t.innerHTML=cg+head+d.r.map(([l,cs])=>'<tr><th>'+l+'</th>'+cs.map(cell).join('')+'</tr>').join('');
+  t.removeAttribute('data-t');
+}};
+buildTables(document);
 
 /* Superposition diagrams.
    b: bounds (equally spaced). r: rows, top first. g: segments [from,to,closedFrom,closedTo];
@@ -440,13 +278,75 @@ const draw=s=>{
   s.innerHTML=o;
 };
 const spObs=new ResizeObserver(es=>es.forEach(e=>draw(e.target)));
-document.querySelectorAll('svg.sp[data-d]').forEach(s=>{spObs.observe(s);draw(s)});
+const buildDiagrams=root=>root.querySelectorAll('svg.sp[data-d]').forEach(s=>{spObs.observe(s);draw(s)});
+buildDiagrams(document);
 
-const toggle=(btn,open)=>{const a=btn.nextElementSibling;const v=open===undefined?!a.classList.contains('open'):open;a.classList.toggle('open',v);btn.textContent=v?'Hide answer':'Show answer';btn.setAttribute('aria-expanded',v)};
-const btns=[...document.querySelectorAll('.tog')];
-btns.forEach(b=>{b.setAttribute('aria-expanded','false');b.addEventListener('click',()=>toggle(b))});
-document.getElementById('showAll').addEventListener('click',()=>btns.forEach(b=>toggle(b,true)));
-document.getElementById('hideAll').addEventListener('click',()=>btns.forEach(b=>toggle(b,false)));
+/* Answers access: codes are checked by the Apps Script, answers come from it one at a time */
+const API='https://script.google.com/macros/s/AKfycbxCT9amacyKKkQJhzrnjFkjM2HKnxq4T87vsryULQHPqJvyWezvHXpc-APpsu50VRUXwQ/exec';
+const $=id=>document.getElementById(id);
+const st={token:null,teacher:null,more:false,busy:false};
+const msg=t=>{$('accMsg').textContent=t||''};
+const call=async body=>{
+  if(!API)throw new Error('The answers service is not connected yet.');
+  const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body)});
+  return r.json();
+};
+const show=v=>{$('loginForm').hidden=v!=='login';$('stuBox').hidden=v!=='stu';$('teaBox').hidden=v!=='tea';document.body.classList.toggle('stu',v==='stu')};
+const fillTeacher=d=>{
+  $('since').textContent=d.since;
+  $('totBody').innerHTML=d.counts.map(([l,c])=>'<tr><td>'+l+'</td><td>'+c+'</td></tr>').join('')+'<tr class="sum"><td>Total</td><td>'+d.total+'</td></tr>';
+  $('c1In').value=d.code1;$('c2In').value=d.code2;
+  document.querySelectorAll('input[name=mode]').forEach(r=>r.checked=r.value===d.mode);
+};
+$('accBtn').addEventListener('click',()=>{const p=$('accPanel');p.hidden=!p.hidden;$('accBtn').setAttribute('aria-expanded',!p.hidden);if(!p.hidden&&!$('loginForm').hidden)$('codeIn').focus()});
+$('loginForm').addEventListener('submit',async e=>{
+  e.preventDefault();const code=$('codeIn').value.trim();
+  if(!code){msg('Enter a code first.');return}
+  msg('');
+  try{
+    const d=await call({action:'login',code});
+    if(!d.ok){msg(d.err||'Wrong code');return}
+    $('codeIn').value='';
+    if(d.role==='teacher'){st.teacher=code;fillTeacher(d);show('tea')}
+    else{st.token=d.token;st.more=true;$('stuMsg').textContent=d.mode==='one'?'Tap one question to see its answer for 50 s.':'Tap a question to see its answer for 50 s.';show('stu')}
+  }catch(err){msg(err.message||'Connection problem. Try again.')}
+});
+$('codeIn').addEventListener('input',()=>msg(''));
+$('lockBtn').addEventListener('click',()=>{st.token=null;show('login');msg('')});
+$('closeBtn').addEventListener('click',()=>{st.teacher=null;show('login');$('accPanel').hidden=true;msg('')});
+$('codesForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  try{const d=await call({action:'setCodes',code:st.teacher,code1:$('c1In').value,code2:$('c2In').value});
+    if(!d.ok){msg(d.err);return} st.teacher=d.code2;fillTeacher(d);msg('');$('accMsg').textContent='';alertOk(d.msg)}catch(err){msg(err.message)}
+});
+$('resetBtn').addEventListener('click',async()=>{
+  const m=document.querySelector('input[name=mode]:checked');
+  if(!m){msg('Choose a mode first.');return}
+  try{const d=await call({action:'reset',code:st.teacher,mode:m.value});if(!d.ok){msg(d.err);return}fillTeacher(d);alertOk(d.msg)}catch(err){msg(err.message)}
+});
+const alertOk=t=>{const p=document.createElement('p');p.className='pt';p.style.color='var(--ok)';p.textContent=t;$('teaBox').prepend(p);setTimeout(()=>p.remove(),2500)};
+const timers={};
+const closeAns=a=>{clearInterval(timers[a.dataset.part]);a.classList.remove('open');a.innerHTML=''};
+document.querySelectorAll('.qh[data-part]').forEach(q=>q.addEventListener('click',async ev=>{
+  if(!document.body.classList.contains('stu')||st.busy)return;
+  ev.stopPropagation();
+  const part=q.dataset.part, a=document.querySelector('.ans[data-part="'+part+'"]');
+  if(a.classList.contains('open'))return;
+  if(!st.token){show('login');$('accPanel').hidden=false;msg('Enter the code again.');return}
+  st.busy=true;a.classList.add('open');a.innerHTML='<p class="loading">Loading…</p>';
+  try{
+    const d=await call({action:'answer',token:st.token,part});
+    if(!d.ok){closeAns(a);if(d.needCode){st.token=null;show('login');$('accPanel').hidden=false}msg(d.err);return}
+    if(!d.more){st.token=null;show('login');$('accPanel').hidden=false;msg('');}
+    let left=50;
+    a.innerHTML='<div class="timer"><span>50 s</span><i><b></b></i></div>'+d.html;
+    buildTables(a);buildDiagrams(a);
+    const lab=a.querySelector('.timer span'),bar=a.querySelector('.timer b');
+    timers[part]=setInterval(()=>{left--;lab.textContent=left+' s';bar.style.width=(left*2)+'%';if(left<=0)closeAns(a)},1000);
+  }catch(err){closeAns(a);msg(err.message||'Connection problem. Try again.')}
+  finally{st.busy=false}
+}));
+['copy','cut','contextmenu'].forEach(t=>document.addEventListener(t,e=>{if(e.target.closest&&e.target.closest('.ans'))e.preventDefault()}));
 }
 </script>
 </body>
