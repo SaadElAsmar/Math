@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Quadratic with Parameter</title>
+<title>Équation à paramètre</title>
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 /*
@@ -101,37 +101,37 @@ body.stu .qh[data-part]:hover{background:var(--acbg)}
 </head>
 <body>
 <div class="wrap">
-<h1>Quadratic equation with a parameter</h1>
-<p class="sub">Discussion according to the real parameter <i>m</i></p>
+<h1>Équation du second degré à paramètre</h1>
+<p class="sub">Discussion selon le paramètre réel <i>m</i></p>
 
 <div class="eq"><span>(<i>m</i> + 1)<i>x</i>² + 2(<i>m</i> − 5)<i>x</i> + 4<i>m</i> − 5 = 0</span><span>(<i>E</i>)</span></div>
 
 <div class="acc">
-  <button class="link" id="accBtn" aria-expanded="false">Answers</button>
+  <button class="link" id="accBtn" aria-expanded="false">Corrigés</button>
   <div id="accPanel" class="panel" hidden>
     <form id="loginForm" class="row">
       <input id="codeIn" type="password" autocomplete="off" placeholder="Code" aria-label="Code">
       <button type="submit">OK</button>
     </form>
     <div id="stuBox" hidden>
-      <p id="stuMsg">Tap a question to see its answer for 50 s.</p>
-      <button type="button" id="lockBtn" class="small">Lock</button>
+      <p id="stuMsg">Touche une question pour voir son corrigé pendant 50 s.</p>
+      <button type="button" id="lockBtn" class="small">Verrouiller</button>
     </div>
     <div id="teaBox" hidden>
-      <p class="pt">Answers opened since <span id="since"></span></p>
+      <p class="pt">Corrigés ouverts depuis <span id="since"></span></p>
       <table class="tot"><tbody id="totBody"></tbody></table>
       <p class="pt">Codes</p>
       <form id="codesForm" class="grid2">
         <label>Code 1<input id="c1In" autocomplete="off"></label>
         <label>Code 2<input id="c2In" autocomplete="off"></label>
-        <button type="submit" class="small">Save codes</button>
+        <button type="submit" class="small">Enregistrer les codes</button>
       </form>
-      <p class="pt">Reset counters</p>
+      <p class="pt">Remise à zéro</p>
       <div class="row wrapr">
-        <label class="rad"><input type="radio" name="mode" value="one"> One answer per code</label>
-        <label class="rad"><input type="radio" name="mode" value="all"> All answers</label>
+        <label class="rad"><input type="radio" name="mode" value="one"> Un corrigé par code</label>
+        <label class="rad"><input type="radio" name="mode" value="all"> Tous les corrigés</label>
       </div>
-      <div class="row"><button type="button" id="resetBtn" class="small">Reset counters</button><button type="button" id="closeBtn" class="small">Close</button></div>
+      <div class="row"><button type="button" id="resetBtn" class="small">Remettre à zéro</button><button type="button" id="closeBtn" class="small">Fermer</button></div>
     </div>
     <p id="accMsg" class="msg" role="status"></p>
   </div>
@@ -141,57 +141,57 @@ body.stu .qh[data-part]:hover{background:var(--acbg)}
 
 <!-- 1 -->
 <li>
-  <div class="qh" data-part="1"><span class="lab">1)</span><div>Solve (<i>E</i>) for <i>m</i> = −1. <button type="button" class="eye" aria-label="See the answer"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button></div></div>
+  <div class="qh" data-part="1"><span class="lab">1)</span><div>Résoudre (<i>E</i>) pour <i>m</i> = −1. <button type="button" class="eye" aria-label="Voir le corrigé"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button></div></div>
   <div class="ans" data-part="1"></div>
 </li>
 
 <!-- 2 -->
 <li>
-  <div class="qh" data-part="2"><span class="lab">2)</span><div>For <i>m</i> ≠ −1, compute Δ', the product <i>P</i> and the sum <i>S</i> of the roots, then make the sign table of Δ', <i>P</i> and <i>S</i>. <button type="button" class="eye" aria-label="See the answer"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button></div></div>
+  <div class="qh" data-part="2"><span class="lab">2)</span><div>Pour <i>m</i> ≠ −1, calculer Δ', le produit <i>P</i> et la somme <i>S</i> des racines, puis dresser le tableau de signes de Δ', <i>P</i> et <i>S</i>. <button type="button" class="eye" aria-label="Voir le corrigé"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button></div></div>
   <div class="ans" data-part="2"></div>
 </li>
 
 <!-- 3 -->
 <li>
-  <div class="qh"><span class="lab">3)</span><div>Find <i>m</i> so that (<i>E</i>) has:
+  <div class="qh"><span class="lab">3)</span><div>Déterminer <i>m</i> pour que (<i>E</i>) admette :
     <ol class="sublist">
 
     <li>
-      <div class="qh" data-part="3a"><span class="lab">a)</span><div>two distinct roots <i>x</i>₁ and <i>x</i>₂. <button type="button" class="eye" aria-label="See the answer"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button></div></div>
+      <div class="qh" data-part="3a"><span class="lab">a)</span><div>deux racines distinctes <i>x</i>₁ et <i>x</i>₂. <button type="button" class="eye" aria-label="Voir le corrigé"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button></div></div>
       <div class="ans" data-part="3a"></div>
     </li>
 
     <li>
-      <div class="qh" data-part="3b"><span class="lab">b)</span><div>a double root. Give it. <button type="button" class="eye" aria-label="See the answer"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button></div></div>
+      <div class="qh" data-part="3b"><span class="lab">b)</span><div>une racine double. La donner. <button type="button" class="eye" aria-label="Voir le corrigé"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button></div></div>
       <div class="ans" data-part="3b"></div>
     </li>
 
     <li>
-      <div class="qh" data-part="3c"><span class="lab">c)</span><div>two distinct roots of the same sign. Specify the sign. <button type="button" class="eye" aria-label="See the answer"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button></div></div>
+      <div class="qh" data-part="3c"><span class="lab">c)</span><div>deux racines distinctes de même signe. Préciser ce signe. <button type="button" class="eye" aria-label="Voir le corrigé"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button></div></div>
       <div class="ans" data-part="3c"></div>
     </li>
 
     <li>
-      <div class="qh" data-part="3d"><span class="lab">d)</span><div>two distinct roots of opposite signs. <button type="button" class="eye" aria-label="See the answer"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button></div></div>
+      <div class="qh" data-part="3d"><span class="lab">d)</span><div>deux racines distinctes de signes contraires. <button type="button" class="eye" aria-label="Voir le corrigé"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button></div></div>
       <div class="ans" data-part="3d"></div>
     </li>
 
     <li>
-      <div class="qh"><span class="lab">e)</span><div>two distinct roots satisfying:
+      <div class="qh"><span class="lab">e)</span><div>deux racines distinctes vérifiant :
         <ol class="sublist">
 
         <li>
-          <div class="qh" data-part="3e.i"><span class="lab">i)</span><div><span class="nw">(<i>x</i>₁ + 1)(<i>x</i>₂ + 1) ≥ 5.</span> <button type="button" class="eye" aria-label="See the answer"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button></div></div>
+          <div class="qh" data-part="3e.i"><span class="lab">i)</span><div><span class="nw">(<i>x</i>₁ + 1)(<i>x</i>₂ + 1) ≥ 5.</span> <button type="button" class="eye" aria-label="Voir le corrigé"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button></div></div>
           <div class="ans" data-part="3e.i"></div>
         </li>
 
         <li>
-          <div class="qh" data-part="3e.ii"><span class="lab">ii)</span><div><span class="nw"><span class="fr"><span>1</span><span><i>x</i>₁</span></span> + <span class="fr"><span>1</span><span><i>x</i>₂</span></span> &lt; <i>m</i>.</span> <button type="button" class="eye" aria-label="See the answer"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button></div></div>
+          <div class="qh" data-part="3e.ii"><span class="lab">ii)</span><div><span class="nw"><span class="fr"><span>1</span><span><i>x</i>₁</span></span> + <span class="fr"><span>1</span><span><i>x</i>₂</span></span> &lt; <i>m</i>.</span> <button type="button" class="eye" aria-label="Voir le corrigé"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button></div></div>
           <div class="ans" data-part="3e.ii"></div>
         </li>
 
         <li>
-          <div class="qh" data-part="3e.iii"><span class="lab">iii)</span><div>Show that <span class="nw">(4<i>x</i>₁ + 3)(4<i>x</i>₂ + 3)</span> does not depend on <i>m</i>. <button type="button" class="eye" aria-label="See the answer"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button></div></div>
+          <div class="qh" data-part="3e.iii"><span class="lab">iii)</span><div>Montrer que <span class="nw">(4<i>x</i>₁ + 3)(4<i>x</i>₂ + 3)</span> ne dépend pas de <i>m</i>. <button type="button" class="eye" aria-label="Voir le corrigé"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button></div></div>
           <div class="ans" data-part="3e.iii"></div>
         </li>
 
@@ -200,7 +200,7 @@ body.stu .qh[data-part]:hover{background:var(--acbg)}
     </li>
 
     <li>
-      <div class="qh" data-part="3f"><span class="lab">f)</span><div>two distinct roots, both less than 1. <button type="button" class="eye" aria-label="See the answer"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button></div></div>
+      <div class="qh" data-part="3f"><span class="lab">f)</span><div>deux racines distinctes, toutes deux inférieures à 1. <button type="button" class="eye" aria-label="Voir le corrigé"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button></div></div>
       <div class="ans" data-part="3f"></div>
     </li>
 
@@ -210,18 +210,18 @@ body.stu .qh[data-part]:hover{background:var(--acbg)}
 
 <!-- 4 -->
 <li>
-  <div class="qh" data-part="4"><span class="lab">4)</span><div>Find <i>m</i> so that −1 is a root of (<i>E</i>), then find the other root. <button type="button" class="eye" aria-label="See the answer"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button></div></div>
+  <div class="qh" data-part="4"><span class="lab">4)</span><div>Déterminer <i>m</i> pour que −1 soit racine de (<i>E</i>), puis trouver l’autre racine. <button type="button" class="eye" aria-label="Voir le corrigé"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button></div></div>
   <div class="ans" data-part="4"></div>
 </li>
 
 <!-- 5 -->
 <li>
-  <div class="qh" data-part="5"><span class="lab">5)</span><div>Find <i>m</i> so that 0 is a root of (<i>E</i>), then find the other root. <button type="button" class="eye" aria-label="See the answer"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button></div></div>
+  <div class="qh" data-part="5"><span class="lab">5)</span><div>Déterminer <i>m</i> pour que 0 soit racine de (<i>E</i>), puis trouver l’autre racine. <button type="button" class="eye" aria-label="Voir le corrigé"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button></div></div>
   <div class="ans" data-part="5"></div>
 </li>
 
 </ol>
-<p class="note">Remarks: m = 5/4 is the border between c) and d): one root is 0, so the roots are neither of the same sign nor of opposite signs. In e.iii), 4x + 3 = 0 gives x = −3/4, the root found in part 1 for m = −1.</p>
+<p class="note">Remarques : m = 5/4 est la frontière entre c) et d) : une racine est nulle, donc les racines ne sont ni de même signe ni de signes contraires. Dans e.iii), 4x + 3 = 0 donne x = −3/4, la racine trouvée à la question 1 pour m = −1.</p>
 </div>
 
 <script>
@@ -289,7 +289,7 @@ const $=id=>document.getElementById(id);
 const st={token:null,teacher:null,more:false,busy:false};
 const msg=t=>{$('accMsg').textContent=t||''};
 const call=async body=>{
-  if(!API)throw new Error('The answers service is not connected yet.');
+  if(!API)throw new Error('Le service des corrigés n’est pas encore connecté.');
   const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body)});
   return r.json();
 };
@@ -303,15 +303,15 @@ const fillTeacher=d=>{
 $('accBtn').addEventListener('click',()=>{const p=$('accPanel');p.hidden=!p.hidden;$('accBtn').setAttribute('aria-expanded',!p.hidden);if(!p.hidden&&!$('loginForm').hidden)$('codeIn').focus()});
 $('loginForm').addEventListener('submit',async e=>{
   e.preventDefault();const code=$('codeIn').value.trim();
-  if(!code){msg('Enter a code first.');return}
+  if(!code){msg('Saisis d’abord un code.');return}
   msg('');
   try{
     const d=await call({action:'login',code});
-    if(!d.ok){msg(d.err||'Wrong code');return}
+    if(!d.ok){msg(d.err||'Code incorrect');return}
     $('codeIn').value='';
     if(d.role==='teacher'){st.teacher=code;fillTeacher(d);show('tea')}
-    else{st.token=d.token;st.more=true;const pp=pending;pending=null;setTimeout(()=>{if(pp)openPart(pp)},0);$('stuMsg').textContent=d.mode==='one'?'Tap one question to see its answer for 50 s.':'Tap a question to see its answer for 50 s.';show('stu')}
-  }catch(err){msg(err.message||'Connection problem. Try again.')}
+    else{st.token=d.token;st.more=true;const pp=pending;pending=null;setTimeout(()=>{if(pp)openPart(pp)},0);$('stuMsg').textContent=d.mode==='one'?'Touche une question pour voir son corrigé pendant 50 s (un seul corrigé).':'Touche une question pour voir son corrigé pendant 50 s.';show('stu')}
+  }catch(err){msg(err.message||'Problème de connexion. Réessaie.')}
 });
 $('codeIn').addEventListener('input',()=>msg(''));
 $('lockBtn').addEventListener('click',()=>{st.token=null;pending=null;show('login');msg('')});
@@ -323,7 +323,7 @@ $('codesForm').addEventListener('submit',async e=>{
 });
 $('resetBtn').addEventListener('click',async()=>{
   const m=document.querySelector('input[name=mode]:checked');
-  if(!m){msg('Choose a mode first.');return}
+  if(!m){msg('Choisis d’abord un mode.');return}
   try{const d=await call({action:'reset',code:st.teacher,mode:m.value});if(!d.ok){msg(d.err);return}fillTeacher(d);alertOk(d.msg)}catch(err){msg(err.message)}
 });
 const alertOk=t=>{const p=document.createElement('p');p.className='pt';p.style.color='var(--ok)';p.textContent=t;$('teaBox').prepend(p);setTimeout(()=>p.remove(),2500)};
@@ -336,7 +336,7 @@ const openPart=async part=>{
   const a=document.querySelector('.ans[data-part="'+part+'"]');
   if(a.classList.contains('open'))return;
   if(!st.token){askCode(part);return}
-  st.busy=true;a.classList.add('open');a.innerHTML='<p class="loading">Loading…</p>';
+  st.busy=true;a.classList.add('open');a.innerHTML='<p class="loading">Chargement…</p>';
   try{
     const d=await call({action:'answer',token:st.token,part});
     if(!d.ok){closeAns(a);if(d.needCode){st.token=null;askCode(part)}msg(d.err);return}
@@ -347,7 +347,7 @@ const openPart=async part=>{
     a.scrollIntoView({behavior:'smooth',block:'start'});
     const lab=a.querySelector('.timer span'),bar=a.querySelector('.timer b');
     timers[part]=setInterval(()=>{left--;lab.textContent=left+' s';bar.style.width=(left*2)+'%';if(left<=0)closeAns(a)},1000);
-  }catch(err){closeAns(a);msg(err.message||'Connection problem. Try again.')}
+  }catch(err){closeAns(a);msg(err.message||'Problème de connexion. Réessaie.')}
   finally{st.busy=false}
 };
 document.querySelectorAll('.qh[data-part]').forEach(q=>{
