@@ -277,9 +277,9 @@ const spObs=new ResizeObserver(es=>es.forEach(e=>draw(e.target)));
 const buildDiagrams=root=>root.querySelectorAll('svg.sp[data-d]').forEach(s=>{spObs.observe(s);draw(s)});
 buildDiagrams(document);
 
-/* Answers: each eye opens one answer for 8 s (one at a time); the Apps Script counts each opening */
+/* Answers: each eye opens one answer for 5 to 15 s depending on its length (one at a time); the Apps Script counts each opening */
 const API='https://script.google.com/macros/s/AKfycbxCT9amacyKKkQJhzrnjFkjM2HKnxq4T87vsryULQHPqJvyWezvHXpc-APpsu50VRUXwQ/exec';
-const SECS=8;
+const MIN_S=5,MAX_S=15; /* display time grows with the length of the answer (about 53 characters per second) */
 let busy=false,current=null,timer=null;
 const closeAns=a=>{if(!a)return;clearInterval(timer);a.classList.remove('open');a.innerHTML='';if(current===a)current=null};
 const openPart=async part=>{
@@ -292,11 +292,14 @@ const openPart=async part=>{
     const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({part})});
     const d=await r.json();
     if(!d.ok){a.innerHTML='<p class="loading">'+(d.err||'Erreur')+'</p>';setTimeout(()=>closeAns(a),2500);return}
-    let left=SECS;
-    a.innerHTML='<div class="timer"><span>'+SECS+' s</span><i><b></b></i></div>'+d.html;
+    a.innerHTML='<div class="timer"><span></span><i><b></b></i></div>'+d.html;
     buildTables(a);buildDiagrams(a);
+    const w=a.textContent.replace(/\s+/g,' ').length+150*a.querySelectorAll('table.sg').length+150*a.querySelectorAll('svg.sp').length;
+    const secs=Math.max(MIN_S,Math.min(MAX_S,Math.round(w/53)));
+    let left=secs;
     const lab=a.querySelector('.timer span'),bar=a.querySelector('.timer b');
-    timer=setInterval(()=>{left--;lab.textContent=left+' s';bar.style.width=(left*100/SECS)+'%';if(left<=0)closeAns(a)},1000);
+    lab.textContent=secs+' s';
+    timer=setInterval(()=>{left--;lab.textContent=left+' s';bar.style.width=(left*100/secs)+'%';if(left<=0)closeAns(a)},1000);
   }catch(err){a.innerHTML='<p class="loading">Problème de connexion. Réessaie.</p>';setTimeout(()=>closeAns(a),2500)}
   finally{busy=false}
 };
