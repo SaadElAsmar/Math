@@ -4,6 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Smooth interpolation</title>
+<link rel="manifest" href="interpolation.webmanifest">
+<meta name="theme-color" content="#141517">
+<link rel="icon" href="icons/interp-192.png">
+<link rel="apple-touch-icon" href="icons/interp-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Interpolation">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -535,6 +542,7 @@ const ro=new ResizeObserver(resize);ro.observe(fig);
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{syncCol();req()});
 const mo=new MutationObserver(req);mo.observe(document.documentElement,{attributes:true});
 if(!loaded)example();else{renderTables();req()}
+if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('interp-sw.js',{scope:'./interpolation'}).catch(()=>{});
 window.__si={S,monoC2,isMono,normalize,setPointX,addPoint,addBreak,moveBreak,groups,owner,placePoint};
 }
 </script>

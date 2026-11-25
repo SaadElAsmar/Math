@@ -1,0 +1,15 @@
+{
+  "name": "Smooth interpolation",
+  "short_name": "Interpolation",
+  "description": "C² monotone curve through your points, with breaks.",
+  "start_url": "./interpolation.html",
+  "scope": "./interpolation",
+  "display": "standalone",
+  "background_color": "#e9eaec",
+  "theme_color": "#141517",
+  "icons": [
+    { "src": "icons/interp-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/interp-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/interp-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
