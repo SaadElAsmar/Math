@@ -39,9 +39,18 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 .fab button{width:44px;height:44px;padding:0;display:grid;place-items:center;font-weight:600;font-size:18px;background:var(--panel);opacity:.94}
 .fab button[aria-pressed=true]{background:var(--ink);color:var(--plot);border-color:var(--ink)}
 .fab svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.help{position:absolute;top:62px;right:10px;width:min(340px,calc(100% - 20px));z-index:4;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:14px;box-shadow:0 8px 24px rgba(0,0,0,.15)}
-.help[hidden]{display:none}
-.help ul{margin:6px 0 0;padding-left:18px}.help li{margin:3px 0}
+.howto{margin-top:18px;font-size:14px;color:var(--muted)}.howto summary{cursor:pointer;color:var(--ink);min-height:40px;display:flex;align-items:center}.howto ul{margin:4px 0 0;padding-left:18px}
+input[type=text]{height:40px;border:1px solid var(--line);border-radius:8px;background:var(--plot);padding:0 10px;font-size:16px;width:100%}
+.fn{border:1px solid var(--line);border-radius:10px;padding:10px;margin-bottom:10px;background:var(--plot)}
+.frow{display:grid;grid-template-columns:auto minmax(0,1fr) 44px;gap:6px;align-items:center}
+.fname{font-weight:600;white-space:nowrap}
+.frow2{display:grid;grid-template-columns:auto minmax(0,1fr) auto minmax(0,1fr) auto 40px;gap:6px;align-items:center;margin-top:6px;font-size:14px;color:var(--muted)}
+.chk{display:flex;align-items:center;gap:4px;font-size:14px;color:var(--ink);white-space:nowrap}.chk input{width:20px;height:20px}
+.err{display:block;color:#d43a1a;font-size:13px;margin-top:4px}
+.trow{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto 40px;gap:6px;align-items:center;margin-top:6px;font-size:14px}
+.trow select{width:auto}
+.teq{grid-column:1/-1;color:var(--muted);font-size:13px;font-variant-numeric:tabular-nums}
+.fn .add,.st .add{margin-top:8px}
 .panel{width:380px;height:100%;background:var(--bg);border-left:1px solid var(--line);display:flex;flex-direction:column}
 .panel[hidden]{display:none}
 .grip{display:none}
@@ -93,23 +102,13 @@ input[type=color]{width:100%;height:40px;border:1px solid var(--line);border-rad
 <div class="fig" id="fig"><canvas id="cv" aria-label="Interpolation plot"></canvas><div id="menu" class="menu" hidden></div></div>
 <div class="fab">
 <button id="bFit" type="button" aria-label="Fit view" title="Fit view"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
-<button id="bHelp" type="button" aria-label="Help" title="Help" aria-pressed="false">?</button>
+<button id="bTan" type="button" aria-label="Tangent tool" title="Tangent tool: tap a curve" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M3 18c4-1 6-5 8-9s5-6 10-6"/><path d="M3 9.5l18 3"/><circle cx="11.5" cy="11" r="1.6" fill="currentColor"/></svg></button>
 <button id="bSet" type="button" aria-label="Options" title="Options" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></svg></button>
-</div>
-<div class="help" id="help" hidden>
-<b>Smooth interpolation</b> — a C² curve, monotone between points, so every local extremum is one of your points.
-<ul>
-<li>Double-tap empty space: add a point. Double-tap the bottom strip: add a break.</li>
-<li>Drag points and breaks. Shift locks the direction.</li>
-<li>Long-press or right-click a point, a break or the curve for its menu.</li>
-<li>Tap a dot at a break to make it f(c).</li>
-<li>Pinch or scroll to zoom; drag empty space to pan.</li>
-</ul>
 </div>
 </section>
 <aside class="panel" id="panel" hidden>
 <div class="grip" id="grip"><span></span></div>
-<div class="ph"><div class="tabs" role="tablist"><button type="button" role="tab" data-tab="points">Points</button><button type="button" role="tab" data-tab="breaks">Breaks</button><button type="button" role="tab" data-tab="colours">Colours</button><button type="button" role="tab" data-tab="more">More</button></div><button type="button" class="x" id="bClose" aria-label="Close options">✕</button></div>
+<div class="ph"><div class="tabs" role="tablist"><button type="button" role="tab" data-tab="points">Points</button><button type="button" role="tab" data-tab="breaks">Breaks</button><button type="button" role="tab" data-tab="funcs">Functions</button><button type="button" role="tab" data-tab="colours">Colours</button><button type="button" role="tab" data-tab="more">More</button></div><button type="button" class="x" id="bClose" aria-label="Close options">✕</button></div>
 <div class="pb">
 <section class="tabpane" id="tab-points" hidden>
 <h2>Points <span id="nPts"></span></h2>
@@ -120,6 +119,15 @@ input[type=color]{width:100%;height:40px;border:1px solid var(--line);border-rad
 <h2>Breaks <span id="nBr"></span></h2>
 <div id="bRows"></div>
 <form class="add one" id="fBr"><input type="number" step="any" id="aB" placeholder="x = c" aria-label="New break x"><button type="submit">Add break</button></form>
+</section>
+<section class="tabpane" id="tab-funcs" hidden>
+<h2>Functions <span id="nFn"></span></h2>
+<div id="fnRows"></div>
+<form class="add one" id="fFn"><input type="text" id="aFn" placeholder="f(x) = sin(x) + x^2/4" aria-label="New function" autocomplete="off" autocapitalize="off" spellcheck="false"><button type="submit">Add</button></form>
+<small class="err" id="fnErr"></small>
+<h2 style="margin-top:18px">Smooth curve tangents</h2>
+<div id="stRows" class="st"></div>
+<form class="add one" id="fSt"><input type="number" step="any" id="aSt" placeholder="Tangent at x₀" aria-label="Smooth curve tangent at x0"><button type="submit">Add tangent</button></form>
 </section>
 <section class="tabpane" id="tab-colours" hidden>
 <div class="set">
@@ -143,7 +151,16 @@ input[type=color]{width:100%;height:40px;border:1px solid var(--line);border-rad
 <label for="sTx">Grid step tx</label><input type="number" id="sTx" min="0" step="any">
 <label for="sTy">Grid step ty</label><input type="number" id="sTy" min="0" step="any">
 </div>
-<div class="two"><button type="button" id="bEx">Example</button><button type="button" id="bClr">Clear</button></div>
+<div class="two"><button type="button" id="bEx">Example</button><button type="button" id="bClr">Clear all</button></div>
+<details class="howto"><summary>How to use</summary><ul>
+<li>Double-tap empty space: add a point. Double-tap the bottom strip: add a break.</li>
+<li>Drag points and breaks. Shift locks the direction.</li>
+<li>Long-press or right-click a point, a break, a curve or a tangent for its menu.</li>
+<li>Tap a dot at a break to make it f(c).</li>
+<li>Tangent tool (curve icon): tap any curve to add a tangent, then drag its point along the curve.</li>
+<li>Functions: type sin(x), 2x^3 - x, exp(-x^2), sqrt(x), ln(x), abs(x), pi, e…</li>
+<li>Pinch or scroll to zoom; drag empty space to pan.</li>
+</ul></details>
 </section>
 </div>
 </aside>
@@ -153,7 +170,7 @@ input[type=color]{width:100%;height:40px;border:1px solid var(--line);border-rad
 const $=s=>document.querySelector(s);
 const cv=$('#cv'),fig=$('#fig'),ctx=cv.getContext('2d'),menu=$('#menu');
 const STRIP=28;
-const S={pts:[],brks:[],view:{x0:-0.8,x1:10.2,y0:-0.4,y1:5.4},eps:0.5,own:'R',lam:0.9,ui:{tab:'points'},snap:{on:false,tx:1,ty:1},col:{curve:null,pts:null,brk:null,bg:null},width:2.6,gcol:{},ptSize:5.5,showFc:false};
+const S={pts:[],brks:[],view:{x0:-0.8,x1:10.2,y0:-0.4,y1:5.4},eps:0.5,own:'R',lam:0.9,ui:{tab:'points'},funcs:[],tans:[],snap:{on:false,tx:1,ty:1},col:{curve:null,pts:null,brk:null,bg:null},width:2.6,gcol:{},ptSize:5.5,showFc:false};
 let uid=1;const nid=()=>uid++;
 const same=(a,b)=>Math.abs(a-b)<=1e-9*Math.max(1,Math.abs(a),Math.abs(b));
 const sgn=v=>v>0?1:v<0?-1:0;
@@ -348,8 +365,81 @@ function monoC2(P,lam){
   const C=[];for(let i=0;i<n-1;i++)C.push(co(i));
   return{xs,h,C,f:(i,t)=>{const c=C[i];return c[0]+t*(c[1]+t*(c[2]+t*(c[3]+t*(c[4]+t*c[5]))))}};
 }
+/* ---------- functions and tangents ---------- */
+const FN={sin:Math.sin,cos:Math.cos,tan:Math.tan,asin:Math.asin,acos:Math.acos,atan:Math.atan,sinh:Math.sinh,cosh:Math.cosh,tanh:Math.tanh,exp:Math.exp,ln:Math.log,log:Math.log10,sqrt:Math.sqrt,abs:Math.abs};
+const NAMES=[...Object.keys(FN),'pi','x','e'].sort((a,b)=>b.length-a.length);
+function powr(b,e){if(b<0&&!Number.isInteger(e)){const q=1/e,qi=Math.round(q);if(Math.abs(q-qi)<1e-9&&qi%2!==0)return -Math.pow(-b,e)}return Math.pow(b,e)}
+function compile(src){
+  const s=String(src).replace(/π/g,'pi').replace(/[·×]/g,'*').replace(/[−–]/g,'-').replace(/\*\*/g,'^').replace(/\s+/g,'').toLowerCase();
+  if(!s)throw Error('Empty expression');
+  const tk=[];let i=0;
+  while(i<s.length){
+    const ch=s[i];
+    if(/[0-9.]/.test(ch)){const m=/^(\d+\.?\d*|\.\d+)(e[+-]?\d+)?/.exec(s.slice(i));if(!m)throw Error('Bad number');tk.push({t:'n',v:parseFloat(m[0])});i+=m[0].length;continue}
+    if(/[a-z]/.test(ch)){const n=NAMES.find(n=>s.startsWith(n,i));if(!n)throw Error('Unknown name "'+s.slice(i).match(/^[a-z]+/)[0]+'"');tk.push({t:FN[n]?'f':'id',v:n});i+=n.length;continue}
+    if('+-*/^()'.includes(ch)){tk.push({t:ch});i++;continue}
+    throw Error('Unexpected "'+ch+'"');
+  }
+  let p=0;const peek=()=>tk[p];
+  const starts=k=>k&&(k.t==='n'||k.t==='id'||k.t==='f'||k.t==='(');
+  function expr(){let a=term();while(peek()&&(peek().t==='+'||peek().t==='-')){const op=tk[p++].t,l=a,r=term();a=op==='+'?x=>l(x)+r(x):x=>l(x)-r(x)}return a}
+  function term(){let a=unary();for(;;){const k=peek();if(k&&(k.t==='*'||k.t==='/')){p++;const l=a,r=unary();a=k.t==='*'?x=>l(x)*r(x):x=>l(x)/r(x)}else if(starts(k)){const l=a,r=power();a=x=>l(x)*r(x)}else return a}}
+  function unary(){const k=peek();if(k&&k.t==='-'){p++;const a=unary();return x=>-a(x)}if(k&&k.t==='+'){p++;return unary()}return power()}
+  function power(){const b=atom();if(peek()&&peek().t==='^'){p++;const e=unary();return x=>powr(b(x),e(x))}return b}
+  function atom(){
+    const k=tk[p++];if(!k)throw Error('Incomplete expression');
+    if(k.t==='n'){const v=k.v;return()=>v}
+    if(k.t==='id'){if(k.v==='x')return x=>x;const v=k.v==='pi'?Math.PI:Math.E;return()=>v}
+    if(k.t==='f'){const f=FN[k.v];if(!peek()||peek().t!=='(')throw Error(k.v+' needs brackets: '+k.v+'(…)');p++;const a=expr();if(!peek()||peek().t!==')')throw Error('Missing )');p++;return x=>f(a(x))}
+    if(k.t==='('){const a=expr();if(!peek()||peek().t!==')')throw Error('Missing )');p++;return a}
+    throw Error('Unexpected "'+k.t+'"');
+  }
+  const f=expr();if(p<tk.length)throw Error('Unexpected "'+(tk[p].v??tk[p].t)+'"');
+  f(0.5);return f;
+}
+const fnCache=new Map();
+function fnOf(F){let c=fnCache.get(F.id);if(!c||c.expr!==F.expr){c={expr:F.expr};try{c.fn=compile(F.expr)}catch(e){c.err=e.message}fnCache.set(F.id,c)}return c}
+function fval(F,x){const c=fnOf(F);if(!c.fn)return NaN;if((F.a!=null&&x<F.a)||(F.b!=null&&x>F.b))return NaN;return c.fn(x)}
+const PAL=['#3b4fd8','#12949a','#9b3bd8','#d83b8a','#2f8f3a','#b8860b'];
+const fnColor=F=>F.color||PAL[(S.funcs.indexOf(F)+PAL.length)%PAL.length];
+const esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+function tanCurve(T){
+  if(T.ct==='f'){
+    const F=S.funcs.find(f=>f.id===T.cid);if(!F||!F.show||!fnOf(F).fn)return null;
+    const lo=F.a??-Infinity,hi=F.b??Infinity;
+    return{lo,hi,color:fnColor(F),at:x=>{const y=fval(F,x);if(!isFinite(y))return null;
+      const h=1e-5*Math.max(1,Math.abs(x));let m;
+      if(x-h<lo)m=(fval(F,x+h)-y)/h;else if(x+h>hi)m=(y-fval(F,x-h))/h;else m=(fval(F,x+h)-fval(F,x-h))/(2*h);
+      return isFinite(m)?{y,m}:null}};
+  }
+  const G=groups().filter(g=>g.length>1);
+  const g=G.find(g=>g[0].id===T.cid)||G.find(g=>g[0].x<=T.x0&&T.x0<=g[g.length-1].x);
+  if(!g)return null;
+  const M=monoC2(g,S.lam);
+  return{lo:g[0].x,hi:g[g.length-1].x,key:g[0].id,color:S.gcol[g[0].id]||S.col.curve||col('--accent'),at:x=>{
+    let i=0;while(i<M.xs.length-2&&x>M.xs[i+1])i++;
+    const t=(x-M.xs[i])/M.h[i],c=M.C[i];
+    return{y:M.f(i,t),m:(c[1]+t*(2*c[2]+t*(3*c[3]+t*(4*c[4]+t*5*c[5]))))/M.h[i]}}};
+}
+function tanData(T){const C=tanCurve(T);if(!C)return null;const x0=Math.min(C.hi,Math.max(C.lo,T.x0)),r=C.at(x0);if(!r)return null;return{x0,y0:r.y,m:r.m,color:C.color,C}}
+function eqText(d){if(!d)return 'Undefined here';const b=d.y0-d.m*d.x0,m=fmt(d.m),bb=fmt(Math.abs(b));
+  const mx=m==='0'?'':(m==='1'?'x':m==='-1'?'−x':m.replace('-','−')+'x');
+  if(!mx)return 'y = '+fmt(b).replace('-','−');
+  return 'y = '+mx+(bb==='0'?'':(b<0?' − ':' + ')+bb)}
+function addTangent(ct,cid,x0){S.tans.push({id:nid(),ct,cid,x0,mode:'line',eq:false});changed()}
+function addFunction(text){
+  let t=String(text).trim(),name=null;
+  const m=/^([a-z])\s*\(\s*x\s*\)\s*=\s*/i.exec(t);
+  if(m){name=m[1].toLowerCase();t=t.slice(m[0].length)}else{const y=/^y\s*=\s*/i.exec(t);if(y)t=t.slice(y[0].length)}
+  compile(t);
+  const ex=name&&S.funcs.find(f=>f.name===name);
+  if(ex){ex.expr=t;ex.show=true}
+  else{if(!name)name=[...'fghpqrsuvw'].find(n=>!S.funcs.some(f=>f.name===n))||'f'+S.funcs.length;S.funcs.push({id:nid(),name,expr:t,color:null,show:true,a:null,b:null})}
+  changed();
+}
+
 /* ---------- drawing ---------- */
-let W=0,H=0,dpr=1,dirty=false,act=null;
+let W=0,H=0,dpr=1,dirty=false,act=null,tanMode=false;
 const PH=()=>H-STRIP;
 const X=x=>(x-S.view.x0)/(S.view.x1-S.view.x0)*W;
 const Y=y=>PH()*(1-(y-S.view.y0)/(S.view.y1-S.view.y0));
@@ -400,6 +490,29 @@ function draw(){
   }
   const G=groups();
   for(const g of G)curve(monoC2(g,S.lam),S.gcol[g[0].id]||c.acc,[],S.width);
+  for(const F of S.funcs){
+    if(!F.show||!fnOf(F).fn)continue;
+    ctx.strokeStyle=fnColor(F);ctx.lineWidth=S.width;ctx.beginPath();
+    let pen=false,prev=0;const xs=[];for(let px=0;px<=W;px+=1)xs.push(iX(px));
+    if(F.a!=null&&F.a>v.x0&&F.a<v.x1)xs.push(F.a);if(F.b!=null&&F.b>v.x0&&F.b<v.x1)xs.push(F.b);xs.sort((a,b)=>a-b);
+    for(const x of xs){const y=fval(F,x);if(!isFinite(y)){pen=false;continue}
+      const py=Math.max(-1e5,Math.min(1e5,Y(y)));
+      if(pen&&Math.abs(py-prev)>PH()*1.2&&(py<0||py>PH()||prev<0||prev>PH()))pen=false;
+      pen?ctx.lineTo(X(x),py):ctx.moveTo(X(x),py);pen=true;prev=py}
+    ctx.stroke();
+  }
+  ctx.font='13px Geist,system-ui,sans-serif';
+  for(const T of S.tans){
+    const d=tanData(T);if(!d)continue;
+    const px=X(d.x0),py=Y(d.y0);ctx.strokeStyle=d.color;ctx.lineWidth=Math.max(1.4,S.width*.65);ctx.beginPath();
+    if(T.mode==='seg'){const vx=W/(v.x1-v.x0),vy=-d.m*PH()/(v.y1-v.y0),n=Math.hypot(vx,vy)||1,L=90;ctx.moveTo(px-vx/n*L,py-vy/n*L);ctx.lineTo(px+vx/n*L,py+vy/n*L)}
+    else{const cl=y=>Math.max(-1e6,Math.min(1e6,Y(y)));ctx.moveTo(0,cl(d.y0+d.m*(v.x0-d.x0)));ctx.lineTo(W,cl(d.y0+d.m*(v.x1-d.x0)))}
+    ctx.stroke();
+    const hot=act&&act.type==='tan'&&act.obj===T;
+    ctx.beginPath();ctx.arc(px,py,hot?8:6,0,7);ctx.fillStyle=d.color;ctx.fill();ctx.lineWidth=2;ctx.strokeStyle=c.plot;ctx.stroke();
+    if(T.eq){const tx=eqText(d);ctx.textAlign='left';ctx.textBaseline='bottom';ctx.lineWidth=4;ctx.strokeStyle=c.plot;ctx.strokeText(tx,px+10,py-8);ctx.fillStyle=d.color;ctx.fillText(tx,px+10,py-8)}
+  }
+  if(tanMode){ctx.font='14px Geist,system-ui,sans-serif';ctx.textAlign='left';ctx.textBaseline='middle';const tx='Tangent tool: tap a curve';const w=ctx.measureText(tx).width+20;ctx.fillStyle=c.acc;ctx.beginPath();ctx.roundRect?ctx.roundRect(10,12,w,32,16):ctx.rect(10,12,w,32);ctx.fill();ctx.fillStyle='#fff';ctx.fillText(tx,20,28)}
   const owners=new Set(S.brks.map(owner).filter(Boolean).map(p=>p.id));
   const hidden=S.ptSize<=0;
   if(hidden&&!S.showFc)return;
@@ -419,6 +532,7 @@ function draw(){
 /* ---------- tables ---------- */
 const pRows=$('#pRows'),bRows=$('#bRows');
 function renderTables(){
+  renderFuncs();
   $('#nPts').textContent=S.pts.length?S.pts.length:'';$('#nBr').textContent=S.brks.length?S.brks.length:'';
   pRows.innerHTML=S.pts.length?S.pts.map(p=>`<div class="row"><input type="number" step="any" data-id="${p.id}" data-k="x" value="${fmt(p.x)}" aria-label="x"><span class="sd">${p.side==='L'?'⁻':p.side==='R'?'⁺':''}</span><input type="number" step="any" data-id="${p.id}" data-k="y" value="${fmt(p.y)}" aria-label="y"><button type="button" class="del" data-del="${p.id}" aria-label="Delete point">✕</button></div>`).join(''):'<p class="empty">No points yet. Double-tap the plot or add one below.</p>';
   bRows.innerHTML=S.brks.length?S.brks.map(b=>{const o=owner(b);return `<div class="brow"><div>${b.manual?`<input type="number" step="any" data-bid="${b.id}" value="${fmt(b.x)}" aria-label="Break x">`:`<b>x = ${fmt(b.x)}</b>`}<small>${b.manual?'manual':'automatic'} · f(c) = ${o?fmt(o.y):'undefined'}</small></div><select data-own="${b.id}" aria-label="f(c) side"><option value="R"${b.own==='R'?' selected':''}>Right</option><option value="L"${b.own==='L'?' selected':''}>Left</option></select>${b.manual?`<button type="button" class="del" data-bdel="${b.id}" aria-label="Delete break">✕</button>`:'<span></span>'}</div>`}).join(''):'<p class="empty">No breaks. Add one below or put two points on the same x.</p>';
@@ -436,6 +550,38 @@ bRows.addEventListener('click',e=>{const id=e.target.closest('[data-bdel]')?.dat
 $('#fPt').addEventListener('submit',e=>{e.preventDefault();const x=$('#aX').value,y=$('#aY').value;if(x===''||y==='')return;addPoint(+x,+y);$('#aX').value='';$('#aY').value='';$('#aX').focus()});
 $('#fBr').addEventListener('submit',e=>{e.preventDefault();const x=$('#aB').value;if(x==='')return;addBreak(+x);$('#aB').value=''});
 
+const fnRows=$('#fnRows'),stRows=$('#stRows');
+function tanRow(T){const d=tanData(T);return `<div class="trow" data-tid="${T.id}"><span>x₀</span><input type="number" step="any" data-k="x0" value="${fmt(d?d.x0:T.x0)}" aria-label="Tangent x0"><select data-k="mode" aria-label="Tangent display"><option value="line"${T.mode==='line'?' selected':''}>Line</option><option value="seg"${T.mode==='seg'?' selected':''}>Segment</option></select><label class="chk"><input type="checkbox" data-k="eq"${T.eq?' checked':''}>Eq.</label><button type="button" class="del" data-tdel="${T.id}" aria-label="Delete tangent">✕</button><small class="teq">${esc(eqText(d))}${d?' · slope '+esc(fmt(d.m)):''}</small></div>`}
+function renderFuncs(){
+  $('#nFn').textContent=S.funcs.length||'';
+  fnRows.innerHTML=S.funcs.length?S.funcs.map(F=>{const c=fnOf(F),cl=fnColor(F);return `<div class="fn" data-fid="${F.id}">
+<div class="frow"><span class="fname" style="color:${cl}">${esc(F.name)}(x) =</span><input type="text" data-k="expr" value="${esc(F.expr)}" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="${esc(F.name)}(x)"><input type="color" data-k="color" value="${cl}" aria-label="Colour"></div>
+<div class="frow2"><span>on</span><input type="number" step="any" data-k="a" value="${F.a??''}" placeholder="−∞" aria-label="Domain start"><span>to</span><input type="number" step="any" data-k="b" value="${F.b??''}" placeholder="+∞" aria-label="Domain end"><label class="chk"><input type="checkbox" data-k="show"${F.show?' checked':''}>Show</label><button type="button" class="del" data-fdel="${F.id}" aria-label="Delete function">✕</button></div>
+${c.err?`<small class="err">${esc(c.err)}</small>`:''}
+${S.tans.filter(T=>T.ct==='f'&&T.cid===F.id).map(tanRow).join('')}
+<form class="add one" data-tadd="${F.id}"><input type="number" step="any" placeholder="Tangent at x₀" aria-label="Tangent at x0"><button type="submit">Add tangent</button></form></div>`}).join(''):'<p class="empty">No functions yet. Type one below, e.g. sin(x) or x^2 - 3.</p>';
+  const st=S.tans.filter(T=>T.ct==='s');
+  stRows.innerHTML=st.length?st.map(tanRow).join(''):'<p class="empty">Use the tangent tool on the curve, or type x₀ below.</p>';
+}
+const tanById=id=>S.tans.find(t=>t.id===+id);
+function onTanChange(t){const T=tanById(t.closest('[data-tid]').dataset.tid);if(!T)return;const k=t.dataset.k;
+  if(k==='x0'&&t.value!==''&&isFinite(+t.value))T.x0=+t.value;else if(k==='mode')T.mode=t.value;else if(k==='eq')T.eq=t.checked;changed()}
+fnRows.addEventListener('change',e=>{const t=e.target;if(t.closest('[data-tid]'))return onTanChange(t);
+  const F=S.funcs.find(f=>f.id===+t.closest('[data-fid]')?.dataset.fid);if(!F||!t.dataset.k)return;const k=t.dataset.k;
+  if(k==='expr')F.expr=t.value.trim();else if(k==='color')F.color=t.value;else if(k==='show')F.show=t.checked;
+  else if(k==='a'||k==='b')F[k]=t.value===''||!isFinite(+t.value)?null:+t.value;
+  changed()});
+fnRows.addEventListener('input',e=>{const t=e.target;if(t.dataset.k==='color'&&!t.closest('[data-tid]')){const F=S.funcs.find(f=>f.id===+t.closest('[data-fid]').dataset.fid);if(F){F.color=t.value;req();save()}}});
+fnRows.addEventListener('click',e=>{const fd=e.target.closest('[data-fdel]'),td=e.target.closest('[data-tdel]');
+  if(fd){const id=+fd.dataset.fdel;S.funcs=S.funcs.filter(f=>f.id!==id);S.tans=S.tans.filter(t=>!(t.ct==='f'&&t.cid===id));changed()}
+  else if(td){S.tans=S.tans.filter(t=>t.id!==+td.dataset.tdel);changed()}});
+fnRows.addEventListener('submit',e=>{e.preventDefault();const f=e.target.closest('[data-tadd]');if(!f)return;const v=f.querySelector('input').value;if(v===''||!isFinite(+v))return;addTangent('f',+f.dataset.tadd,+v)});
+stRows.addEventListener('change',e=>onTanChange(e.target));
+stRows.addEventListener('click',e=>{const td=e.target.closest('[data-tdel]');if(td){S.tans=S.tans.filter(t=>t.id!==+td.dataset.tdel);changed()}});
+$('#fFn').addEventListener('submit',e=>{e.preventDefault();const i=$('#aFn'),er=$('#fnErr');er.textContent='';if(!i.value.trim())return;try{addFunction(i.value);i.value=''}catch(x){er.textContent=x.message}});
+$('#aFn').addEventListener('input',()=>{$('#fnErr').textContent=''});
+$('#fSt').addEventListener('submit',e=>{e.preventDefault();const v=$('#aSt').value;if(v===''||!isFinite(+v))return;const g=groups().filter(g=>g.length>1).find(g=>g[0].x<=+v&&+v<=g[g.length-1].x);addTangent('s',g?g[0].id:0,+v);$('#aSt').value=''});
+
 /* ---------- menu ---------- */
 function closeMenu(){menu.hidden=true;menu.innerHTML=''}
 function openMenu(hit,px,py){
@@ -452,13 +598,21 @@ function openMenu(hit,px,py){
   }else if(hit.type==='curve'){
     gkey=hit.obj[0].id;
     extra=`<label class="mcol">Group colour <input type="color" id="mCol" value="${S.gcol[gkey]||S.col.curve||col('--accent')}"></label>`;
+    items.push(['Add tangent here',()=>addTangent('s',gkey,hit.x0)]);
     items.push(['Use main colour',()=>{delete S.gcol[gkey]}]);
+  }else if(hit.type==='fn'){
+    const F=hit.obj;
+    extra=`<label class="mcol">${esc(F.name)}(x) colour <input type="color" id="mCol" value="${fnColor(F)}"></label>`;
+    items.push(['Add tangent here',()=>addTangent('f',F.id,hit.x0)],['Edit in list',()=>{openPanel(true);setTab('funcs')}],['Hide '+F.name,()=>{F.show=false}]);
+  }else if(hit.type==='tan'){
+    const T=hit.obj;
+    items.push([T.mode==='seg'?'Show as full line':'Show as segment',()=>{T.mode=T.mode==='seg'?'line':'seg'}],[T.eq?'Hide equation':'Show equation',()=>{T.eq=!T.eq}],['Delete tangent',()=>{S.tans=S.tans.filter(q=>q!==T)},1]);
   }else{
     items.push(['Add point here',()=>addPoint(hit.x,hit.y)],['Add break here',()=>addBreak(hit.x)]);
   }
   menu.innerHTML=extra+items.map((it,i)=>`<button type="button" data-i="${i}"${it[2]?' class="danger"':''}>${it[0]}</button>`).join('');
   menu.onclick=e=>{const i=e.target.closest('button')?.dataset.i;if(i==null)return;items[+i][1]();closeMenu();changed()};
-  const mc=menu.querySelector('#mCol');if(mc)mc.addEventListener('input',()=>{S.gcol[gkey]=mc.value;req();save()});
+  const mc=menu.querySelector('#mCol');if(mc)mc.addEventListener('input',()=>{if(hit.type==='fn')hit.obj.color=mc.value;else S.gcol[gkey]=mc.value;req();save()});
   menu.hidden=false;
   try{window.getSelection().removeAllRanges()}catch(_){}
   const mw=menu.offsetWidth,mh=menu.offsetHeight;
@@ -470,7 +624,10 @@ document.addEventListener('pointerdown',e=>{if(!menu.hidden&&!menu.contains(e.ta
 const ptrs=new Map();let lastTap={t:0,x:0,y:0},lp=null;
 function pos(e){const r=cv.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top}}
 function hitTest(px,py,touch){
-  if(S.ptSize<=0)return null;
+  const rt=touch?24:12;
+  for(const T of S.tans){const d=tanData(T);if(d&&Math.hypot(X(d.x0)-px,Y(d.y0)-py)<rt)return{type:'tan',obj:T}}
+  const fnHit=()=>{const rc=touch?18:8,x=iX(px);for(const F of S.funcs){if(!F.show)continue;const y=fval(F,x);if(isFinite(y)&&Math.abs(Y(y)-py)<rc)return{type:'fn',obj:F}}return null};
+  if(S.ptSize<=0)return tanMode?fnHit():null;
   const r=touch?24:11;let best=null,bd=r;
   for(const p of S.pts){const d=Math.hypot(X(p.x)-px,Y(p.y)-py);if(d<bd){bd=d;best=p}}
   if(best)return{type:'point',obj:best};
@@ -482,7 +639,7 @@ function hitTest(px,py,touch){
     const m=monoC2(g,S.lam);let i=0;while(i<m.xs.length-2&&x>m.xs[i+1])i++;
     if(Math.abs(Y(m.f(i,(x-m.xs[i])/m.h[i]))-py)<rc)return{type:'curve',obj:g};
   }
-  return null;
+  return fnHit();
 }
 function zoomAt(v0,ax,ay,bx,by,f){
   const rx=(v0.x1-v0.x0)*f,ry=(v0.y1-v0.y0)*f;
@@ -501,17 +658,18 @@ cv.addEventListener('pointerdown',e=>{
   act={type:hit?hit.type:'pan',obj:hit&&hit.obj,sx:p.x,sy:p.y,moved:false,touch,v0:{...S.view},lock:null};
   if(hit&&hit.type==='point'){act.offx=hit.obj.x-iX(p.x);act.offy=hit.obj.y-iY(p.y);act.ox=hit.obj.x;act.oy=hit.obj.y}
   if(hit&&hit.type==='break')act.offx=hit.obj.x-iX(p.x);
-  if(touch&&hit)lp=setTimeout(()=>{lp=null;if(act&&!act.moved){const h={type:act.type,obj:act.obj};act=null;openMenu(h,p.x,p.y);req()}},550);
+  if(touch&&hit)lp=setTimeout(()=>{lp=null;if(act&&!act.moved){const h={type:act.type,obj:act.obj,x0:iX(p.x)};act=null;openMenu(h,p.x,p.y);req()}},550);
   req();
 });
 cv.addEventListener('pointermove',e=>{
   const p=pos(e);
-  if(!ptrs.has(e.pointerId)){if(e.pointerType==='mouse'){const h=hitTest(p.x,p.y,false);cv.style.cursor=h?(h.type==='point'?'grab':h.type==='break'?'ew-resize':'context-menu'):(p.y>PH()?'copy':'crosshair')}return}
+  if(!ptrs.has(e.pointerId)){if(e.pointerType==='mouse'){const h=hitTest(p.x,p.y,false);cv.style.cursor=h?(h.type==='point'||h.type==='tan'?'grab':h.type==='break'?'ew-resize':tanMode?'copy':'context-menu'):(p.y>PH()?'copy':'crosshair')}return}
   ptrs.set(e.pointerId,p);if(!act)return;
   if(act.type==='pinch'){if(ptrs.size<2)return;const[a,b]=[...ptrs.values()];const c={x:(a.x+b.x)/2,y:(a.y+b.y)/2},d=Math.hypot(a.x-b.x,a.y-b.y)||1;zoomAt(act.v0,act.c0.x,act.c0.y,c.x,c.y,act.d0/d);req();return}
   const dx=p.x-act.sx,dy=p.y-act.sy;
   if(!act.moved&&Math.hypot(dx,dy)<(act.touch?8:3))return;
   act.moved=true;if(lp){clearTimeout(lp);lp=null}
+  if(act.type==='tan'){const T=act.obj,C=tanCurve(T);if(C){T.x0=Math.min(C.hi,Math.max(C.lo,gX(iX(p.x))));if(C.key)T.cid=C.key}changed(true);return}
   if(act.type==='point'){
     const P=act.obj;let mx=iX(p.x)+act.offx,my=iY(p.y)+act.offy;
     if(e.shiftKey){if(!act.lock)act.lock=Math.abs(dx)>Math.abs(dy)?'h':'v';if(act.lock==='h')my=act.oy;else mx=act.ox}else act.lock=null;
@@ -527,15 +685,18 @@ function up(e){
   if(!act.moved&&e.type==='pointerup'){
     const now=performance.now(),dbl=now-lastTap.t<330&&Math.hypot(p.x-lastTap.x,p.y-lastTap.y)<26;
     lastTap={t:now,x:p.x,y:p.y};
-    if(act.type==='point'){const b=brkAt(act.obj.x);if(b&&act.obj.side){b.own=act.obj.side;changed()}}
-    else if((act.type==='pan'||act.type==='curve')&&dbl&&S.ptSize>0){lastTap.t=0;if(p.y>PH())addBreak(iX(p.x));else addPoint(iX(p.x),iY(p.y),true)}
+    if(tanMode&&act.type==='curve'){addTangent('s',act.obj[0].id,iX(p.x))}
+    else if(tanMode&&act.type==='fn'){addTangent('f',act.obj.id,iX(p.x))}
+    else if(tanMode&&act.type==='point'){const g=groups().find(g=>g.includes(act.obj)&&g.length>1);if(g)addTangent('s',g[0].id,act.obj.x)}
+    else if(act.type==='point'){const b=brkAt(act.obj.x);if(b&&act.obj.side){b.own=act.obj.side;changed()}}
+    else if(!tanMode&&(act.type==='pan'||act.type==='curve'||act.type==='fn')&&dbl&&S.ptSize>0){lastTap.t=0;if(p.y>PH())addBreak(iX(p.x));else addPoint(iX(p.x),iY(p.y),true)}
   }else if(act.moved){renderTables();save()}
   act=null;req();
 }
 cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);
 cv.addEventListener('touchstart',e=>{if(e.touches.length===1)e.preventDefault()},{passive:false});
 document.addEventListener('selectstart',e=>{if(fig.contains(e.target)||document.body.classList.contains('dragging'))e.preventDefault()});
-cv.addEventListener('contextmenu',e=>{e.preventDefault();if(S.ptSize<=0)return;const p=pos(e);const h=hitTest(p.x,p.y,false)||{type:'empty',x:iX(p.x),y:iY(p.y)};act=null;openMenu(h,p.x,p.y)});
+cv.addEventListener('contextmenu',e=>{e.preventDefault();if(S.ptSize<=0)return;const p=pos(e);const h=hitTest(p.x,p.y,false)||{type:'empty',x:iX(p.x),y:iY(p.y)};h.x0=iX(p.x);act=null;openMenu(h,p.x,p.y)});
 cv.addEventListener('wheel',e=>{e.preventDefault();const p=pos(e);zoomAt({...S.view},p.x,p.y,p.x,p.y,Math.exp(e.deltaY*.0015));req();save()},{passive:false});
 
 /* ---------- toolbar, settings, storage ---------- */
@@ -546,12 +707,12 @@ function fit(){
   const mx=(x1-x0)*.08,my=(y1-y0)*.12,top=(y1-y0)*70/Math.max(200,PH()-70);S.view={x0:x0-mx,x1:x1+mx,y0:y0-my,y1:y1+my+top};req();save();
 }
 function example(){
-  uid=1;S.brks=[];S.gcol={};
+  uid=1+Math.max(0,...S.funcs.map(f=>f.id),...S.tans.map(t=>t.id));S.brks=[];S.gcol={};S.tans=S.tans.filter(t=>t.ct==='f');
   S.pts=[[0,1],[1.6,3.4],[3.2,2.3],[5.2,4.1,'L'],[5.2,1.5,'R'],[6.6,2.6],[8,4.6],[9.4,3.2]].map(a=>({id:nid(),x:a[0],y:a[1],side:a[2]||null}));
   normalize(null);fit();changed();
 }
 $('#bFit').onclick=fit;$('#bEx').onclick=example;
-$('#bClr').onclick=()=>{S.pts=[];S.brks=[];S.gcol={};changed()};
+$('#bClr').onclick=()=>{S.pts=[];S.brks=[];S.gcol={};S.funcs=[];S.tans=[];changed()};
 const sEps=$('#sEps'),sOwn=$('#sOwn'),sLam=$('#sLam');
 sEps.onchange=()=>{const v=+sEps.value;if(isFinite(v))S.eps=Math.min(5,Math.max(.1,v));sEps.value=S.eps;save()};
 sOwn.onchange=()=>{S.own=sOwn.value;save()};
@@ -565,8 +726,10 @@ function load(){
     if(o.view&&[o.view.x0,o.view.x1,o.view.y0,o.view.y1].every(isFinite)&&o.view.x1>o.view.x0&&o.view.y1>o.view.y0)S.view=o.view;
     S.eps=isFinite(o.eps)?o.eps:.5;S.own=o.own==='L'?'L':'R';S.lam=isFinite(o.lam)?o.lam:.9;const hx=v=>typeof v==='string'&&/^#[0-9a-f]{6}$/i.test(v)?v:null,oc=o.col||{};
     S.col={curve:hx(oc.curve),pts:hx(oc.pts),brk:hx(oc.brk),bg:hx(oc.bg)};S.width=isFinite(o.width)?Math.min(8,Math.max(1,o.width)):2.6;
-    S.gcol={};if(o.gcol&&typeof o.gcol==='object')for(const k in o.gcol){const v=hx(o.gcol[k]);if(v)S.gcol[k]=v}S.ptSize=isFinite(o.ptSize)?Math.min(12,Math.max(0,o.ptSize)):5.5;S.showFc=!!o.showFc;const sn=o.snap||{};S.snap={on:!!sn.on,tx:isFinite(sn.tx)&&sn.tx>0?+sn.tx:1,ty:isFinite(sn.ty)&&sn.ty>0?+sn.ty:1};S.ui={tab:['points','breaks','colours','more'].includes(o.ui&&o.ui.tab)?o.ui.tab:'points'};
-    uid=1+Math.max(0,...S.pts.map(p=>p.id),...S.brks.map(b=>b.id));normalize(null);return true}catch(_){return false}
+    S.gcol={};if(o.gcol&&typeof o.gcol==='object')for(const k in o.gcol){const v=hx(o.gcol[k]);if(v)S.gcol[k]=v}S.ptSize=isFinite(o.ptSize)?Math.min(12,Math.max(0,o.ptSize)):5.5;S.showFc=!!o.showFc;const sn=o.snap||{};S.snap={on:!!sn.on,tx:isFinite(sn.tx)&&sn.tx>0?+sn.tx:1,ty:isFinite(sn.ty)&&sn.ty>0?+sn.ty:1};S.ui={tab:['points','breaks','funcs','colours','more'].includes(o.ui&&o.ui.tab)?o.ui.tab:'points'};
+    S.funcs=(Array.isArray(o.funcs)?o.funcs:[]).filter(f=>f&&typeof f.expr==='string'&&isFinite(f.id)).map(f=>({id:+f.id,name:String(f.name||'f').slice(0,3),expr:f.expr.slice(0,300),color:hx(f.color),show:f.show!==false,a:isFinite(f.a)&&f.a!==null?+f.a:null,b:isFinite(f.b)&&f.b!==null?+f.b:null}));
+    S.tans=(Array.isArray(o.tans)?o.tans:[]).filter(t=>t&&(t.ct==='f'||t.ct==='s')&&isFinite(t.x0)&&isFinite(t.id)).map(t=>({id:+t.id,ct:t.ct,cid:+t.cid,x0:+t.x0,mode:t.mode==='seg'?'seg':'line',eq:!!t.eq}));
+    uid=1+Math.max(0,...S.pts.map(p=>p.id),...S.brks.map(b=>b.id),...S.funcs.map(f=>f.id),...S.tans.map(t=>t.id));normalize(null);return true}catch(_){return false}
 }
 const loaded=load();
 sEps.value=S.eps;sOwn.value=S.own;sLam.value=S.lam;
@@ -589,7 +752,7 @@ syncCol();
 const ro=new ResizeObserver(resize);ro.observe(fig);
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{syncCol();req()});
 const mo=new MutationObserver(req);mo.observe(document.documentElement,{attributes:true});
-const panel=$('#panel'),help=$('#help'),bSet=$('#bSet'),bHelp=$('#bHelp'),mq=matchMedia('(max-width:899px)'),tabBtns=[...document.querySelectorAll('[data-tab]')];
+const panel=$('#panel'),bSet=$('#bSet'),mq=matchMedia('(max-width:899px)'),tabBtns=[...document.querySelectorAll('[data-tab]')];
 let sheetH=0;
 function setTab(t){for(const b of tabBtns){const on=b.dataset.tab===t;b.setAttribute('aria-selected',on);$('#tab-'+b.dataset.tab).hidden=!on}S.ui.tab=t;save()}
 function setSheet(h){sheetH=h;const root=document.documentElement.style;
@@ -597,8 +760,6 @@ function setSheet(h){sheetH=h;const root=document.documentElement.style;
 function openPanel(o){panel.hidden=!o;bSet.setAttribute('aria-pressed',o);setSheet(o?innerHeight*.5:0)}
 for(const b of tabBtns)b.onclick=()=>setTab(b.dataset.tab);
 bSet.onclick=()=>openPanel(panel.hidden);$('#bClose').onclick=()=>openPanel(false);
-bHelp.onclick=()=>{help.hidden=!help.hidden;bHelp.setAttribute('aria-pressed',!help.hidden)};
-cv.addEventListener('pointerdown',()=>{if(!help.hidden){help.hidden=true;bHelp.setAttribute('aria-pressed',false)}});
 mq.addEventListener('change',()=>openPanel(!panel.hidden));
 addEventListener('resize',()=>{if(!panel.hidden&&mq.matches)setSheet(Math.min(sheetH,innerHeight*.94))});
 const grip=$('#grip');let gd=null;
@@ -607,6 +768,7 @@ grip.addEventListener('pointermove',e=>{if(gd)setSheet(Math.max(60,Math.min(inne
 const gripEnd=()=>{if(!gd)return;gd=null;const vh=innerHeight;if(sheetH<vh*.28)openPanel(false);else if(sheetH<vh*.72)setSheet(vh*.5);else setSheet(vh*.94)};
 grip.addEventListener('pointerup',gripEnd);grip.addEventListener('pointercancel',gripEnd);
 setTab(S.ui.tab);
+const bTan=$('#bTan');bTan.onclick=()=>{tanMode=!tanMode;bTan.setAttribute('aria-pressed',tanMode);req()};
 if(!loaded)example();else{renderTables();req()}
 if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('interp-sw.js',{scope:'./interpolation'}).catch(()=>{});
 window.__si={S,monoC2,isMono,normalize,setPointX,addPoint,addBreak,moveBreak,groups,owner,placePoint};

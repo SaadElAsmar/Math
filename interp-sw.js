@@ -1,4 +1,4 @@
-const V = 'interp-v3';
+const V = 'interp-v4';
 const CORE = ['./interpolation.html', './interpolation.webmanifest', './icons/interp-192.png', './icons/interp-512.png', './icons/interp-180.png'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(V).then(c => c.addAll(CORE)).then(() => self.skipWaiting()));
