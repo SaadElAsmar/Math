@@ -102,6 +102,7 @@ input[type=color]{width:100%;height:40px;border:1px solid var(--line);border-rad
 <div class="fig" id="fig"><canvas id="cv" aria-label="Interpolation plot"></canvas><div id="menu" class="menu" hidden></div></div>
 <div class="fab">
 <button id="bFit" type="button" aria-label="Fit view" title="Fit view"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+<button id="bSnap" type="button" aria-label="Snap to grid" title="Snap to grid" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M4 9h16M4 15h16M9 4v16M15 4v16"/><circle cx="15" cy="15" r="2.2" fill="currentColor"/></svg></button>
 <button id="bTan" type="button" aria-label="Tangent tool" title="Tangent tool: tap a curve" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M3 18c4-1 6-5 8-9s5-6 10-6"/><path d="M3 9.5l18 3"/><circle cx="11.5" cy="11" r="1.6" fill="currentColor"/></svg></button>
 <button id="bSet" type="button" aria-label="Options" title="Options" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></svg></button>
 </div>
@@ -147,8 +148,7 @@ input[type=color]{width:100%;height:40px;border:1px solid var(--line);border-rad
 <label for="sEps">ε (% of visible width)</label><input type="number" id="sEps" min="0.1" max="5" step="0.1">
 <label for="sOwn">Default f(c) side</label><select id="sOwn"><option value="R">Right</option><option value="L">Left</option></select>
 <label for="sLam">Shrink factor λ</label><input type="number" id="sLam" min="0.5" max="0.99" step="0.01">
-<label for="sSnap">Snap to grid<small>Drag and double-tap only</small></label><input type="checkbox" id="sSnap" style="width:24px;height:24px;justify-self:start">
-<label for="sTx">Grid step tx</label><input type="number" id="sTx" min="0" step="any">
+<label for="sTx">Grid step tx<small>Snap is switched on with the grid button on the graph</small></label><input type="number" id="sTx" min="0" step="any">
 <label for="sTy">Grid step ty</label><input type="number" id="sTy" min="0" step="any">
 </div>
 <div class="two"><button type="button" id="bEx">Example</button><button type="button" id="bClr">Clear all</button></div>
@@ -733,8 +733,8 @@ function load(){
 }
 const loaded=load();
 sEps.value=S.eps;sOwn.value=S.own;sLam.value=S.lam;
-const sSnap=$('#sSnap'),sTx=$('#sTx'),sTy=$('#sTy');sSnap.checked=S.snap.on;sTx.value=S.snap.tx;sTy.value=S.snap.ty;
-sSnap.onchange=()=>{S.snap.on=sSnap.checked;req();save()};
+const bSnap=$('#bSnap'),sTx=$('#sTx'),sTy=$('#sTy');bSnap.setAttribute('aria-pressed',S.snap.on);sTx.value=S.snap.tx;sTy.value=S.snap.ty;
+bSnap.onclick=()=>{S.snap.on=!S.snap.on;bSnap.setAttribute('aria-pressed',S.snap.on);req();save()};
 sTx.onchange=()=>{const v=+sTx.value;if(isFinite(v)&&v>0){S.snap.tx=v;if(sTy.dataset.touched!=='1'){S.snap.ty=v;sTy.value=v}}sTx.value=S.snap.tx;req();save()};
 sTy.onchange=()=>{const v=+sTy.value;if(isFinite(v)&&v>0){S.snap.ty=v;sTy.dataset.touched='1'}sTy.value=S.snap.ty;req();save()};
 const sSize=$('#sSize'),oSize=$('#oSize'),sFc=$('#sFc');
