@@ -139,6 +139,9 @@ input[type=color]{width:100%;height:40px;border:1px solid var(--line);border-rad
 <label for="sEps">ε (% of visible width)</label><input type="number" id="sEps" min="0.1" max="5" step="0.1">
 <label for="sOwn">Default f(c) side</label><select id="sOwn"><option value="R">Right</option><option value="L">Left</option></select>
 <label for="sLam">Shrink factor λ</label><input type="number" id="sLam" min="0.5" max="0.99" step="0.01">
+<label for="sSnap">Snap to grid<small>Drag and double-tap only</small></label><input type="checkbox" id="sSnap" style="width:24px;height:24px;justify-self:start">
+<label for="sTx">Grid step tx</label><input type="number" id="sTx" min="0" step="any">
+<label for="sTy">Grid step ty</label><input type="number" id="sTy" min="0" step="any">
 </div>
 <div class="two"><button type="button" id="bEx">Example</button><button type="button" id="bClr">Clear</button></div>
 </section>
@@ -150,7 +153,7 @@ input[type=color]{width:100%;height:40px;border:1px solid var(--line);border-rad
 const $=s=>document.querySelector(s);
 const cv=$('#cv'),fig=$('#fig'),ctx=cv.getContext('2d'),menu=$('#menu');
 const STRIP=28;
-const S={pts:[],brks:[],view:{x0:-0.8,x1:10.2,y0:-0.4,y1:5.4},eps:0.5,own:'R',lam:0.9,ui:{tab:'points'},col:{curve:null,pts:null,brk:null,bg:null},width:2.6,gcol:{},ptSize:5.5,showFc:false};
+const S={pts:[],brks:[],view:{x0:-0.8,x1:10.2,y0:-0.4,y1:5.4},eps:0.5,own:'R',lam:0.9,ui:{tab:'points'},snap:{on:false,tx:1,ty:1},col:{curve:null,pts:null,brk:null,bg:null},width:2.6,gcol:{},ptSize:5.5,showFc:false};
 let uid=1;const nid=()=>uid++;
 const same=(a,b)=>Math.abs(a-b)<=1e-9*Math.max(1,Math.abs(a),Math.abs(b));
 const sgn=v=>v>0?1:v<0?-1:0;
@@ -241,21 +244,27 @@ function placeBreak(mx,id){
   const T=uniq([...S.pts.map(p=>p.x),...S.brks.filter(b=>b.id!==id).map(b=>b.x)]);
   return place(mx,T,a=>!brkAt(a,id));
 }
-function setPointX(P,mx,from){
-  const px=P.x,nx=placePoint(mx,P.id);
+const snapR=()=>act&&act.touch?18:12;
+function gX(x){const t=S.snap.tx;if(!S.snap.on||!(t>0))return x;const k=Math.round(x/t)*t;return Math.abs(X(k)-X(x))<snapR()?k:x}
+function gY(y){const t=S.snap.ty;if(!S.snap.on||!(t>0))return y;const k=Math.round(y/t)*t;return Math.abs(Y(k)-Y(y))<snapR()?k:y}
+function setPointX(P,mx,from,grid){
+  const px=P.x;let nx=placePoint(mx,P.id);
+  if(grid&&same(nx,mx)){const g=gX(mx);if(g!==mx)nx=placePoint(g,P.id)}
   if(same(nx,px)&&P.side!=null)return;
   const atNew=ptsAt(nx,new Set([P.id]));let hint=null;
   P.x=nx;P.side=null;
   if(atNew.length||brkAt(nx)){atNew.forEach(q=>q.side=null);hint={id:P.id,from:from===undefined?(px<nx?-1:1):from}}
   normalize(hint);
 }
-function moveBreak(B,mx){
-  const nx=placeBreak(mx,B.id);if(same(nx,B.x))return;
+function moveBreak(B,mx,grid){
+  let nx=placeBreak(mx,B.id);
+  if(grid&&same(nx,mx)){const g=gX(mx);if(g!==mx)nx=placeBreak(g,B.id)}if(same(nx,B.x))return;
   B.x=nx;ptsAt(nx).forEach(q=>q.side=null);normalize(null);
 }
-function addPoint(x,y){
-  const P={id:nid(),x:NaN,y,side:null};
-  const nx=placePoint(x,P.id);P.x=nx;
+function addPoint(x,y,grid){
+  const P={id:nid(),x:NaN,y:grid?gY(y):y,side:null};
+  let nx=placePoint(x,P.id);
+  if(grid&&same(nx,x)){const g=gX(x);if(g!==x)nx=placePoint(g,P.id)}P.x=nx;
   ptsAt(nx,new Set([P.id])).forEach(q=>q.side=null);
   S.pts.push(P);normalize(null);changed();
 }
@@ -370,6 +379,12 @@ function draw(){
   const v=S.view,sx=niceStep(v.x1-v.x0,W/90),sy=niceStep(v.y1-v.y0,PH()/60);
   ctx.font='12px Geist,system-ui,sans-serif';ctx.lineWidth=1;
   ctx.strokeStyle=c.grid;ctx.fillStyle=c.muted;ctx.textAlign='center';ctx.textBaseline='middle';
+  if(S.snap.on){
+    const tx=S.snap.tx,ty=S.snap.ty;ctx.globalAlpha=.6;
+    if(tx>0&&W*tx/(v.x1-v.x0)>=12)for(let k=Math.ceil(v.x0/tx);k*tx<=v.x1;k++){const px=Math.round(X(k*tx))+.5;ctx.beginPath();ctx.moveTo(px,0);ctx.lineTo(px,PH());ctx.stroke()}
+    if(ty>0&&PH()*ty/(v.y1-v.y0)>=12)for(let k=Math.ceil(v.y0/ty);k*ty<=v.y1;k++){const py=Math.round(Y(k*ty))+.5;ctx.beginPath();ctx.moveTo(0,py);ctx.lineTo(W,py);ctx.stroke()}
+    ctx.globalAlpha=1;
+  }
   for(let x=Math.ceil(v.x0/sx)*sx;x<=v.x1;x+=sx){const px=Math.round(X(x))+.5;ctx.beginPath();ctx.moveTo(px,0);ctx.lineTo(px,PH());ctx.stroke();ctx.fillText(fmt(x),px,PH()+STRIP/2)}
   ctx.textAlign='left';
   for(let y=Math.ceil(v.y0/sy)*sy;y<=v.y1;y+=sy){const py=Math.round(Y(y))+.5;ctx.beginPath();ctx.moveTo(0,py);ctx.lineTo(W,py);ctx.stroke();if(py>20&&py<PH()-8)ctx.fillText(fmt(y),6,py-8)}
@@ -393,6 +408,9 @@ function draw(){
     const px=X(p.x),py=Y(p.y),atB=brkAt(p.x),open=atB&&!owners.has(p.id),hot=act&&act.type==='point'&&act.obj===p;
     if(hidden&&!atB)continue;
     if(hot){ctx.fillStyle=c.acc;ctx.globalAlpha=.18;ctx.beginPath();ctx.arc(px,py,16,0,7);ctx.fill();ctx.globalAlpha=1}
+    if(hot&&S.snap.on){const on=(v,t)=>t>0&&Math.abs(v/t-Math.round(v/t))<1e-9;ctx.strokeStyle=c.acc;ctx.lineWidth=1.5;ctx.setLineDash([3,3]);
+      if(on(p.x,S.snap.tx)){ctx.beginPath();ctx.moveTo(px,py-36);ctx.lineTo(px,py+36);ctx.stroke()}
+      if(on(p.y,S.snap.ty)){ctx.beginPath();ctx.moveTo(px-36,py);ctx.lineTo(px+36,py);ctx.stroke()}ctx.setLineDash([])}
     ctx.beginPath();ctx.arc(px,py,R,0,7);
     if(open){ctx.fillStyle=c.plot;ctx.fill();ctx.strokeStyle=c.ink;ctx.lineWidth=2;ctx.stroke()}else{ctx.fillStyle=c.ink;ctx.fill()}
   }
@@ -497,8 +515,8 @@ cv.addEventListener('pointermove',e=>{
   if(act.type==='point'){
     const P=act.obj;let mx=iX(p.x)+act.offx,my=iY(p.y)+act.offy;
     if(e.shiftKey){if(!act.lock)act.lock=Math.abs(dx)>Math.abs(dy)?'h':'v';if(act.lock==='h')my=act.oy;else mx=act.ox}else act.lock=null;
-    setPointX(P,mx);P.y=my;changed(true);
-  }else if(act.type==='break'&&act.obj.manual){moveBreak(act.obj,iX(p.x)+act.offx);changed(true)}
+    setPointX(P,mx,undefined,true);P.y=gY(my);changed(true);
+  }else if(act.type==='break'&&act.obj.manual){moveBreak(act.obj,iX(p.x)+act.offx,true);changed(true)}
   else{const v=act.v0,kx=(v.x1-v.x0)/W,ky=(v.y1-v.y0)/PH();S.view={x0:v.x0-dx*kx,x1:v.x1-dx*kx,y0:v.y0+dy*ky,y1:v.y1+dy*ky};req()}
 });
 function up(e){
@@ -510,7 +528,7 @@ function up(e){
     const now=performance.now(),dbl=now-lastTap.t<330&&Math.hypot(p.x-lastTap.x,p.y-lastTap.y)<26;
     lastTap={t:now,x:p.x,y:p.y};
     if(act.type==='point'){const b=brkAt(act.obj.x);if(b&&act.obj.side){b.own=act.obj.side;changed()}}
-    else if((act.type==='pan'||act.type==='curve')&&dbl&&S.ptSize>0){lastTap.t=0;if(p.y>PH())addBreak(iX(p.x));else addPoint(iX(p.x),iY(p.y))}
+    else if((act.type==='pan'||act.type==='curve')&&dbl&&S.ptSize>0){lastTap.t=0;if(p.y>PH())addBreak(iX(p.x));else addPoint(iX(p.x),iY(p.y),true)}
   }else if(act.moved){renderTables();save()}
   act=null;req();
 }
@@ -547,11 +565,15 @@ function load(){
     if(o.view&&[o.view.x0,o.view.x1,o.view.y0,o.view.y1].every(isFinite)&&o.view.x1>o.view.x0&&o.view.y1>o.view.y0)S.view=o.view;
     S.eps=isFinite(o.eps)?o.eps:.5;S.own=o.own==='L'?'L':'R';S.lam=isFinite(o.lam)?o.lam:.9;const hx=v=>typeof v==='string'&&/^#[0-9a-f]{6}$/i.test(v)?v:null,oc=o.col||{};
     S.col={curve:hx(oc.curve),pts:hx(oc.pts),brk:hx(oc.brk),bg:hx(oc.bg)};S.width=isFinite(o.width)?Math.min(8,Math.max(1,o.width)):2.6;
-    S.gcol={};if(o.gcol&&typeof o.gcol==='object')for(const k in o.gcol){const v=hx(o.gcol[k]);if(v)S.gcol[k]=v}S.ptSize=isFinite(o.ptSize)?Math.min(12,Math.max(0,o.ptSize)):5.5;S.showFc=!!o.showFc;S.ui={tab:['points','breaks','colours','more'].includes(o.ui&&o.ui.tab)?o.ui.tab:'points'};
+    S.gcol={};if(o.gcol&&typeof o.gcol==='object')for(const k in o.gcol){const v=hx(o.gcol[k]);if(v)S.gcol[k]=v}S.ptSize=isFinite(o.ptSize)?Math.min(12,Math.max(0,o.ptSize)):5.5;S.showFc=!!o.showFc;const sn=o.snap||{};S.snap={on:!!sn.on,tx:isFinite(sn.tx)&&sn.tx>0?+sn.tx:1,ty:isFinite(sn.ty)&&sn.ty>0?+sn.ty:1};S.ui={tab:['points','breaks','colours','more'].includes(o.ui&&o.ui.tab)?o.ui.tab:'points'};
     uid=1+Math.max(0,...S.pts.map(p=>p.id),...S.brks.map(b=>b.id));normalize(null);return true}catch(_){return false}
 }
 const loaded=load();
 sEps.value=S.eps;sOwn.value=S.own;sLam.value=S.lam;
+const sSnap=$('#sSnap'),sTx=$('#sTx'),sTy=$('#sTy');sSnap.checked=S.snap.on;sTx.value=S.snap.tx;sTy.value=S.snap.ty;
+sSnap.onchange=()=>{S.snap.on=sSnap.checked;req();save()};
+sTx.onchange=()=>{const v=+sTx.value;if(isFinite(v)&&v>0){S.snap.tx=v;if(sTy.dataset.touched!=='1'){S.snap.ty=v;sTy.value=v}}sTx.value=S.snap.tx;req();save()};
+sTy.onchange=()=>{const v=+sTy.value;if(isFinite(v)&&v>0){S.snap.ty=v;sTy.dataset.touched='1'}sTy.value=S.snap.ty;req();save()};
 const sSize=$('#sSize'),oSize=$('#oSize'),sFc=$('#sFc');
 const syncSize=()=>{sSize.value=S.ptSize;oSize.textContent=S.ptSize>0?fmt(S.ptSize):'hidden';sFc.checked=S.showFc};syncSize();
 sSize.oninput=()=>{S.ptSize=+sSize.value;syncSize();req();save()};
