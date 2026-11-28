@@ -37,7 +37,8 @@ button:hover{border-color:var(--muted)}
 button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 .fab{position:absolute;top:10px;right:10px;display:flex;gap:6px;z-index:4}
 .fab button{width:44px;height:44px;padding:0;display:grid;place-items:center;font-weight:600;font-size:18px;background:var(--panel);opacity:.94}
-.fab button[aria-pressed=true]{background:var(--ink);color:var(--plot);border-color:var(--ink)}
+.fab button[aria-pressed=true]{color:var(--accent);border-color:var(--accent)}
+#bSnap .dot{display:none}#bSnap[aria-pressed=true] .dot{display:inline}#bSnap[aria-pressed=true]{color:inherit;border-color:var(--line)}
 .fab svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .howto{margin-top:18px;font-size:14px;color:var(--muted)}.howto summary{cursor:pointer;color:var(--ink);min-height:40px;display:flex;align-items:center}.howto ul{margin:4px 0 0;padding-left:18px}
 input[type=text]{height:40px;border:1px solid var(--line);border-radius:8px;background:var(--plot);padding:0 10px;font-size:16px;width:100%}
@@ -102,7 +103,7 @@ input[type=color]{width:100%;height:40px;border:1px solid var(--line);border-rad
 <div class="fig" id="fig"><canvas id="cv" aria-label="Interpolation plot"></canvas><div id="menu" class="menu" hidden></div></div>
 <div class="fab">
 <button id="bFit" type="button" aria-label="Fit view" title="Fit view"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
-<button id="bSnap" type="button" aria-label="Snap to grid" title="Snap to grid" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M4 9h16M4 15h16M9 4v16M15 4v16"/><circle cx="15" cy="15" r="2.2" fill="currentColor"/></svg></button>
+<button id="bSnap" type="button" aria-label="Snap to grid" title="Snap to grid" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M4 9h16M4 15h16M9 4v16M15 4v16"/><circle class="dot" cx="15" cy="15" r="2.6" fill="var(--accent)" stroke="var(--accent)"/></svg></button>
 <button id="bTan" type="button" aria-label="Tangent tool" title="Tangent tool: tap a curve" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M3 18c4-1 6-5 8-9s5-6 10-6"/><path d="M3 9.5l18 3"/><circle cx="11.5" cy="11" r="1.6" fill="currentColor"/></svg></button>
 <button id="bSet" type="button" aria-label="Options" title="Options" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></svg></button>
 </div>
@@ -512,7 +513,7 @@ function draw(){
     ctx.beginPath();ctx.arc(px,py,hot?8:6,0,7);ctx.fillStyle=d.color;ctx.fill();ctx.lineWidth=2;ctx.strokeStyle=c.plot;ctx.stroke();
     if(T.eq){const tx=eqText(d);ctx.textAlign='left';ctx.textBaseline='bottom';ctx.lineWidth=4;ctx.strokeStyle=c.plot;ctx.strokeText(tx,px+10,py-8);ctx.fillStyle=d.color;ctx.fillText(tx,px+10,py-8)}
   }
-  if(tanMode){ctx.font='14px Geist,system-ui,sans-serif';ctx.textAlign='left';ctx.textBaseline='middle';const tx='Tangent tool: tap a curve';const w=ctx.measureText(tx).width+20;ctx.fillStyle=c.acc;ctx.beginPath();ctx.roundRect?ctx.roundRect(10,12,w,32,16):ctx.rect(10,12,w,32);ctx.fill();ctx.fillStyle='#fff';ctx.fillText(tx,20,28)}
+  if(tanMode){ctx.font='14px Geist,system-ui,sans-serif';ctx.textAlign='left';ctx.textBaseline='middle';const tx='Tap a curve';const w=ctx.measureText(tx).width+20;ctx.fillStyle=c.acc;ctx.beginPath();ctx.roundRect?ctx.roundRect(10,12,w,32,16):ctx.rect(10,12,w,32);ctx.fill();ctx.fillStyle='#fff';ctx.fillText(tx,20,28)}
   const owners=new Set(S.brks.map(owner).filter(Boolean).map(p=>p.id));
   const hidden=S.ptSize<=0;
   if(hidden&&!S.showFc)return;
